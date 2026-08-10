@@ -55,7 +55,8 @@ export default function Home() {
       const max = document.documentElement.scrollHeight - innerHeight;
       const next = max ? Math.max(0, Math.min(1, scrollY / max)) : 0;
       setProgress(next);
-      setLevel(Math.min(6, Math.floor(next * 6) + 1));
+      const screen = next * 7;
+      setLevel(screen < 3 ? 1 : Math.min(6, Math.floor(screen) - 1));
       if (Math.abs(scrollY - lastY.current) > 1) {
         setBackwards(scrollY < lastY.current);
         if (motionRef.current === "idle" || motionRef.current === "stopping") {
@@ -74,7 +75,7 @@ export default function Home() {
     };
   }, []);
 
-  const worldX = progress * 600;
+  const worldX = progress * 700;
   const heroX = Math.min(29, 8 + progress * 75);
 
   return (
@@ -90,6 +91,8 @@ export default function Home() {
 
         <div className="world" style={{ transform: `translate3d(-${worldX}vw,0,0)` }}>
           <div className="backdrop" />
+          <div className="about-scenario" />
+          <div className="sky-parallax" aria-hidden="true"><i /><i /></div>
           <div className="moon-disc" />
           <div className="far-castles"><i /><i /><i /><i /></div>
 
@@ -100,12 +103,20 @@ export default function Home() {
           </section>
 
           <section className="zone profile-zone" aria-labelledby="perfil-title">
-            <div className="banner"><small>NIVEL 1</small><h2 id="perfil-title">El desarrollador</h2></div>
-            <div className="stone-dialogue">
-              <p>“Meticuloso, innovador y orientado a resolver problemas.”</p>
-              <span>8 años creando productos web y móviles, liderando equipos y navegando proyectos complejos.</span>
+            <div className="legend legend-origin">
+              <small>CAPÍTULO I · EL ORIGEN</small>
+              <h2 id="perfil-title">Una leyenda escrita en código</h2>
+              <p>En Guadalajara comenzó el viaje de un creador inquieto, guiado por la curiosidad y el deseo de convertir problemas complejos en experiencias claras.</p>
             </div>
-            <div className="stat-obelisks"><article><b>8+</b><span>AÑOS</span></article><article><b>16</b><span>PROYECTOS</span></article><article><b>90%</b><span>APRENDIZAJE</span></article></div>
+            <div className="legend legend-calling">
+              <small>EL LLAMADO</small>
+              <h2>Construir, aprender y guiar</h2>
+              <p>Durante más de ocho años ha creado productos web y móviles, liderado equipos y compartido conocimiento con nuevas generaciones.</p>
+              <blockquote>“Meticuloso, innovador y orientado a resolver problemas.”</blockquote>
+            </div>
+            <div className="raven raven-distant" aria-hidden="true"><i /></div>
+            <div className="wanderer" aria-hidden="true"><i /></div>
+            <div className="castle-threshold"><span>LAS PUERTAS DEL OFICIO</span><b>ENTRAR AL CASTILLO</b></div>
             <div className="gate"><b>NIVEL 2</b></div>
           </section>
 
@@ -150,6 +161,9 @@ export default function Home() {
         </div>
 
         <div className={`player motion-${motion} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
+        <div className="foreground-post" style={{ transform: `translate3d(${72 - worldX}vw,0,0)` }} aria-hidden="true">
+          <div className="raven raven-foreground"><i /></div>
+        </div>
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
       </div>
     </main>
