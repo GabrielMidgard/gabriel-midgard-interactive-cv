@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+type MotionState = "idle" | "starting" | "running" | "stopping";
+
 const jobs = [
   ["Random estudio", "2013—2015", "Sitios web, apps híbridas, multimedia, UX y APIs RESTful."],
   ["Global Standards", "2015—2017", "Apps móviles, arquitectura de datos y soluciones de auditoría."],
@@ -20,13 +22,35 @@ const skillGroups = [
 
 export default function Home() {
   const [progress, setProgress] = useState(0);
-  const [moving, setMoving] = useState(false);
+  const [motion, setMotion] = useState<MotionState>("idle");
   const [backwards, setBackwards] = useState(false);
   const [level, setLevel] = useState(1);
   const lastY = useRef(0);
+  const motionRef = useRef<MotionState>("idle");
+  const phaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const changeMotion = (next: MotionState) => {
+      motionRef.current = next;
+      setMotion(next);
+    };
+
+    const beginRun = () => {
+      if (phaseTimer.current) clearTimeout(phaseTimer.current);
+      changeMotion("starting");
+      phaseTimer.current = setTimeout(() => changeMotion("running"), 105);
+    };
+
+    const scheduleStop = () => {
+      if (stopTimer.current) clearTimeout(stopTimer.current);
+      stopTimer.current = setTimeout(() => {
+        if (phaseTimer.current) clearTimeout(phaseTimer.current);
+        changeMotion("stopping");
+        phaseTimer.current = setTimeout(() => changeMotion("idle"), 130);
+      }, 230);
+    };
+
     const update = () => {
       const max = document.documentElement.scrollHeight - innerHeight;
       const next = max ? Math.max(0, Math.min(1, scrollY / max)) : 0;
@@ -34,15 +58,20 @@ export default function Home() {
       setLevel(Math.min(6, Math.floor(next * 6) + 1));
       if (Math.abs(scrollY - lastY.current) > 1) {
         setBackwards(scrollY < lastY.current);
-        setMoving(true);
-        if (stopTimer.current) clearTimeout(stopTimer.current);
-        stopTimer.current = setTimeout(() => setMoving(false), 140);
+        if (motionRef.current === "idle" || motionRef.current === "stopping") {
+          beginRun();
+        }
+        scheduleStop();
       }
       lastY.current = scrollY;
     };
     update();
     addEventListener("scroll", update, { passive: true });
-    return () => { removeEventListener("scroll", update); if (stopTimer.current) clearTimeout(stopTimer.current); };
+    return () => {
+      removeEventListener("scroll", update);
+      if (phaseTimer.current) clearTimeout(phaseTimer.current);
+      if (stopTimer.current) clearTimeout(stopTimer.current);
+    };
   }, []);
 
   const worldX = progress * 600;
@@ -120,7 +149,7 @@ export default function Home() {
           <div className="foreground-trees"><i /><i /><i /><i /><i /><i /></div>
         </div>
 
-        <div className={`player ${moving ? "walking" : ""} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
+        <div className={`player motion-${motion} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
       </div>
     </main>
