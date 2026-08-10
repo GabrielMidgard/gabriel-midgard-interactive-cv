@@ -39,7 +39,7 @@ export default function Home() {
     const beginRun = () => {
       if (phaseTimer.current) clearTimeout(phaseTimer.current);
       changeMotion("starting");
-      phaseTimer.current = setTimeout(() => changeMotion("running"), 105);
+      phaseTimer.current = setTimeout(() => changeMotion("running"), 55);
     };
 
     const scheduleStop = () => {
@@ -47,8 +47,8 @@ export default function Home() {
       stopTimer.current = setTimeout(() => {
         if (phaseTimer.current) clearTimeout(phaseTimer.current);
         changeMotion("stopping");
-        phaseTimer.current = setTimeout(() => changeMotion("idle"), 130);
-      }, 230);
+        phaseTimer.current = setTimeout(() => changeMotion("idle"), 80);
+      }, 130);
     };
 
     const update = () => {

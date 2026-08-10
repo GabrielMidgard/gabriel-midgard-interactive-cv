@@ -218,8 +218,8 @@ body {
 .player i {
   position: absolute;
   inset: 0;
-  background-image: url("/knight-sprites.png");
-  background-size: 400% 400%;
+  background-image: url("/knight-motion.png");
+  background-size: 300% 300%;
   background-repeat: no-repeat;
   background-position: 0 0;
 }
@@ -228,6 +228,14 @@ body {
   max-width: 630px;
   aspect-ratio: 3/2;
 }
+
+.player.motion-starting,
+.player.motion-running,
+.player.motion-stopping {
+  width: 32vw;
+  max-width: 565px;
+  min-width: 273px;
+}
 .player.motion-idle i {
   background-image: url("/knight-idle.png");
   background-size: contain;
@@ -235,9 +243,9 @@ body {
   animation: idle-breath 2.8s ease-in-out infinite;
   transform-origin: center bottom;
 }
-.player.motion-starting i { animation: run-start 0.105s steps(1, end) forwards; }
-.player.motion-running i { animation: armored-run 0.46s steps(1, end) infinite; }
-.player.motion-stopping i { animation: run-stop 0.13s steps(1, end) forwards; }
+.player.motion-starting i { animation: run-start 0.055s steps(1, end) forwards; }
+.player.motion-running i { animation: armored-run 0.36s steps(1, end) infinite; }
+.player.motion-stopping i { animation: run-stop 0.08s steps(1, end) forwards; }
 .player.backwards {
   transform: scaleX(-1);
 }
@@ -247,26 +255,22 @@ body {
   65% { transform: translateY(0) scaleY(0.998); }
 }
 @keyframes run-start {
-  0% { background-position: 0 33.333%; }
-  33% { background-position: 33.333% 33.333%; }
-  66% { background-position: 66.666% 33.333%; }
-  100% { background-position: 100% 33.333%; }
+  0% { background-position: 0 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 100% 0; }
 }
 @keyframes armored-run {
-  0%, 100% { background-position: 0 66.666%; }
-  12.5% { background-position: 33.333% 66.666%; }
-  25% { background-position: 66.666% 66.666%; }
-  37.5% { background-position: 100% 66.666%; }
+  0%, 100% { background-position: 0 50%; }
+  16.666% { background-position: 50% 50%; }
+  33.333% { background-position: 100% 50%; }
   50% { background-position: 0 100%; }
-  62.5% { background-position: 33.333% 100%; }
-  75% { background-position: 66.666% 100%; }
-  87.5% { background-position: 100% 100%; }
+  66.666% { background-position: 50% 100%; }
+  83.333% { background-position: 100% 100%; }
 }
 @keyframes run-stop {
-  0% { background-position: 100% 33.333%; }
-  33% { background-position: 66.666% 33.333%; }
-  66% { background-position: 33.333% 33.333%; }
-  100% { background-position: 0 33.333%; }
+  0% { background-position: 100% 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 0 0; }
 }
 .ground-layer {
   position: absolute;
@@ -708,6 +712,14 @@ body {
   .player.motion-idle {
     width: 55vw;
     max-width: none;
+  }
+
+  .player.motion-starting,
+  .player.motion-running,
+  .player.motion-stopping {
+    width: 45vw;
+    max-width: none;
+    min-width: 216px;
   }
   .title-plaque {
     left: 8vw;
