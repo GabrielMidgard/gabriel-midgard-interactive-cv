@@ -1,0 +1,828 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap");
+@import "tailwindcss";
+:root {
+  --bone: #eadfc5;
+  --gold: #c69b58;
+  --blood: #862e28;
+  --ink: #070909;
+  --world: 700vw;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: #050706;
+  color: var(--bone);
+  font-family: Inter, sans-serif;
+}
+body {
+  overflow-x: hidden;
+}
+.game-scroll {
+  height: 700vh;
+}
+.game {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #101613;
+}
+.game:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 48%, #000b 115%),
+    linear-gradient(#0007, transparent 20%, transparent 78%, #000a);
+  box-shadow: inset 0 0 80px #000;
+}
+.world {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--world);
+  height: 100%;
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(90deg, #10151455, #4d322b20, #10151466),
+    url("/world-bg.png");
+  background-size:
+    100vw 100%,
+    100vw 100%;
+  background-repeat: repeat-x;
+  filter: saturate(0.72) brightness(0.7);
+}
+.moon-disc {
+  position: absolute;
+  left: 245vw;
+  top: 9vh;
+  width: 31vh;
+  height: 31vh;
+  border-radius: 50%;
+  background: #171715;
+  box-shadow:
+    0 0 18px 7px #e29a66,
+    0 0 90px 35px #7e3e2eaa;
+}
+.far-castles {
+  position: absolute;
+  inset: 20% 0 18%;
+  opacity: 0.34;
+}
+.far-castles i {
+  position: absolute;
+  bottom: 0;
+  width: 7vw;
+  background: #080b0a;
+  clip-path: polygon(
+    18% 15%,
+    35% 15%,
+    35% 4%,
+    50% 0,
+    65% 4%,
+    65% 15%,
+    82% 15%,
+    100% 100%,
+    0 100%
+  );
+}
+.far-castles i:nth-child(1) {
+  left: 125vw;
+  height: 70%;
+}
+.far-castles i:nth-child(2) {
+  left: 270vw;
+  height: 94%;
+}
+.far-castles i:nth-child(3) {
+  left: 425vw;
+  height: 75%;
+}
+.far-castles i:nth-child(4) {
+  left: 590vw;
+  height: 88%;
+}
+.zone {
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  z-index: 5;
+}
+.intro-zone {
+  left: 0;
+}
+.profile-zone {
+  left: 100vw;
+}
+.skills-zone {
+  left: 200vw;
+}
+.jobs-zone {
+  left: 300vw;
+}
+.jobs-two {
+  left: 400vw;
+}
+.education-zone {
+  left: 500vw;
+}
+.contact-zone {
+  left: 600vw;
+}
+.game-hud {
+  position: fixed;
+  z-index: 40;
+  top: 22px;
+  left: 3vw;
+  right: 3vw;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  filter: drop-shadow(0 4px 8px #000);
+}
+.crest {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  background: #131715;
+  font: 700 12px Cinzel;
+  transform: rotate(45deg);
+}
+.hud-copy {
+  display: grid;
+  gap: 4px;
+}
+.hud-copy strong {
+  font: 700 12px Cinzel;
+  letter-spacing: 0.13em;
+}
+.hud-copy span {
+  font: 500 8px Cinzel;
+  color: #a58f69;
+  letter-spacing: 0.24em;
+}
+.level-counter {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.level-counter small {
+  font: 600 8px Cinzel;
+  letter-spacing: 0.2em;
+  color: #9a907c;
+}
+.level-counter b {
+  font: 700 28px Cinzel;
+  color: #c38263;
+}
+.progress-track {
+  position: fixed;
+  z-index: 41;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #23241f;
+}
+.progress-track i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #70231f, #d3774e, #d7b673);
+  box-shadow: 0 0 12px #dc7955;
+}
+.player {
+  position: fixed;
+  z-index: 25;
+  bottom: 10.8vh;
+  width: 24vw;
+  max-width: 420px;
+  min-width: 210px;
+  aspect-ratio: 1;
+  transition: left 0.12s linear;
+  filter: drop-shadow(0 12px 7px #000c);
+  transform-origin: bottom center;
+}
+.player i {
+  position: absolute;
+  inset: 0;
+  background-image: url("/knight-motion.png");
+  background-size: 300% 300%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+.player.motion-idle {
+  width: 36vw;
+  max-width: 630px;
+  aspect-ratio: 3/2;
+}
+
+.player.motion-starting,
+.player.motion-running,
+.player.motion-stopping {
+  width: 32vw;
+  max-width: 565px;
+  min-width: 273px;
+}
+.player.motion-idle i {
+  background-image: url("/knight-idle.png");
+  background-size: contain;
+  background-position: center bottom;
+  animation: idle-breath 2.8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+.player.motion-starting i { animation: run-start 0.055s steps(1, end) forwards; }
+.player.motion-running i { animation: armored-run 0.36s steps(1, end) infinite; }
+.player.motion-stopping i { animation: run-stop 0.08s steps(1, end) forwards; }
+.player.backwards {
+  transform: scaleX(-1);
+}
+@keyframes idle-breath {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  45% { transform: translateY(-1px) scaleY(1.006); }
+  65% { transform: translateY(0) scaleY(0.998); }
+}
+@keyframes run-start {
+  0% { background-position: 0 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 100% 0; }
+}
+@keyframes armored-run {
+  0%, 100% { background-position: 0 50%; }
+  16.666% { background-position: 50% 50%; }
+  33.333% { background-position: 100% 50%; }
+  50% { background-position: 0 100%; }
+  66.666% { background-position: 50% 100%; }
+  83.333% { background-position: 100% 100%; }
+}
+@keyframes run-stop {
+  0% { background-position: 100% 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 0 0; }
+}
+.ground-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14vh;
+  background: linear-gradient(#302d23, #0c0e0d);
+  border-top: 5px solid #827049;
+  box-shadow: 0 -8px 30px #000;
+}
+.ground-layer:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 60px,
+    #16181688 62px 64px
+  );
+}
+.ground-layer i {
+  position: absolute;
+  top: -13px;
+  width: 100%;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, #695e45 0 8vw, #413b30 8vw 9vw);
+  clip-path: polygon(
+    0 45%,
+    5% 10%,
+    9% 55%,
+    14% 5%,
+    20% 45%,
+    27% 0,
+    34% 50%,
+    42% 8%,
+    50% 55%,
+    59% 4%,
+    67% 55%,
+    75% 8%,
+    82% 50%,
+    91% 5%,
+    100% 45%,
+    100% 100%,
+    0 100%
+  );
+}
+.ground-layer i:last-child {
+  top: 65%;
+  opacity: 0.4;
+}
+.title-plaque {
+  position: absolute;
+  left: 7vw;
+  top: 18vh;
+  width: 58vw;
+  text-shadow: 0 5px 18px #000;
+}
+.title-plaque span,
+.banner small,
+.final-shrine small {
+  color: #c79d61;
+  font: 600 10px Cinzel;
+  letter-spacing: 0.32em;
+}
+.title-plaque h1 {
+  margin: 12px 0 5px;
+  font: 800 clamp(3.2rem, 7.5vw, 8rem)/0.82 Cinzel;
+  text-transform: uppercase;
+  letter-spacing: -0.06em;
+}
+.title-plaque h1 br + * {
+  color: #b75e49;
+}
+.title-plaque p {
+  margin: 25px 0;
+  font: 600 13px Cinzel;
+  letter-spacing: 0.5em;
+}
+.tutorial {
+  position: absolute;
+  left: 8vw;
+  bottom: 20vh;
+  display: grid;
+  gap: 6px;
+  border-left: 2px solid #b06d48;
+  padding-left: 17px;
+}
+.tutorial b {
+  font: 700 14px Cinzel;
+}
+.tutorial span {
+  font-size: 10px;
+  color: #aaa395;
+}
+.gate {
+  position: absolute;
+  right: 5vw;
+  bottom: 14vh;
+  width: 12vw;
+  min-width: 120px;
+  height: 36vh;
+  border: 18px solid #262724;
+  border-bottom: 0;
+  box-shadow:
+    inset 0 0 0 3px #766749,
+    0 0 28px #000;
+  background: linear-gradient(#080a09, #202820aa);
+  clip-path: polygon(
+    0 12%,
+    12% 12%,
+    12% 4%,
+    30% 4%,
+    50% 0,
+    70% 4%,
+    88% 4%,
+    88% 12%,
+    100% 12%,
+    100% 100%,
+    0 100%
+  );
+}
+.gate b {
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #d2b780;
+  font: 700 11px Cinzel;
+  letter-spacing: 0.16em;
+}
+.gate-one {
+  right: -6vw;
+}
+.banner {
+  position: absolute;
+  left: 8vw;
+  top: 14vh;
+}
+.banner h2 {
+  margin: 8px 0;
+  font: 700 clamp(2.5rem, 4vw, 4.8rem)/1 Cinzel;
+  text-transform: uppercase;
+  text-shadow: 0 4px 15px #000;
+}
+.stone-dialogue {
+  position: absolute;
+  left: 10vw;
+  top: 36vh;
+  width: 42vw;
+  padding: 27px 32px;
+  border: 1px solid #655b48;
+  background: #0d1110e8;
+  box-shadow: 10px 10px 0 #0006;
+}
+.stone-dialogue p {
+  margin: 0 0 12px;
+  color: #dbc698;
+  font: 600 1.3rem/1.4 Cinzel;
+}
+.stone-dialogue span {
+  color: #aaa99f;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.stat-obelisks {
+  position: absolute;
+  left: 55vw;
+  bottom: 14vh;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.3vw;
+}
+.stat-obelisks article {
+  width: 8vw;
+  min-width: 90px;
+  padding: 55px 10px 18px;
+  text-align: center;
+  background: linear-gradient(90deg, #202522, #363832, #181c1a);
+  border: 1px solid #625b49;
+  clip-path: polygon(50% 0, 100% 22%, 90% 100%, 10% 100%, 0 22%);
+}
+.stat-obelisks b {
+  display: block;
+  color: #c47758;
+  font: 700 1.65rem Cinzel;
+}
+.stat-obelisks span {
+  font: 600 8px Cinzel;
+  letter-spacing: 0.15em;
+}
+.skill-towers {
+  position: absolute;
+  left: 8vw;
+  right: 20vw;
+  bottom: 14vh;
+  height: 52vh;
+  display: flex;
+  gap: 1.5vw;
+  align-items: flex-end;
+}
+.skill-towers article {
+  width: 17vw;
+  height: var(--height);
+  background: linear-gradient(90deg, #1a1e1c, #343833, #151918);
+  border: 1px solid #5a5648;
+  display: flex;
+  align-items: flex-start;
+  padding: 25px 22px;
+  clip-path: polygon(
+    0 8%,
+    8% 8%,
+    8% 2%,
+    22% 2%,
+    28% 0,
+    34% 2%,
+    82% 2%,
+    82% 8%,
+    100% 8%,
+    100% 100%,
+    0 100%
+  );
+}
+.skill-towers small {
+  color: #b97155;
+  font: 600 8px Cinzel;
+}
+.skill-towers h3 {
+  margin: 7px 0;
+  font: 700 1.2rem Cinzel;
+}
+.skill-towers p {
+  color: #9b9e96;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.job-scrolls {
+  position: absolute;
+  left: 7vw;
+  right: 19vw;
+  top: 34vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5vw;
+}
+.job-scrolls article {
+  min-height: 34vh;
+  padding: 26px;
+  background: #141817e8;
+  border: 1px solid #5a574b;
+  box-shadow: 8px 8px 0 #0005;
+}
+.job-scrolls time,
+.academy time {
+  color: #bd7659;
+  font: 600 9px Cinzel;
+  letter-spacing: 0.1em;
+}
+.job-scrolls h3,
+.academy h3 {
+  margin: 12px 0;
+  font: 700 1.3rem Cinzel;
+}
+.job-scrolls p,
+.academy p {
+  color: #9b9e97;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.academy {
+  position: absolute;
+  left: 12vw;
+  top: 36vh;
+  width: 55vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2vw;
+}
+.academy article {
+  padding: 30px;
+  background: #101513e8;
+  border-top: 3px solid #9b7249;
+  box-shadow: 10px 10px 0 #0006;
+}
+.final-shrine {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  width: min(760px, 70vw);
+  text-align: center;
+  padding: 50px;
+  background: #0a0e0de8;
+  border: 1px solid #79674b;
+  box-shadow: 0 0 70px #a0523733;
+}
+.final-shrine h2 {
+  margin: 12px 0;
+  font: 700 clamp(2.3rem, 4.5vw, 5rem)/1 Cinzel;
+  text-transform: uppercase;
+}
+.final-shrine > p {
+  color: #aaa89d;
+}
+.final-shrine > a {
+  display: inline-block;
+  margin: 20px;
+  padding: 16px 24px;
+  background: #8a332a;
+  border: 1px solid #d0a465;
+  font: 700 10px Cinzel;
+  letter-spacing: 0.18em;
+}
+.final-shrine div {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  color: #99988f;
+  font: 600 9px Cinzel;
+  letter-spacing: 0.1em;
+}
+.foreground-trees {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.foreground-trees i {
+  position: absolute;
+  bottom: 12vh;
+  width: 4vw;
+  height: 35vh;
+  background: #090c0b;
+  clip-path: polygon(
+    43% 0,
+    57% 0,
+    60% 50%,
+    100% 40%,
+    62% 58%,
+    100% 72%,
+    58% 65%,
+    62% 100%,
+    38% 100%,
+    42% 65%,
+    0 74%,
+    40% 57%,
+    0 42%,
+    40% 50%
+  );
+}
+.foreground-trees i:nth-child(1) {
+  left: 82vw;
+  height: 47vh;
+}
+.foreground-trees i:nth-child(2) {
+  left: 190vw;
+}
+.foreground-trees i:nth-child(3) {
+  left: 295vw;
+  height: 44vh;
+}
+.foreground-trees i:nth-child(4) {
+  left: 395vw;
+}
+.foreground-trees i:nth-child(5) {
+  left: 497vw;
+  height: 48vh;
+}
+.foreground-trees i:nth-child(6) {
+  left: 690vw;
+}
+.fog {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  width: 55vw;
+  height: 20vh;
+  border-radius: 50%;
+  background: #bfc6bd12;
+  filter: blur(30px);
+  animation: fog 12s ease-in-out infinite;
+}
+.fog-one {
+  bottom: 9vh;
+  left: -15vw;
+}
+.fog-two {
+  bottom: 28vh;
+  right: -20vw;
+  animation-delay: -5s;
+}
+@keyframes fog {
+  50% {
+    transform: translateX(30vw);
+  }
+}
+.scroll-prompt {
+  position: fixed;
+  z-index: 41;
+  bottom: 3vh;
+  right: 3vw;
+  color: #aaa28e;
+  font: 600 8px Cinzel;
+  letter-spacing: 0.2em;
+}
+.scroll-prompt span {
+  color: #d09b62;
+  font-size: 15px;
+}
+@media (max-width: 760px) {
+  .game-scroll {
+    height: 700vh;
+  }
+  .world {
+    width: 700vw;
+  }
+  .game-hud {
+    top: 13px;
+  }
+  .hud-copy strong {
+    font-size: 9px;
+  }
+  .hud-copy span {
+    font-size: 6px;
+  }
+  .level-counter small {
+    display: none;
+  }
+  .crest {
+    width: 38px;
+    height: 38px;
+  }
+  .player {
+    min-width: 170px;
+    width: 34vw;
+    bottom: 9.8vh;
+  }
+  .player.motion-idle {
+    width: 55vw;
+    max-width: none;
+  }
+
+  .player.motion-starting,
+  .player.motion-running,
+  .player.motion-stopping {
+    width: 45vw;
+    max-width: none;
+    min-width: 216px;
+  }
+  .title-plaque {
+    left: 8vw;
+    top: 23vh;
+    width: 80vw;
+  }
+  .title-plaque h1 {
+    font-size: 13vw;
+  }
+  .title-plaque p {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+  }
+  .tutorial {
+    bottom: 25vh;
+  }
+  .banner {
+    left: 7vw;
+    top: 17vh;
+  }
+  .banner h2 {
+    font-size: 8vw;
+  }
+  .stone-dialogue {
+    left: 7vw;
+    top: 33vh;
+    width: 65vw;
+    padding: 20px;
+  }
+  .stone-dialogue p {
+    font-size: 0.9rem;
+  }
+  .stone-dialogue span {
+    font-size: 10px;
+  }
+  .stat-obelisks {
+    display: none;
+  }
+  .gate {
+    right: -5vw;
+    width: 25vw;
+    border-width: 11px;
+  }
+  .skill-towers {
+    left: 5vw;
+    right: 18vw;
+    gap: 2vw;
+  }
+  .skill-towers article {
+    width: 17vw;
+    padding: 16px 8px;
+  }
+  .skill-towers h3 {
+    font-size: 2.5vw;
+  }
+  .skill-towers p {
+    font-size: 7px;
+  }
+  .job-scrolls {
+    left: 5vw;
+    right: 18vw;
+    top: 32vh;
+    gap: 1vw;
+  }
+  .job-scrolls article {
+    padding: 14px;
+  }
+  .job-scrolls h3 {
+    font-size: 2.6vw;
+  }
+  .job-scrolls p {
+    font-size: 8px;
+  }
+  .academy {
+    left: 7vw;
+    width: 69vw;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .academy article {
+    padding: 17px;
+  }
+  .final-shrine {
+    width: 80vw;
+    padding: 25px 15px;
+  }
+  .final-shrine div {
+    flex-direction: column;
+    gap: 7px;
+  }
+  .scroll-prompt {
+    right: 15px;
+  }
+  .fog {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world {
+    transition: none;
+  }
+  .player i,
+  .fog {
+    animation: none;
+  }
+}
