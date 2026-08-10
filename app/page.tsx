@@ -55,8 +55,10 @@ export default function Home() {
       const max = document.documentElement.scrollHeight - innerHeight;
       const next = max ? Math.max(0, Math.min(1, scrollY / max)) : 0;
       setProgress(next);
-      const screen = next * 7;
-      setLevel(screen < 3 ? 1 : Math.min(6, Math.floor(screen) - 1));
+      const wallScene = innerHeight * 1.78;
+      const position = next * (innerWidth * 7 + wallScene);
+      const screen = (position - wallScene) / innerWidth;
+      setLevel(position < innerWidth * 3 + wallScene ? 1 : Math.min(6, Math.floor(screen) - 1));
       if (Math.abs(scrollY - lastY.current) > 1) {
         setBackwards(scrollY < lastY.current);
         if (motionRef.current === "idle" || motionRef.current === "stopping") {
@@ -75,12 +77,22 @@ export default function Home() {
     };
   }, []);
 
-  const worldX = progress * 700;
+  const travelVw = progress * 700;
+  const travelVh = progress * 178;
+  const worldTransform = `translate3d(calc(-${travelVw}vw - ${travelVh}vh),0,0)`;
+  const layerTransform = (originVw: number) =>
+    `translate3d(calc(${originVw - travelVw}vw - ${travelVh}vh),0,0)`;
+  const skyTransform = `translate3d(calc(${travelVw * 0.7}vw + ${travelVh * 0.7}vh),0,0)`;
+  const skyPhase = Math.min(1, progress * 2.15);
   const heroX = Math.min(29, 8 + progress * 75);
 
   return (
     <main className="game-scroll">
-      <div className="game" aria-label="Currículum interactivo de Gabriel Vázquez Ruiz">
+      <div
+        className="game"
+        style={{ "--sky-phase": skyPhase } as React.CSSProperties}
+        aria-label="Currículum interactivo de Gabriel Vázquez Ruiz"
+      >
         <div className="fog fog-one" /><div className="fog fog-two" />
         <div className="game-hud">
           <div className="crest">GV</div>
@@ -89,10 +101,10 @@ export default function Home() {
         </div>
         <div className="progress-track"><i style={{ width: `${progress * 100}%` }} /></div>
 
-        <div className="world" style={{ transform: `translate3d(-${worldX}vw,0,0)` }}>
+        <div className="world" style={{ transform: worldTransform }}>
           <div className="backdrop" />
           <div className="about-scenario" />
-          <div className="sky-parallax" aria-hidden="true"><i /><i /></div>
+          <div className="sky-parallax" style={{ transform: skyTransform }} aria-hidden="true"><i /><i /></div>
           <div className="moon-disc" />
           <div className="far-castles"><i /><i /><i /><i /></div>
 
@@ -161,7 +173,9 @@ export default function Home() {
         </div>
 
         <div className={`player motion-${motion} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
-        <div className="foreground-post" style={{ transform: `translate3d(${72 - worldX}vw,0,0)` }} aria-hidden="true">
+        <div className="castle-wall-transition castle-wall-back" style={{ transform: layerTransform(260) }} aria-hidden="true" />
+        <div className="castle-wall-transition castle-wall-front" style={{ transform: layerTransform(260) }} aria-hidden="true" />
+        <div className="foreground-post" style={{ transform: layerTransform(72) }} aria-hidden="true">
           <div className="raven raven-foreground"><i /></div>
         </div>
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>

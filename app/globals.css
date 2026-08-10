@@ -5,7 +5,7 @@
   --gold: #c69b58;
   --blood: #862e28;
   --ink: #070909;
-  --world: 800vw;
+  --world: calc(800vw + 178vh);
 }
 * {
   box-sizing: border-box;
@@ -21,7 +21,7 @@ body {
   overflow-x: hidden;
 }
 .game-scroll {
-  height: 800vh;
+  height: calc(800vh + 178vw);
 }
 .game {
   position: fixed;
@@ -64,22 +64,59 @@ body {
   position: absolute;
   z-index: 1;
   inset: 0 auto 0 0;
-  width: 300vw;
+  width: calc(300vw + 178vh);
+  overflow: hidden;
   background:
     linear-gradient(90deg, #070a09aa 0%, transparent 18%, transparent 78%, #090b0acc 100%),
-    url("/about-journey-bg-clean.png") center / 300vw 100% no-repeat;
-  filter: saturate(0.76) brightness(0.76);
+    url("/about-journey-bg-clean.png") left center / calc(300vw + 178vh) 100% no-repeat;
+  background-color: #05080d;
+  filter:
+    saturate(calc(0.88 - var(--sky-phase) * 0.34))
+    brightness(calc(0.84 - var(--sky-phase) * 0.3));
+  transition: filter 0.08s linear;
+}
+.about-scenario:before,
+.about-scenario:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.about-scenario:before {
+  background:
+    radial-gradient(circle at 66% 27%, #ffb16b66 0 6%, #ce68403d 19%, transparent 48%),
+    linear-gradient(180deg, #d98a6338 0%, #9d4b3b1f 45%, transparent 76%);
+  opacity: calc(1 - var(--sky-phase) * 0.84);
+  mix-blend-mode: screen;
+}
+.about-scenario:after {
+  background: linear-gradient(180deg, #020713ed 0%, #07101bd9 48%, #090d11a8 76%, #07090870 100%);
+  opacity: calc(var(--sky-phase) * 0.86);
 }
 .sky-parallax {
   position: absolute;
   z-index: 2;
   top: 0;
   left: 0;
-  width: 300vw;
+  width: calc(300vw + 178vh);
   height: 58vh;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.38;
+  opacity: calc(0.38 + var(--sky-phase) * 0.18);
+  will-change: transform;
+  transition: transform 0.08s linear, opacity 0.08s linear;
+}
+.sky-parallax:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, #e8dfc9 0 1px, transparent 1.5px),
+    radial-gradient(circle, #b9c6d2 0 0.7px, transparent 1.2px);
+  background-position: 3vw 4vh, 11vw 12vh;
+  background-size: 19vw 17vh, 27vw 23vh;
+  opacity: calc(var(--sky-phase) * 0.42);
+  mix-blend-mode: screen;
 }
 .sky-parallax i {
   position: absolute;
@@ -91,7 +128,10 @@ body {
     radial-gradient(ellipse at 18% 55%, #d2b18a22 0 12%, transparent 38%),
     radial-gradient(ellipse at 56% 38%, #c5ad9320 0 15%, transparent 42%),
     radial-gradient(ellipse at 85% 62%, #827b7429 0 11%, transparent 37%);
-  filter: blur(24px);
+  filter:
+    blur(24px)
+    saturate(calc(1 - var(--sky-phase) * 0.38))
+    brightness(calc(1 - var(--sky-phase) * 0.28));
   animation: sky-drift 38s ease-in-out infinite alternate;
 }
 .sky-parallax i:last-child {
@@ -166,22 +206,22 @@ body {
 }
 .profile-zone {
   left: 100vw;
-  width: 200vw;
+  width: calc(200vw + 178vh);
 }
 .skills-zone {
-  left: 300vw;
+  left: calc(300vw + 178vh);
 }
 .jobs-zone {
-  left: 400vw;
+  left: calc(400vw + 178vh);
 }
 .jobs-two {
-  left: 500vw;
+  left: calc(500vw + 178vh);
 }
 .education-zone {
-  left: 600vw;
+  left: calc(600vw + 178vh);
 }
 .contact-zone {
-  left: 700vw;
+  left: calc(700vw + 178vh);
 }
 .game-hud {
   position: fixed;
@@ -626,9 +666,28 @@ body {
   animation-duration: 6.6s;
   animation-delay: -2.4s;
 }
+.castle-wall-transition {
+  position: fixed;
+  left: 0;
+  bottom: 9vh;
+  width: 178vh;
+  height: 108vh;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.08s linear;
+  background: url("/castle-wall-transition.png") center bottom / 100% 100% no-repeat;
+  filter: saturate(0.72) brightness(0.7) drop-shadow(-18px 4px 20px #000b);
+}
+.castle-wall-back {
+  z-index: 24;
+}
+.castle-wall-front {
+  z-index: 26;
+  clip-path: inset(0 0 0 43%);
+}
 .castle-threshold {
   position: absolute;
-  left: 174vw;
+  left: calc(164vw + 178vh);
   bottom: 21vh;
   display: grid;
   gap: 8px;
@@ -889,10 +948,10 @@ body {
 }
 @media (max-width: 760px) {
   .game-scroll {
-    height: 800vh;
+    height: calc(800vh + 178vw);
   }
   .world {
-    width: 800vw;
+    width: var(--world);
   }
   .game-hud {
     top: 13px;
@@ -995,8 +1054,13 @@ body {
     min-width: 250px;
     height: 15vh;
   }
+  .castle-wall-transition {
+    bottom: 9vh;
+    width: 178vh;
+    height: 108vh;
+  }
   .castle-threshold {
-    left: 158vw;
+    left: calc(164vw + 178vh);
     width: 35vw;
   }
   .stat-obelisks {
