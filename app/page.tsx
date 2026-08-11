@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-type MotionState = "idle" | "starting" | "running" | "stopping";
+import { MainCharacter, type MotionState } from "./characters/main-character/MainCharacter";
+import {
+  CastleWallsBackground,
+  CastleWallsOverlay,
+  CastleWallsWorld,
+} from "./scenes/castle-walls/CastleWalls";
 
 const jobs = [
   ["Random estudio", "2013—2015", "Sitios web, apps híbridas, multimedia, UX y APIs RESTful."],
@@ -29,6 +33,7 @@ export default function Home() {
   const motionRef = useRef<MotionState>("idle");
   const phaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollFrame = useRef<number | null>(null);
 
   useEffect(() => {
     const changeMotion = (next: MotionState) => {
@@ -68,10 +73,19 @@ export default function Home() {
       }
       lastY.current = scrollY;
     };
+    const requestUpdate = () => {
+      if (scrollFrame.current !== null) return;
+      scrollFrame.current = requestAnimationFrame(() => {
+        scrollFrame.current = null;
+        update();
+      });
+    };
+
     update();
-    addEventListener("scroll", update, { passive: true });
+    addEventListener("scroll", requestUpdate, { passive: true });
     return () => {
-      removeEventListener("scroll", update);
+      removeEventListener("scroll", requestUpdate);
+      if (scrollFrame.current !== null) cancelAnimationFrame(scrollFrame.current);
       if (phaseTimer.current) clearTimeout(phaseTimer.current);
       if (stopTimer.current) clearTimeout(stopTimer.current);
     };
@@ -82,7 +96,6 @@ export default function Home() {
   const worldTransform = `translate3d(calc(-${travelVw}vw - ${travelVh}vh),0,0)`;
   const layerTransform = (originVw: number) =>
     `translate3d(calc(${originVw - travelVw}vw - ${travelVh}vh),0,0)`;
-  const skyTransform = `translate3d(calc(${travelVw * 0.7}vw + ${travelVh * 0.7}vh),0,0)`;
   const skyPhase = Math.min(1, progress * 2.15);
   const heroX = Math.min(29, 8 + progress * 75);
 
@@ -103,8 +116,7 @@ export default function Home() {
 
         <div className="world" style={{ transform: worldTransform }}>
           <div className="backdrop" />
-          <div className="about-scenario" />
-          <div className="sky-parallax" style={{ transform: skyTransform }} aria-hidden="true"><i /><i /></div>
+          <CastleWallsBackground />
           <div className="moon-disc" />
           <div className="far-castles"><i /><i /><i /><i /></div>
 
@@ -114,23 +126,7 @@ export default function Home() {
             <div className="gate gate-one"><b>NIVEL 1</b></div>
           </section>
 
-          <section className="zone profile-zone" aria-labelledby="perfil-title">
-            <div className="legend legend-origin">
-              <small>CAPÍTULO I · EL ORIGEN</small>
-              <h2 id="perfil-title">Una leyenda escrita en código</h2>
-              <p>En Guadalajara comenzó el viaje de un creador inquieto, guiado por la curiosidad y el deseo de convertir problemas complejos en experiencias claras.</p>
-            </div>
-            <div className="legend legend-calling">
-              <small>EL LLAMADO</small>
-              <h2>Construir, aprender y guiar</h2>
-              <p>Durante más de ocho años ha creado productos web y móviles, liderado equipos y compartido conocimiento con nuevas generaciones.</p>
-              <blockquote>“Meticuloso, innovador y orientado a resolver problemas.”</blockquote>
-            </div>
-            <div className="raven raven-distant" aria-hidden="true"><i /></div>
-            <div className="wanderer" aria-hidden="true"><i /></div>
-            <div className="castle-threshold"><span>LAS PUERTAS DEL OFICIO</span><b>ENTRAR AL CASTILLO</b></div>
-            <div className="gate"><b>NIVEL 2</b></div>
-          </section>
+          <CastleWallsWorld />
 
           <section className="zone skills-zone" aria-labelledby="skills-title">
             <div className="banner"><small>NIVEL 2</small><h2 id="skills-title">Arsenal técnico</h2></div>
@@ -172,12 +168,8 @@ export default function Home() {
           <div className="foreground-trees"><i /><i /><i /><i /><i /><i /></div>
         </div>
 
-        <div className={`player motion-${motion} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
-        <div className="castle-wall-transition castle-wall-back" style={{ transform: layerTransform(260) }} aria-hidden="true" />
-        <div className="castle-wall-transition castle-wall-front" style={{ transform: layerTransform(260) }} aria-hidden="true" />
-        <div className="foreground-post" style={{ transform: layerTransform(72) }} aria-hidden="true">
-          <div className="raven raven-foreground"><i /></div>
-        </div>
+        <MainCharacter motion={motion} backwards={backwards} left={`${heroX}vw`} />
+        <CastleWallsOverlay layerTransform={layerTransform} />
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
       </div>
     </main>
