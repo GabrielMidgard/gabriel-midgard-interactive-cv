@@ -1,0 +1,105 @@
+.player {
+  position: fixed;
+  z-index: 25;
+  bottom: 10.8vh;
+  width: 24vw;
+  max-width: 420px;
+  min-width: 210px;
+  aspect-ratio: 1;
+  transition: left 0.12s linear;
+  filter: drop-shadow(0 12px 7px #000c);
+  transform-origin: bottom center;
+}
+
+.player i {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/characters/main-character/knight-motion.png");
+  background-size: 300% 300%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+.idle {
+  width: 36vw;
+  max-width: 630px;
+  aspect-ratio: 3/2;
+}
+
+.starting,
+.running,
+.stopping {
+  width: 32vw;
+  max-width: 565px;
+  min-width: 273px;
+}
+
+.idle i {
+  background-image: url("/assets/characters/main-character/knight-idle.png");
+  background-size: contain;
+  background-position: center bottom;
+  animation: idle-breath 2.8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.starting i { animation: run-start 0.055s steps(1, end) forwards; }
+.running i { animation: armored-run 0.36s steps(1, end) infinite; }
+.stopping i { animation: run-stop 0.08s steps(1, end) forwards; }
+
+.backwards {
+  transform: scaleX(-1);
+}
+
+@keyframes idle-breath {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  45% { transform: translateY(-1px) scaleY(1.006); }
+  65% { transform: translateY(0) scaleY(0.998); }
+}
+
+@keyframes run-start {
+  0% { background-position: 0 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 100% 0; }
+}
+
+@keyframes armored-run {
+  0%, 100% { background-position: 0 50%; }
+  16.666% { background-position: 50% 50%; }
+  33.333% { background-position: 100% 50%; }
+  50% { background-position: 0 100%; }
+  66.666% { background-position: 50% 100%; }
+  83.333% { background-position: 100% 100%; }
+}
+
+@keyframes run-stop {
+  0% { background-position: 100% 0; }
+  50% { background-position: 50% 0; }
+  100% { background-position: 0 0; }
+}
+
+@media (max-width: 760px) {
+  .player {
+    min-width: 170px;
+    width: 34vw;
+    bottom: 9.8vh;
+  }
+
+  .idle {
+    width: 55vw;
+    max-width: none;
+  }
+
+  .starting,
+  .running,
+  .stopping {
+    width: 45vw;
+    max-width: none;
+    min-width: 216px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player i {
+    animation: none;
+  }
+}

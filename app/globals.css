@@ -5,7 +5,7 @@
   --gold: #c69b58;
   --blood: #862e28;
   --ink: #070909;
-  --world: 700vw;
+  --world: calc(800vw + 178vh);
 }
 * {
   box-sizing: border-box;
@@ -21,7 +21,7 @@ body {
   overflow-x: hidden;
 }
 .game-scroll {
-  height: 700vh;
+  height: calc(800vh + 178vw);
 }
 .game {
   position: fixed;
@@ -62,7 +62,7 @@ body {
 }
 .moon-disc {
   position: absolute;
-  left: 245vw;
+  left: 345vw;
   top: 9vh;
   width: 31vh;
   height: 31vh;
@@ -120,23 +120,20 @@ body {
 .intro-zone {
   left: 0;
 }
-.profile-zone {
-  left: 100vw;
-}
 .skills-zone {
-  left: 200vw;
+  left: calc(300vw + 178vh);
 }
 .jobs-zone {
-  left: 300vw;
+  left: calc(400vw + 178vh);
 }
 .jobs-two {
-  left: 400vw;
+  left: calc(500vw + 178vh);
 }
 .education-zone {
-  left: 500vw;
+  left: calc(600vw + 178vh);
 }
 .contact-zone {
-  left: 600vw;
+  left: calc(700vw + 178vh);
 }
 .game-hud {
   position: fixed;
@@ -202,75 +199,6 @@ body {
   height: 100%;
   background: linear-gradient(90deg, #70231f, #d3774e, #d7b673);
   box-shadow: 0 0 12px #dc7955;
-}
-.player {
-  position: fixed;
-  z-index: 25;
-  bottom: 10.8vh;
-  width: 24vw;
-  max-width: 420px;
-  min-width: 210px;
-  aspect-ratio: 1;
-  transition: left 0.12s linear;
-  filter: drop-shadow(0 12px 7px #000c);
-  transform-origin: bottom center;
-}
-.player i {
-  position: absolute;
-  inset: 0;
-  background-image: url("/knight-motion.png");
-  background-size: 300% 300%;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-}
-.player.motion-idle {
-  width: 36vw;
-  max-width: 630px;
-  aspect-ratio: 3/2;
-}
-
-.player.motion-starting,
-.player.motion-running,
-.player.motion-stopping {
-  width: 32vw;
-  max-width: 565px;
-  min-width: 273px;
-}
-.player.motion-idle i {
-  background-image: url("/knight-idle.png");
-  background-size: contain;
-  background-position: center bottom;
-  animation: idle-breath 2.8s ease-in-out infinite;
-  transform-origin: center bottom;
-}
-.player.motion-starting i { animation: run-start 0.055s steps(1, end) forwards; }
-.player.motion-running i { animation: armored-run 0.36s steps(1, end) infinite; }
-.player.motion-stopping i { animation: run-stop 0.08s steps(1, end) forwards; }
-.player.backwards {
-  transform: scaleX(-1);
-}
-@keyframes idle-breath {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  45% { transform: translateY(-1px) scaleY(1.006); }
-  65% { transform: translateY(0) scaleY(0.998); }
-}
-@keyframes run-start {
-  0% { background-position: 0 0; }
-  50% { background-position: 50% 0; }
-  100% { background-position: 100% 0; }
-}
-@keyframes armored-run {
-  0%, 100% { background-position: 0 50%; }
-  16.666% { background-position: 50% 50%; }
-  33.333% { background-position: 100% 50%; }
-  50% { background-position: 0 100%; }
-  66.666% { background-position: 50% 100%; }
-  83.333% { background-position: 100% 100%; }
-}
-@keyframes run-stop {
-  0% { background-position: 100% 0; }
-  50% { background-position: 50% 0; }
-  100% { background-position: 0 0; }
 }
 .ground-layer {
   position: absolute;
@@ -683,10 +611,10 @@ body {
 }
 @media (max-width: 760px) {
   .game-scroll {
-    height: 700vh;
+    height: calc(800vh + 178vw);
   }
   .world {
-    width: 700vw;
+    width: var(--world);
   }
   .game-hud {
     top: 13px;
@@ -703,23 +631,6 @@ body {
   .crest {
     width: 38px;
     height: 38px;
-  }
-  .player {
-    min-width: 170px;
-    width: 34vw;
-    bottom: 9.8vh;
-  }
-  .player.motion-idle {
-    width: 55vw;
-    max-width: none;
-  }
-
-  .player.motion-starting,
-  .player.motion-running,
-  .player.motion-stopping {
-    width: 45vw;
-    max-width: none;
-    min-width: 216px;
   }
   .title-plaque {
     left: 8vw;
@@ -821,7 +732,6 @@ body {
   .world {
     transition: none;
   }
-  .player i,
   .fog {
     animation: none;
   }
