@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-type MotionState = "idle" | "starting" | "running" | "stopping";
+import { MainCharacter, type MotionState } from "./characters/main-character/MainCharacter";
+import {
+  CastleWallsBackground,
+  CastleWallsOverlay,
+  CastleWallsWorld,
+} from "./scenes/castle-walls/CastleWalls";
 
 const jobs = [
   ["Random estudio", "2013—2015", "Sitios web, apps híbridas, multimedia, UX y APIs RESTful."],
@@ -29,6 +33,7 @@ export default function Home() {
   const motionRef = useRef<MotionState>("idle");
   const phaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollFrame = useRef<number | null>(null);
 
   useEffect(() => {
     const changeMotion = (next: MotionState) => {
@@ -55,7 +60,10 @@ export default function Home() {
       const max = document.documentElement.scrollHeight - innerHeight;
       const next = max ? Math.max(0, Math.min(1, scrollY / max)) : 0;
       setProgress(next);
-      setLevel(Math.min(6, Math.floor(next * 6) + 1));
+      const wallScene = innerHeight * 1.78;
+      const position = next * (innerWidth * 7 + wallScene);
+      const screen = (position - wallScene) / innerWidth;
+      setLevel(position < innerWidth * 3 + wallScene ? 1 : Math.min(6, Math.floor(screen) - 1));
       if (Math.abs(scrollY - lastY.current) > 1) {
         setBackwards(scrollY < lastY.current);
         if (motionRef.current === "idle" || motionRef.current === "stopping") {
@@ -65,21 +73,39 @@ export default function Home() {
       }
       lastY.current = scrollY;
     };
+    const requestUpdate = () => {
+      if (scrollFrame.current !== null) return;
+      scrollFrame.current = requestAnimationFrame(() => {
+        scrollFrame.current = null;
+        update();
+      });
+    };
+
     update();
-    addEventListener("scroll", update, { passive: true });
+    addEventListener("scroll", requestUpdate, { passive: true });
     return () => {
-      removeEventListener("scroll", update);
+      removeEventListener("scroll", requestUpdate);
+      if (scrollFrame.current !== null) cancelAnimationFrame(scrollFrame.current);
       if (phaseTimer.current) clearTimeout(phaseTimer.current);
       if (stopTimer.current) clearTimeout(stopTimer.current);
     };
   }, []);
 
-  const worldX = progress * 600;
+  const travelVw = progress * 700;
+  const travelVh = progress * 178;
+  const worldTransform = `translate3d(calc(-${travelVw}vw - ${travelVh}vh),0,0)`;
+  const layerTransform = (originVw: number) =>
+    `translate3d(calc(${originVw - travelVw}vw - ${travelVh}vh),0,0)`;
+  const skyPhase = Math.min(1, progress * 2.15);
   const heroX = Math.min(29, 8 + progress * 75);
 
   return (
     <main className="game-scroll">
-      <div className="game" aria-label="Currículum interactivo de Gabriel Vázquez Ruiz">
+      <div
+        className="game"
+        style={{ "--sky-phase": skyPhase } as React.CSSProperties}
+        aria-label="Currículum interactivo de Gabriel Vázquez Ruiz"
+      >
         <div className="fog fog-one" /><div className="fog fog-two" />
         <div className="game-hud">
           <div className="crest">GV</div>
@@ -88,8 +114,9 @@ export default function Home() {
         </div>
         <div className="progress-track"><i style={{ width: `${progress * 100}%` }} /></div>
 
-        <div className="world" style={{ transform: `translate3d(-${worldX}vw,0,0)` }}>
+        <div className="world" style={{ transform: worldTransform }}>
           <div className="backdrop" />
+          <CastleWallsBackground />
           <div className="moon-disc" />
           <div className="far-castles"><i /><i /><i /><i /></div>
 
@@ -99,15 +126,7 @@ export default function Home() {
             <div className="gate gate-one"><b>NIVEL 1</b></div>
           </section>
 
-          <section className="zone profile-zone" aria-labelledby="perfil-title">
-            <div className="banner"><small>NIVEL 1</small><h2 id="perfil-title">El desarrollador</h2></div>
-            <div className="stone-dialogue">
-              <p>“Meticuloso, innovador y orientado a resolver problemas.”</p>
-              <span>8 años creando productos web y móviles, liderando equipos y navegando proyectos complejos.</span>
-            </div>
-            <div className="stat-obelisks"><article><b>8+</b><span>AÑOS</span></article><article><b>16</b><span>PROYECTOS</span></article><article><b>90%</b><span>APRENDIZAJE</span></article></div>
-            <div className="gate"><b>NIVEL 2</b></div>
-          </section>
+          <CastleWallsWorld />
 
           <section className="zone skills-zone" aria-labelledby="skills-title">
             <div className="banner"><small>NIVEL 2</small><h2 id="skills-title">Arsenal técnico</h2></div>
@@ -149,7 +168,8 @@ export default function Home() {
           <div className="foreground-trees"><i /><i /><i /><i /><i /><i /></div>
         </div>
 
-        <div className={`player motion-${motion} ${backwards ? "backwards" : ""}`} style={{ left: `${heroX}vw` }} aria-hidden="true"><i /></div>
+        <MainCharacter motion={motion} backwards={backwards} left={`${heroX}vw`} />
+        <CastleWallsOverlay layerTransform={layerTransform} />
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
       </div>
     </main>
