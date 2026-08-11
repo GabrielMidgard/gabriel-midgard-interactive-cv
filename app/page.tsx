@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MainCharacter, type MotionState } from "./characters/main-character/MainCharacter";
+import { LOADING_DURATION_SECONDS } from "./config/experience";
 import {
   CastleWallsBackground,
   CastleWallsOverlay,
   CastleWallsWorld,
 } from "./scenes/castle-walls/CastleWalls";
+import { LoadingScene } from "./scenes/loading/LoadingScene";
 
 const jobs = [
   ["Random estudio", "2013—2015", "Sitios web, apps híbridas, multimedia, UX y APIs RESTful."],
@@ -25,6 +27,7 @@ const skillGroups = [
 ];
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [motion, setMotion] = useState<MotionState>("idle");
   const [backwards, setBackwards] = useState(false);
@@ -34,6 +37,7 @@ export default function Home() {
   const phaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollFrame = useRef<number | null>(null);
+  const finishLoading = useCallback(() => setIsLoading(false), []);
 
   useEffect(() => {
     const changeMotion = (next: MotionState) => {
@@ -101,10 +105,17 @@ export default function Home() {
 
   return (
     <main className="game-scroll">
+      {isLoading && (
+        <LoadingScene
+          durationSeconds={LOADING_DURATION_SECONDS}
+          onComplete={finishLoading}
+        />
+      )}
       <div
         className="game"
         style={{ "--sky-phase": skyPhase } as React.CSSProperties}
         aria-label="Currículum interactivo de Gabriel Vázquez Ruiz"
+        aria-hidden={isLoading}
       >
         <div className="fog fog-one" /><div className="fog fog-two" />
         <div className="game-hud">
