@@ -1,5 +1,5 @@
 {
-  "debugPortAddress": "127.0.0.1:59469",
+  "debugPortAddress": "127.0.0.1:56996",
   "defaultEntrypointService": "core:user:__asset-worker__",
   "userWorkerService": "core:user:__asset-worker__"
 }
