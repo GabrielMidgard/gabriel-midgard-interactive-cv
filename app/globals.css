@@ -21,7 +21,7 @@ body {
   overflow-x: hidden;
 }
 .game-scroll {
-  height: calc(800vh + 178vw);
+  height: var(--scroll-height, calc(800vh + 178vw));
 }
 .game {
   position: fixed;
@@ -62,7 +62,7 @@ body {
 }
 .moon-disc {
   position: absolute;
-  left: 345vw;
+  left: calc(var(--pre-castle-width, 0vw) + 345vw);
   top: 9vh;
   width: 31vh;
   height: 31vh;
@@ -95,19 +95,19 @@ body {
   );
 }
 .far-castles i:nth-child(1) {
-  left: 125vw;
+  left: calc(var(--pre-castle-width, 0vw) + 125vw);
   height: 70%;
 }
 .far-castles i:nth-child(2) {
-  left: 270vw;
+  left: calc(var(--pre-castle-width, 0vw) + 270vw);
   height: 94%;
 }
 .far-castles i:nth-child(3) {
-  left: 425vw;
+  left: calc(var(--pre-castle-width, 0vw) + 425vw);
   height: 75%;
 }
 .far-castles i:nth-child(4) {
-  left: 590vw;
+  left: calc(var(--pre-castle-width, 0vw) + 590vw);
   height: 88%;
 }
 .zone {
@@ -121,19 +121,19 @@ body {
   left: 0;
 }
 .skills-zone {
-  left: calc(300vw + 178vh);
+  left: calc(var(--pre-castle-width, 0vw) + 300vw + 178vh);
 }
 .jobs-zone {
-  left: calc(400vw + 178vh);
+  left: calc(var(--pre-castle-width, 0vw) + 400vw + 178vh);
 }
 .jobs-two {
-  left: calc(500vw + 178vh);
+  left: calc(var(--pre-castle-width, 0vw) + 500vw + 178vh);
 }
 .education-zone {
-  left: calc(600vw + 178vh);
+  left: calc(var(--pre-castle-width, 0vw) + 600vw + 178vh);
 }
 .contact-zone {
-  left: calc(700vw + 178vh);
+  left: calc(var(--pre-castle-width, 0vw) + 700vw + 178vh);
 }
 .game-hud {
   position: fixed;
@@ -551,25 +551,25 @@ body {
   );
 }
 .foreground-trees i:nth-child(1) {
-  left: 82vw;
+  left: calc(var(--pre-castle-width, 0vw) + 82vw);
   height: 47vh;
 }
 .foreground-trees i:nth-child(2) {
-  left: 190vw;
+  left: calc(var(--pre-castle-width, 0vw) + 190vw);
 }
 .foreground-trees i:nth-child(3) {
-  left: 295vw;
+  left: calc(var(--pre-castle-width, 0vw) + 295vw);
   height: 44vh;
 }
 .foreground-trees i:nth-child(4) {
-  left: 395vw;
+  left: calc(var(--pre-castle-width, 0vw) + 395vw);
 }
 .foreground-trees i:nth-child(5) {
-  left: 497vw;
+  left: calc(var(--pre-castle-width, 0vw) + 497vw);
   height: 48vh;
 }
 .foreground-trees i:nth-child(6) {
-  left: 690vw;
+  left: calc(var(--pre-castle-width, 0vw) + 690vw);
 }
 .fog {
   position: fixed;
@@ -611,7 +611,7 @@ body {
 }
 @media (max-width: 760px) {
   .game-scroll {
-    height: calc(800vh + 178vw);
+    height: var(--scroll-height, calc(800vh + 178vw));
   }
   .world {
     width: var(--world);
