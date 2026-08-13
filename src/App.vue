@@ -6,7 +6,6 @@ import CastleWalls from "@/components/scenes/castle-walls/CastleWalls.vue";
 import EnchantedForest from "@/components/scenes/enchanted-forest/EnchantedForest.vue";
 import FantasticTown from "@/components/scenes/fantastic-town/FantasticTown.vue";
 import LoadingScene from "@/components/scenes/loading/LoadingScene.vue";
-import { LOADING_DURATION_SECONDS } from "@/config/experience";
 import {
   CASTLE_WALLS_START_VW,
   ENCHANTED_FOREST_START_VW,
@@ -15,6 +14,7 @@ import {
   WORLD_WIDTH_VW,
 } from "@/config/world";
 import { useExperienceStore } from "@/stores/experience";
+import { useSettingsStore } from "@/stores/settings";
 import type { CssVariables } from "@/types/experience";
 
 const jobs = [
@@ -34,8 +34,10 @@ const skillGroups = [
 ] as const;
 
 const experience = useExperienceStore();
+const settingsStore = useSettingsStore();
 const {
   isLoading,
+  loadingStarted,
   progress,
   motion,
   backwards,
@@ -46,6 +48,13 @@ const {
   heroX,
   worldTransform,
 } = storeToRefs(experience);
+const {
+  activeModeId,
+  enabledModes,
+  isReady: settingsReady,
+  loadingDurationSeconds,
+  modeSelectorEnabled,
+} = storeToRefs(settingsStore);
 
 const rootStyle = {
   "--world": `calc(${WORLD_WIDTH_VW}vw + 178vh)`,
@@ -67,15 +76,23 @@ const corruptedTreeTransform = computed(() =>
 const castleWallTransform = computed(() => experience.layerTransform(CASTLE_WALLS_START_VW + 260));
 const foregroundPostTransform = computed(() => experience.layerTransform(CASTLE_WALLS_START_VW + 72));
 
-onMounted(experience.startNavigation);
+onMounted(async () => {
+  await settingsStore.loadSettings();
+  experience.startLoading();
+  experience.startNavigation();
+});
 onBeforeUnmount(experience.stopNavigation);
 </script>
 
 <template>
   <main class="game-scroll" :style="rootStyle">
     <LoadingScene
-      v-if="isLoading"
-      :duration-seconds="LOADING_DURATION_SECONDS"
+      v-if="settingsReady && loadingStarted && isLoading"
+      :duration-seconds="loadingDurationSeconds"
+      :mode-selector-enabled="modeSelectorEnabled"
+      :modes="enabledModes"
+      :active-mode-id="activeModeId"
+      @select-mode="settingsStore.selectMode"
       @complete="experience.finishLoading"
     />
 
@@ -95,14 +112,19 @@ onBeforeUnmount(experience.stopNavigation);
 
       <div class="world" :style="{ transform: worldTransform }">
         <div class="backdrop" />
-        <FantasticTown :width-vw="FANTASTIC_TOWN_WIDTH_VW" />
+        <FantasticTown
+          v-if="settingsStore.hasScene('fantastic-town')"
+          :width-vw="FANTASTIC_TOWN_WIDTH_VW"
+        />
         <EnchantedForest
+          v-if="settingsStore.hasScene('enchanted-forest')"
           :start-vw="ENCHANTED_FOREST_START_VW"
           :width-vw="ENCHANTED_FOREST_WIDTH_VW"
           :living-tree-transform="livingTreeTransform"
           :corrupted-tree-transform="corruptedTreeTransform"
         />
         <CastleWalls
+          v-if="settingsStore.hasScene('castle-walls')"
           :start-vw="CASTLE_WALLS_START_VW"
           :wall-transform="castleWallTransform"
           :post-transform="foregroundPostTransform"
@@ -110,7 +132,11 @@ onBeforeUnmount(experience.stopNavigation);
         <div class="moon-disc" />
         <div class="far-castles"><i /><i /><i /><i /></div>
 
-        <section class="zone skills-zone" aria-labelledby="skills-title">
+        <section
+          v-if="settingsStore.hasScene('skills')"
+          class="zone skills-zone"
+          aria-labelledby="skills-title"
+        >
           <div class="banner"><small>NIVEL 3</small><h2 id="skills-title">Arsenal técnico</h2></div>
           <div class="skill-towers">
             <article
@@ -124,7 +150,11 @@ onBeforeUnmount(experience.stopNavigation);
           <div class="gate"><b>NIVEL 4</b></div>
         </section>
 
-        <section class="zone jobs-zone" aria-labelledby="jobs-title">
+        <section
+          v-if="settingsStore.hasScene('experience')"
+          class="zone jobs-zone"
+          aria-labelledby="jobs-title"
+        >
           <div class="banner"><small>NIVEL 4</small><h2 id="jobs-title">Reinos servidos</h2></div>
           <div class="job-scrolls">
             <article v-for="[name, date, text] in jobs.slice(0, 3)" :key="name">
@@ -134,7 +164,11 @@ onBeforeUnmount(experience.stopNavigation);
           <div class="gate"><b>NIVEL 5</b></div>
         </section>
 
-        <section class="zone jobs-zone jobs-two" aria-label="Experiencia reciente">
+        <section
+          v-if="settingsStore.hasScene('experience')"
+          class="zone jobs-zone jobs-two"
+          aria-label="Experiencia reciente"
+        >
           <div class="banner"><small>NIVEL 5</small><h2>Batallas recientes</h2></div>
           <div class="job-scrolls">
             <article v-for="[name, date, text] in jobs.slice(3)" :key="name">
@@ -144,7 +178,11 @@ onBeforeUnmount(experience.stopNavigation);
           <div class="gate"><b>NIVEL 6</b></div>
         </section>
 
-        <section class="zone education-zone" aria-labelledby="education-title">
+        <section
+          v-if="settingsStore.hasScene('education')"
+          class="zone education-zone"
+          aria-labelledby="education-title"
+        >
           <div class="banner"><small>NIVEL 6</small><h2 id="education-title">La academia</h2></div>
           <div class="academy">
             <article><time>2010—2015</time><h3>Ingeniería en Sistemas Computacionales</h3><p>Instituto Tecnológico José Mario Molina</p></article>
@@ -153,7 +191,11 @@ onBeforeUnmount(experience.stopNavigation);
           <div class="gate"><b>NIVEL 7</b></div>
         </section>
 
-        <section class="zone contact-zone" aria-labelledby="contact-title">
+        <section
+          v-if="settingsStore.hasScene('contact')"
+          class="zone contact-zone"
+          aria-labelledby="contact-title"
+        >
           <div class="final-shrine">
             <small>MISIÓN COMPLETADA</small><h2 id="contact-title">Construyamos algo memorable</h2>
             <p>¿Tienes una misión para mí?</p>

@@ -13,6 +13,7 @@ const clamp = (value: number, minimum = 0, maximum = 1) =>
 
 export const useExperienceStore = defineStore("experience", () => {
   const isLoading = ref(true);
+  const loadingStarted = ref(false);
   const progress = ref(0);
   const motion = ref<MotionState>("idle");
   const backwards = ref(false);
@@ -123,8 +124,13 @@ export const useExperienceStore = defineStore("experience", () => {
     isLoading.value = false;
   }
 
+  function startLoading() {
+    loadingStarted.value = true;
+  }
+
   return {
     isLoading,
+    loadingStarted,
     progress,
     motion,
     backwards,
@@ -140,5 +146,6 @@ export const useExperienceStore = defineStore("experience", () => {
     startNavigation,
     stopNavigation,
     finishLoading,
+    startLoading,
   };
 });

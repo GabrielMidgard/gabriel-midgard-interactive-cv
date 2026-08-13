@@ -266,6 +266,56 @@
   animation: loading-progress var(--loading-duration) linear forwards;
 }
 
+.modeSelector {
+  position: absolute;
+  z-index: 26;
+  left: 50%;
+  bottom: clamp(76px, 12vh, 130px);
+  display: flex;
+  width: min(900px, 88vw);
+  gap: 12px;
+  transform: translateX(-50%);
+}
+
+.modeSelector button {
+  flex: 1;
+  min-height: 82px;
+  padding: 14px 16px;
+  border: 1px solid #a77e484d;
+  background: #080b0bd9;
+  color: #d8cdb6;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.modeSelector button:hover,
+.modeSelector button:focus-visible,
+.modeSelector .selectedMode {
+  border-color: #d8a35d;
+  background: #17130fe8;
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.modeSelector strong,
+.modeSelector span {
+  display: block;
+}
+
+.modeSelector strong {
+  margin-bottom: 7px;
+  color: #eadfc5;
+  font: 600 0.78rem Cinzel, serif;
+  letter-spacing: 0.09em;
+}
+
+.modeSelector span {
+  color: #aaa295;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 .transitionVeil {
   position: absolute;
   z-index: 30;
@@ -365,6 +415,19 @@
     right: 24px;
     width: auto;
   }
+
+  .modeSelector {
+    bottom: 105px;
+    width: calc(100vw - 32px);
+    gap: 7px;
+  }
+
+  .modeSelector button {
+    min-height: 70px;
+    padding: 10px;
+  }
+
+  .modeSelector span { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

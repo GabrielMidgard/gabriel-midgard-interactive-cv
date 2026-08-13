@@ -1,0 +1,61 @@
+{
+  "$schema": "./settings.schema.json",
+  "version": 1,
+  "defaultMode": "cinematic",
+  "rememberLastMode": true,
+  "loading": {
+    "durationSeconds": 5,
+    "modeSelectorEnabled": false
+  },
+  "modes": {
+    "resume": {
+      "enabled": false,
+      "label": "CV directo",
+      "description": "Una lectura rápida, profesional y sin mecánicas de juego.",
+      "scenes": ["skills", "experience", "education", "contact"],
+      "features": {
+        "map": false,
+        "menu": false,
+        "inventory": false
+      }
+    },
+    "cinematic": {
+      "enabled": true,
+      "label": "CV interactivo",
+      "description": "Un recorrido más breve con escenas y animaciones exclusivas.",
+      "scenes": [
+        "fantastic-town",
+        "enchanted-forest",
+        "castle-walls",
+        "skills",
+        "experience",
+        "education",
+        "contact"
+      ],
+      "features": {
+        "map": false,
+        "menu": false,
+        "inventory": false
+      }
+    },
+    "adventure": {
+      "enabled": false,
+      "label": "Aventura RPG",
+      "description": "La experiencia completa con mapa, menú, inventario y exploración.",
+      "scenes": [
+        "fantastic-town",
+        "enchanted-forest",
+        "castle-walls",
+        "skills",
+        "experience",
+        "education",
+        "contact"
+      ],
+      "features": {
+        "map": true,
+        "menu": true,
+        "inventory": true
+      }
+    }
+  }
+}

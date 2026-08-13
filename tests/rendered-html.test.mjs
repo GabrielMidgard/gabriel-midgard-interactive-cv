@@ -19,3 +19,22 @@ test("incluye los recursos y metadatos de Sites", async () => {
   await access(new URL("dist/assets/scenes/fantastic-town/fantastic-town-panorama-wide.webp", root));
   await access(new URL("dist/assets/characters/main-character/knight-motion.png", root));
 });
+
+test("publica la configuración editable sin recompilar", async () => {
+  const rawSettings = await readFile(new URL("dist/settings.json", root), "utf8");
+  const settings = JSON.parse(rawSettings);
+
+  assert.equal(settings.defaultMode, "cinematic");
+  assert.equal(settings.loading.durationSeconds, 5);
+  assert.equal(settings.loading.modeSelectorEnabled, false);
+  assert.deepEqual(settings.modes.cinematic.scenes, [
+    "fantastic-town",
+    "enchanted-forest",
+    "castle-walls",
+    "skills",
+    "experience",
+    "education",
+    "contact",
+  ]);
+  await access(new URL("dist/settings.schema.json", root));
+});

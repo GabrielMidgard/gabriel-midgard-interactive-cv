@@ -41,4 +41,23 @@ npm run start
 - `src/config/`: dimensiones globales y duración de la carga.
 - `public/assets/`: imágenes y hojas de sprites, separadas por escena.
 
+## Configuración sin recompilar
+
+El archivo `public/settings.json` controla la experiencia en tiempo de ejecución.
+Después de editarlo, basta con recargar la página durante el desarrollo. En una
+publicación solo es necesario sustituir también ese archivo JSON en el servidor.
+
+Opciones principales:
+
+- `defaultMode`: modo que se abre inicialmente.
+- `rememberLastMode`: recuerda en el navegador la última elección.
+- `loading.durationSeconds`: duración de la pantalla de carga.
+- `loading.modeSelectorEnabled`: muestra las opciones de experiencia en el loading.
+- `modes.<modo>.enabled`: habilita o deshabilita una modalidad.
+- `modes.<modo>.scenes`: determina qué escenarios se muestran.
+- `modes.<modo>.features`: reserva las funciones RPG de mapa, menú e inventario.
+
+`public/settings.schema.json` documenta y valida todas las opciones. El proyecto
+también incluye una configuración segura de respaldo por si el JSON se daña.
+
 Para detener el servidor, vuelve a la terminal y presiona `Ctrl + C`.

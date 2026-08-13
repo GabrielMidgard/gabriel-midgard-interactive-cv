@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import type { CssVariables } from "@/types/experience";
+import type { ExperienceMode } from "@/types/settings";
 
-const props = defineProps<{ durationSeconds: number }>();
-const emit = defineEmits<{ complete: [] }>();
+const props = defineProps<{
+  durationSeconds: number;
+  modeSelectorEnabled: boolean;
+  modes: Array<{ id: string } & ExperienceMode>;
+  activeModeId: string;
+}>();
+const emit = defineEmits<{
+  complete: [];
+  selectMode: [modeId: string];
+}>();
 const leaving = ref(false);
 
 const stars = [
@@ -97,6 +106,19 @@ function emberStyle(ember: readonly [number, number, number]) {
     </header>
 
     <div :class="$style.loadingStatus"><span>ENCENDIENDO LA HOGUERA</span><div><i /></div></div>
+    <nav v-if="modeSelectorEnabled" :class="$style.modeSelector" aria-label="Selecciona la experiencia">
+      <button
+        v-for="mode in modes"
+        :key="mode.id"
+        type="button"
+        :class="mode.id === activeModeId ? $style.selectedMode : ''"
+        :aria-pressed="mode.id === activeModeId"
+        @click="emit('selectMode', mode.id)"
+      >
+        <strong>{{ mode.label }}</strong>
+        <span>{{ mode.description }}</span>
+      </button>
+    </nav>
     <div :class="$style.transitionVeil" aria-hidden="true" />
   </section>
 </template>
