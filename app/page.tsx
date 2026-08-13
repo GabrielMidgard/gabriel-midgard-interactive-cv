@@ -16,7 +16,10 @@ import {
   CastleWallsOverlay,
   CastleWallsWorld,
 } from "./scenes/castle-walls/CastleWalls";
-import { EnchantedForest } from "./scenes/enchanted-forest/EnchantedForest";
+import {
+  EnchantedForest,
+  EnchantedForestOverlay,
+} from "./scenes/enchanted-forest/EnchantedForest";
 import { FantasticTown } from "./scenes/fantastic-town/FantasticTown";
 import { LoadingScene } from "./scenes/loading/LoadingScene";
 
@@ -216,6 +219,11 @@ export default function Home() {
         </div>
 
         <MainCharacter motion={motion} backwards={backwards} left={`${heroX}vw`} />
+        <EnchantedForestOverlay
+          layerTransform={layerTransform}
+          startVw={ENCHANTED_FOREST_START_VW}
+          widthVw={ENCHANTED_FOREST_WIDTH_VW}
+        />
         <CastleWallsOverlay layerTransform={layerTransform} startVw={CASTLE_WALLS_START_VW} />
         <div className="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
       </div>

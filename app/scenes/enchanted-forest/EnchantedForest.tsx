@@ -6,6 +6,12 @@ interface EnchantedForestProps {
   widthVw: number;
 }
 
+interface EnchantedForestOverlayProps {
+  layerTransform: (originVw: number) => string;
+  startVw: number;
+  widthVw: number;
+}
+
 type SceneProperties = CSSProperties & Record<`--${string}`, string | number>;
 
 export function EnchantedForest({ startVw, widthVw }: EnchantedForestProps) {
@@ -43,5 +49,26 @@ export function EnchantedForest({ startVw, widthVw }: EnchantedForestProps) {
         <b>CASTLE WALLS</b>
       </div>
     </section>
+  );
+}
+
+export function EnchantedForestOverlay({
+  layerTransform,
+  startVw,
+  widthVw,
+}: EnchantedForestOverlayProps) {
+  return (
+    <>
+      <div
+        className={`${styles.thresholdTree} ${styles.livingTree}`}
+        style={{ transform: layerTransform(startVw) }}
+        aria-hidden="true"
+      />
+      <div
+        className={`${styles.thresholdTree} ${styles.corruptedTree}`}
+        style={{ transform: layerTransform(startVw + widthVw) }}
+        aria-hidden="true"
+      />
+    </>
   );
 }

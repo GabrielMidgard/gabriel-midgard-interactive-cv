@@ -152,6 +152,33 @@
   letter-spacing: 0.12em;
 }
 
+.thresholdTree {
+  position: fixed;
+  z-index: 27;
+  left: 0;
+  bottom: -7.4vh;
+  margin-left: -108vh;
+  width: 220vh;
+  height: 150vh;
+  pointer-events: none;
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 10px 12px #000b);
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+.livingTree {
+  background-image: url("/assets/scenes/enchanted-forest/transitions/living-threshold-tree.webp");
+  filter: saturate(0.88) brightness(0.84) drop-shadow(0 10px 12px #000b);
+}
+
+.corruptedTree {
+  background-image: url("/assets/scenes/enchanted-forest/transitions/corrupted-threshold-tree.webp");
+  filter: saturate(0.62) brightness(0.63) drop-shadow(0 12px 14px #000d);
+}
+
 @keyframes mote-rise {
   0%, 100% { opacity: 0.18; transform: translate3d(0, 5px, 0) scale(0.8); }
   42% { opacity: 0.9; transform: translate3d(5px, -10px, 0) scale(1); }
@@ -168,6 +195,13 @@
   .intro h2 { font-size: 11vw; }
   .intro p { width: 72vw; font-size: 10px; }
   .landmark { top: 20vh; }
+
+  .thresholdTree {
+    bottom: -5vh;
+    margin-left: -78vh;
+    width: 160vh;
+    height: 110vh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
