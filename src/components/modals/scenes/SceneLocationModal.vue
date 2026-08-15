@@ -60,7 +60,7 @@ function particleStyle(index: number, kind: "spark" | "rune") {
     "--particle-delay": `${(seed % 11) * -0.19}s`,
     "--particle-duration": `${2.2 + (seed % 6) * 0.28}s`,
     "--particle-size": kind === "rune"
-      ? `${8 + (index % 4) * 1.25}px`
+      ? `${11 + (index % 4) * 1.5}px`
       : `${1.5 + (index % 3) * 0.7}px`,
     "--particle-drift": `${drift}px`,
     "--particle-color": props.palette.particleColors[
@@ -90,7 +90,7 @@ function particleStyle(index: number, kind: "spark" | "rune") {
         <div :class="$style.magic" aria-hidden="true">
           <img
             :class="$style.emblem"
-            src="/assets/modals/scenes/blood-rune-omega.png"
+            src="/assets/modals/scenes/phoenix-fire-emblem.png"
             alt=""
           />
           <div :class="$style.runeOrbit">
