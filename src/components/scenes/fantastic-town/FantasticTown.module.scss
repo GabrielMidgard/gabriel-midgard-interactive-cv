@@ -61,9 +61,7 @@
   text-shadow: 0 3px 13px #1b0e08d9;
 }
 
-.intro span,
-.landmark small,
-.castleApproach small {
+.intro span {
   color: #8f552a;
   font: 700 9px Cinzel, serif;
   letter-spacing: 0.3em;
@@ -106,28 +104,6 @@
   color: #eee0c5;
   font-size: 10px;
 }
-
-.landmark {
-  position: absolute;
-  z-index: 7;
-  top: 15vh;
-  display: grid;
-  gap: 6px;
-  padding: 14px 18px;
-  border-left: 1px solid #a96935;
-  background: linear-gradient(90deg, #29170cbd, transparent);
-  text-shadow: 0 2px 9px #1b0d07;
-}
-
-.landmark b {
-  color: #fff0cf;
-  font: 700 clamp(0.8rem, 1.25vw, 1.2rem) Cinzel, serif;
-  letter-spacing: 0.08em;
-}
-
-.homesLandmark { left: 105vw; }
-.marketLandmark { left: 207vw; }
-.wellLandmark { left: 325vw; }
 
 .villagers {
   position: absolute;
@@ -192,23 +168,6 @@
 .sunHaze i:nth-child(2) { left: 188vw; animation-delay: -2.3s; }
 .sunHaze i:nth-child(3) { left: 328vw; animation-delay: -4.1s; }
 
-.castleApproach {
-  position: absolute;
-  z-index: 8;
-  right: 8vw;
-  bottom: 24vh;
-  display: grid;
-  gap: 8px;
-  text-align: right;
-  text-shadow: 0 3px 12px #1c0e08;
-}
-
-.castleApproach b {
-  color: #fff0cf;
-  font: 700 clamp(1.35rem, 2.4vw, 2.7rem) Cinzel, serif;
-  letter-spacing: 0.12em;
-}
-
 .ruinBlend {
   position: absolute;
   z-index: 10;
@@ -262,7 +221,6 @@
   .intro h1 { font-size: 13vw; }
   .intro p { width: 72vw; font-size: 10px; }
   .tutorial { bottom: 24vh; }
-  .landmark { top: 19vh; }
 }
 
 @media (prefers-reduced-motion: reduce) {

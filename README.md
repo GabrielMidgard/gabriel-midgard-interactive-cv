@@ -33,9 +33,13 @@ npm run start
 
 ## Arquitectura
 
-- `src/App.vue`: composición del recorrido y contenido del CV.
+- `src/App.vue`: shell global del router y host de modales.
+- `src/views/ExperienceView.vue`: composición del recorrido y contenido del CV.
+- `src/views/ModalLabView.vue`: catálogo visual para probar modales aislados.
 - `src/stores/experience.ts`: estado global Pinia, scroll, niveles y movimiento.
+- `src/stores/scene-modals.ts`: estado, temporizador y ubicación activa de los avisos.
 - `src/components/scenes/`: un componente y un módulo SCSS por escenario.
+- `src/components/modals/scenes/`: modales reutilizables para cambios de lugar.
 - `src/components/characters/`: componentes y animaciones de personajes.
 - `src/styles/`: tokens y estilos compartidos del mundo.
 - `src/config/`: dimensiones globales y duración de la carga.
@@ -53,11 +57,32 @@ Opciones principales:
 - `rememberLastMode`: recuerda en el navegador la última elección.
 - `loading.durationSeconds`: duración de la pantalla de carga.
 - `loading.modeSelectorEnabled`: muestra las opciones de experiencia en el loading.
+- `modals.sceneDurationSeconds`: duración total de los avisos de ubicación.
+- `modals.scenePalettes`: colores de runas, brillo, aura y partículas por escenario.
 - `modes.<modo>.enabled`: habilita o deshabilita una modalidad.
 - `modes.<modo>.scenes`: determina qué escenarios se muestran.
 - `modes.<modo>.features`: reserva las funciones RPG de mapa, menú e inventario.
 
 `public/settings.schema.json` documenta y valida todas las opciones. El proyecto
 también incluye una configuración segura de respaldo por si el JSON se daña.
+
+## Laboratorio de modales
+
+Con el servidor de desarrollo activo, abre:
+
+```text
+http://localhost:5173/test/modals
+```
+
+La página permite reproducir cada aviso de escena, cambiar el color del lienzo
+y ajustar temporalmente su duración; el fondo inicial es negro. Para conservar
+la duración después de recargar, edita `modals.sceneDurationSeconds` en
+`public/settings.json`. Los textos y tonos disponibles para el recorrido se
+centralizan en `src/config/scene-location-notices.ts`.
+
+Cada entrada de `modals.scenePalettes` acepta `runeColor`, `glowColor`,
+`auraColor` y un arreglo `particleColors`. Los escenarios luminosos y
+corrompidos pueden compartir una paleta o utilizar una propia mediante el campo
+`paletteId` de cada aviso.
 
 Para detener el servidor, vuelve a la terminal y presiona `Ctrl + C`.

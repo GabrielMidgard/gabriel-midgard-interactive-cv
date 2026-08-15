@@ -63,9 +63,7 @@
   text-shadow: 0 4px 18px #020804;
 }
 
-.intro span,
-.landmark small,
-.castleApproach small {
+.intro span {
   color: #c59c58;
   font: 700 9px Cinzel, serif;
   letter-spacing: 0.3em;
@@ -86,28 +84,6 @@
   font-size: 13px;
   line-height: 1.75;
 }
-
-.landmark {
-  position: absolute;
-  z-index: 8;
-  top: 17vh;
-  display: grid;
-  gap: 6px;
-  padding: 14px 18px;
-  border-left: 1px solid #b58a4e;
-  background: linear-gradient(90deg, #07100dcf, transparent);
-  text-shadow: 0 3px 13px #000;
-}
-
-.landmark b {
-  color: #e7dfca;
-  font: 700 clamp(0.8rem, 1.2vw, 1.15rem) Cinzel, serif;
-  letter-spacing: 0.08em;
-}
-
-.grove { left: 116vw; }
-.root { left: 213vw; }
-.deadwood { left: 318vw; }
 
 .motes {
   position: absolute;
@@ -134,23 +110,6 @@
 .motes i:nth-child(4) { left: 58%; bottom: 26%; animation-delay: -2.2s; }
 .motes i:nth-child(5) { left: 72%; bottom: 35%; animation-delay: -5.5s; }
 .motes i:nth-child(6) { left: 88%; bottom: 29%; animation-delay: -0.3s; opacity: 0.5; }
-
-.castleApproach {
-  position: absolute;
-  z-index: 8;
-  right: 8vw;
-  bottom: 24vh;
-  display: grid;
-  gap: 8px;
-  text-align: right;
-  text-shadow: 0 4px 16px #000;
-}
-
-.castleApproach b {
-  color: #e7dfca;
-  font: 700 clamp(1.35rem, 2.4vw, 2.7rem) Cinzel, serif;
-  letter-spacing: 0.12em;
-}
 
 .thresholdTree {
   position: fixed;
@@ -194,7 +153,6 @@
 
   .intro h2 { font-size: 11vw; }
   .intro p { width: 72vw; font-size: 10px; }
-  .landmark { top: 20vh; }
 
   .thresholdTree {
     bottom: -5vh;

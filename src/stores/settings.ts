@@ -2,14 +2,71 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { DEFAULT_SETTINGS } from "@/config/default-settings";
 import { SCENE_IDS } from "@/types/settings";
-import type { ExperienceMode, RuntimeSettings, SceneId } from "@/types/settings";
+import type {
+  ExperienceMode,
+  RuntimeSettings,
+  SceneId,
+  SceneModalPalette,
+} from "@/types/settings";
 
 const SETTINGS_URL = "/settings.json";
 const MODE_STORAGE_KEY = "gabriel-midgard-experience-mode";
 const sceneIds = new Set<string>(SCENE_IDS);
+const MIN_SCENE_MODAL_SECONDS = 1.5;
+const MAX_SCENE_MODAL_SECONDS = 12;
+const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}([0-9a-f]{2})?$/i;
 
 function cloneDefaults(): RuntimeSettings {
   return structuredClone(DEFAULT_SETTINGS);
+}
+
+function normalizeSceneModalDuration(value: unknown) {
+  const duration = Number(value);
+  if (!Number.isFinite(duration)) return DEFAULT_SETTINGS.modals.sceneDurationSeconds;
+  return Math.max(MIN_SCENE_MODAL_SECONDS, Math.min(MAX_SCENE_MODAL_SECONDS, duration));
+}
+
+function normalizeColor(value: unknown, fallback: string) {
+  return typeof value === "string" && HEX_COLOR_PATTERN.test(value)
+    ? value
+    : fallback;
+}
+
+function normalizeSceneModalPalette(
+  value: unknown,
+  fallback: SceneModalPalette,
+): SceneModalPalette {
+  const candidate = value && typeof value === "object"
+    ? value as Partial<SceneModalPalette>
+    : {};
+  const particleColors = Array.isArray(candidate.particleColors)
+    ? candidate.particleColors.filter(
+      (color): color is string => typeof color === "string" && HEX_COLOR_PATTERN.test(color),
+    ).slice(0, 8)
+    : [];
+
+  return {
+    runeColor: normalizeColor(candidate.runeColor, fallback.runeColor),
+    glowColor: normalizeColor(candidate.glowColor, fallback.glowColor),
+    auraColor: normalizeColor(candidate.auraColor, fallback.auraColor),
+    particleColors: particleColors.length ? particleColors : [...fallback.particleColors],
+  };
+}
+
+function normalizeSceneModalPalettes(value: unknown) {
+  const defaults = DEFAULT_SETTINGS.modals.scenePalettes;
+  const fallback = defaults.default;
+  const candidates = value && typeof value === "object"
+    ? value as Record<string, unknown>
+    : {};
+  const paletteIds = new Set([...Object.keys(defaults), ...Object.keys(candidates)]);
+
+  return Object.fromEntries(
+    [...paletteIds].map((paletteId) => [
+      paletteId,
+      normalizeSceneModalPalette(candidates[paletteId], defaults[paletteId] ?? fallback),
+    ]),
+  );
 }
 
 function normalizeMode(value: unknown): ExperienceMode | null {
@@ -60,6 +117,12 @@ function normalizeSettings(value: unknown): RuntimeSettings {
       durationSeconds: Math.max(0, Math.min(60, Number(candidate.loading?.durationSeconds) || 0)),
       modeSelectorEnabled: candidate.loading?.modeSelectorEnabled === true,
     },
+    modals: {
+      sceneDurationSeconds: normalizeSceneModalDuration(
+        candidate.modals?.sceneDurationSeconds,
+      ),
+      scenePalettes: normalizeSceneModalPalettes(candidate.modals?.scenePalettes),
+    },
     modes,
   };
 }
@@ -79,6 +142,7 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.modes[activeModeId.value] ?? enabledModes.value[0],
   );
   const loadingDurationSeconds = computed(() => settings.value.loading.durationSeconds);
+  const sceneModalDurationSeconds = computed(() => settings.value.modals.sceneDurationSeconds);
   const modeSelectorEnabled = computed(() =>
     settings.value.loading.modeSelectorEnabled && enabledModes.value.length > 1,
   );
@@ -91,6 +155,16 @@ export const useSettingsStore = defineStore("settings", () => {
     if (!settings.value.modes[modeId]?.enabled) return;
     activeModeId.value = modeId;
     if (settings.value.rememberLastMode) localStorage.setItem(MODE_STORAGE_KEY, modeId);
+  }
+
+  function setSceneModalDurationSeconds(value: number) {
+    settings.value.modals.sceneDurationSeconds = normalizeSceneModalDuration(value);
+  }
+
+  function getSceneModalPalette(paletteId = "default") {
+    return settings.value.modals.scenePalettes[paletteId]
+      ?? settings.value.modals.scenePalettes.default
+      ?? DEFAULT_SETTINGS.modals.scenePalettes.default;
   }
 
   async function loadSettings() {
@@ -119,9 +193,12 @@ export const useSettingsStore = defineStore("settings", () => {
     isReady,
     usedFallback,
     loadingDurationSeconds,
+    sceneModalDurationSeconds,
     modeSelectorEnabled,
     hasScene,
+    getSceneModalPalette,
     selectMode,
+    setSceneModalDurationSeconds,
     loadSettings,
   };
 });

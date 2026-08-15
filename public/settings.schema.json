@@ -4,7 +4,7 @@
   "title": "Configuración del CV interactivo",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "defaultMode", "rememberLastMode", "loading", "modes"],
+  "required": ["version", "defaultMode", "rememberLastMode", "loading", "modals", "modes"],
   "properties": {
     "$schema": { "type": "string" },
     "version": { "type": "integer", "minimum": 1 },
@@ -19,6 +19,20 @@
         "modeSelectorEnabled": { "type": "boolean" }
       }
     },
+    "modals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sceneDurationSeconds", "scenePalettes"],
+      "properties": {
+        "sceneDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
+        "scenePalettes": {
+          "type": "object",
+          "required": ["default"],
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/modalPalette" }
+        }
+      }
+    },
     "modes": {
       "type": "object",
       "minProperties": 1,
@@ -26,6 +40,26 @@
     }
   },
   "$defs": {
+    "modalPalette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runeColor", "glowColor", "auraColor", "particleColors"],
+      "properties": {
+        "runeColor": { "$ref": "#/$defs/color" },
+        "glowColor": { "$ref": "#/$defs/color" },
+        "auraColor": { "$ref": "#/$defs/color" },
+        "particleColors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/color" }
+        }
+      }
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+    },
     "mode": {
       "type": "object",
       "additionalProperties": false,

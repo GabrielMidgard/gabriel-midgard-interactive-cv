@@ -29,7 +29,6 @@ const props = defineProps<{
 
     <div :class="[$style.raven, $style.ravenDistant]" aria-hidden="true"><i /></div>
     <div :class="$style.wanderer" aria-hidden="true"><i /></div>
-    <div :class="$style.castleThreshold"><span>LAS PUERTAS DEL OFICIO</span><b>ENTRAR AL CASTILLO</b></div>
     <div :class="['gate', $style.levelGate]"><b>NIVEL 3</b></div>
   </section>
 

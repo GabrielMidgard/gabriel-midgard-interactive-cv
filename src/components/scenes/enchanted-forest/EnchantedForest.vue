@@ -25,11 +25,6 @@ const sceneStyle = {
       <h2 id="enchanted-forest-title">El bosque<br />de los susurros</h2>
       <p>La luz aún habita entre las raíces, pero algo antiguo ha comenzado a devorar el camino.</p>
     </header>
-
-    <div :class="[$style.landmark, $style.grove]"><small>I</small><b>LA ARBOLEDA LUMINOSA</b></div>
-    <div :class="[$style.landmark, $style.root]"><small>II</small><b>LA RAÍZ CORROMPIDA</b></div>
-    <div :class="[$style.landmark, $style.deadwood]"><small>III</small><b>DONDE MUEREN LAS HOJAS</b></div>
-    <div :class="$style.castleApproach"><small>LA NIEBLA REVELA</small><b>CASTLE WALLS</b></div>
   </section>
 
   <Teleport to="body">

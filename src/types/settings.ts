@@ -24,6 +24,13 @@ export interface ExperienceMode {
   features: ModeFeatures;
 }
 
+export interface SceneModalPalette {
+  runeColor: string;
+  glowColor: string;
+  auraColor: string;
+  particleColors: string[];
+}
+
 export interface RuntimeSettings {
   version: number;
   defaultMode: string;
@@ -31,6 +38,10 @@ export interface RuntimeSettings {
   loading: {
     durationSeconds: number;
     modeSelectorEnabled: boolean;
+  };
+  modals: {
+    sceneDurationSeconds: number;
+    scenePalettes: Record<string, SceneModalPalette>;
   };
   modes: Record<string, ExperienceMode>;
 }

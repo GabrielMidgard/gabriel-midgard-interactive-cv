@@ -43,8 +43,7 @@
 .legendOrigin { left: 8vw; }
 .legendCalling { left: 108vw; }
 
-.legend small,
-.castleThreshold span {
+.legend small {
   color: #c79d61;
   font: 600 9px Cinzel;
   letter-spacing: 0.32em;
@@ -208,22 +207,6 @@
   clip-path: inset(0 0 0 43%);
 }
 
-.castleThreshold {
-  position: absolute;
-  left: calc(164vw + 178vh);
-  bottom: 21vh;
-  display: grid;
-  gap: 8px;
-  text-align: center;
-  text-shadow: 0 3px 12px #000;
-}
-
-.castleThreshold b {
-  color: var(--bone);
-  font: 700 1rem Cinzel;
-  letter-spacing: 0.16em;
-}
-
 .levelGate { right: 2vw; }
 
 @media (max-width: 760px) {
@@ -262,10 +245,6 @@
     height: 108vh;
   }
 
-  .castleThreshold {
-    left: calc(164vw + 178vh);
-    width: 35vw;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

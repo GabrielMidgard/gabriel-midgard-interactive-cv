@@ -43,10 +43,6 @@ function npcStyle(frame: number, left: number, height: number, delay: number) {
       <span>↓ para avanzar&nbsp;&nbsp;·&nbsp;&nbsp;↑ para regresar</span>
     </div>
 
-    <div :class="[$style.landmark, $style.homesLandmark]"><small>I</small><b>LAS CASAS DEL VALLE</b></div>
-    <div :class="[$style.landmark, $style.marketLandmark]"><small>II</small><b>EL MERCADO DE LA PLAZA</b></div>
-    <div :class="[$style.landmark, $style.wellLandmark]"><small>III</small><b>EL POZO ANTIGUO</b></div>
-
     <div :class="$style.villagers" aria-hidden="true">
       <div
         v-for="villager in villagers"
@@ -58,7 +54,6 @@ function npcStyle(frame: number, left: number, height: number, delay: number) {
       </div>
     </div>
 
-    <div :class="$style.castleApproach"><small>EL SENDERO CONTINÚA</small><b>CASTLE WALLS</b></div>
     <div :class="$style.ruinBlend" aria-hidden="true" />
   </section>
 </template>
