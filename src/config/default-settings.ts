@@ -15,7 +15,7 @@ export const DEFAULT_SETTINGS: RuntimeSettings = {
   },
   modals: {
     sceneDurationSeconds: 2.3,
-    questDurationSeconds: 3,
+    questDurationSeconds: 5,
     scenePalettes: {
       default: {
         sceneDomain: "dragon",

@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import type { QuestScrollNotice } from "@/components/modals/quests/types";
 import { useSettingsStore } from "@/stores/settings";
 
-const DEFAULT_DURATION_MS = 3000;
+const DEFAULT_DURATION_MS = 5000;
 const EXIT_TRANSITION_MS = 700;
 
 export const useQuestModalStore = defineStore("quest-modals", () => {
