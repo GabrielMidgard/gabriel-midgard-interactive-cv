@@ -28,6 +28,24 @@
   animation: emberBurn var(--damage-duration, 2000ms) ease-out both;
 }
 
+.drowning {
+  background:
+    radial-gradient(ellipse at 50% 42%, transparent 0 16%, #0008 55%, #000 100%),
+    #000;
+  animation: drowning var(--damage-duration, 5500ms) linear both;
+}
+
+.restoration {
+  background:
+    radial-gradient(circle at 18% 16%, #fff9cf9c 0 1px, transparent 2px),
+    radial-gradient(circle at 68% 32%, #fff0a5c2 0 1px, transparent 2px),
+    radial-gradient(circle at 43% 76%, #e8ffb9a6 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 55%, #fffbd0ad, #d5e86c4f 25%, transparent 64%);
+  background-size: 110px 130px, 150px 125px, 170px 160px, auto;
+  mix-blend-mode: screen;
+  animation: restoration var(--damage-duration, 1800ms) ease-out both;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -66,10 +84,32 @@
   100% { opacity: 0; filter: brightness(0.8); }
 }
 
+@keyframes drowning {
+  0% { opacity: 0; }
+  12% { opacity: 0.2; }
+  22% { opacity: 0.08; }
+  38% { opacity: 0.42; }
+  48% { opacity: 0.26; }
+  64% { opacity: 0.62; }
+  74% { opacity: 0.48; }
+  88% { opacity: 0.82; }
+  100% { opacity: 0.94; }
+}
+
+@keyframes restoration {
+  0% { opacity: 0; filter: brightness(0.8); transform: scale(0.96); }
+  18% { opacity: 0.94; filter: brightness(1.8); }
+  46% { opacity: 0.52; transform: scale(1.015); }
+  70% { opacity: 0.76; filter: brightness(1.15); }
+  100% { opacity: 0; filter: brightness(1); transform: scale(1.04); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .white-flash,
   .blood-pulse,
-  .ember-burn {
+  .ember-burn,
+  .drowning,
+  .restoration {
     animation-timing-function: linear;
   }
 }

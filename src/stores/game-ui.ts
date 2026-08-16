@@ -1,6 +1,11 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import type { DamageEffect, NavigationPanel, PortraitState } from "@/types/game-ui";
+import type {
+  DamageEffect,
+  NavigationPanel,
+  PortraitState,
+  ScreenEffect,
+} from "@/types/game-ui";
 
 const clamp = (value: number, maximum: number) =>
   Math.max(0, Math.min(maximum, value));
@@ -13,9 +18,10 @@ export const useGameUiStore = defineStore("game-ui", () => {
   const gold = ref(2480);
   const shielded = ref(false);
   const isTakingDamage = ref(false);
-  const damageEffect = ref<DamageEffect | null>(null);
-  const damageEffectDurationMs = ref(0);
-  const damageSequence = ref(0);
+  const isRestoring = ref(false);
+  const screenEffect = ref<ScreenEffect | null>(null);
+  const screenEffectDurationMs = ref(0);
+  const screenEffectSequence = ref(0);
   const activeNavigation = ref<NavigationPanel | null>(null);
   const missionExpanded = ref(true);
   let damageTimer: ReturnType<typeof setTimeout> | undefined;
@@ -48,14 +54,32 @@ export const useGameUiStore = defineStore("game-ui", () => {
     if (damageTimer) clearTimeout(damageTimer);
     setHealth(health.value - Math.max(0, amount));
     isTakingDamage.value = true;
-    damageEffect.value = effect;
-    damageEffectDurationMs.value = Math.max(200, Math.min(5000, durationMs));
-    damageSequence.value += 1;
+    isRestoring.value = false;
+    screenEffect.value = effect;
+    screenEffectDurationMs.value = Math.max(200, Math.min(7000, durationMs));
+    screenEffectSequence.value += 1;
     damageTimer = setTimeout(() => {
       isTakingDamage.value = false;
-      damageEffect.value = null;
+      screenEffect.value = null;
       damageTimer = undefined;
-    }, damageEffectDurationMs.value);
+    }, screenEffectDurationMs.value);
+  }
+
+  function restoreState(durationMs = 1800) {
+    if (damageTimer) clearTimeout(damageTimer);
+    health.value = maxHealth.value;
+    energy.value = maxEnergy.value;
+    shielded.value = false;
+    isTakingDamage.value = false;
+    isRestoring.value = true;
+    screenEffect.value = "restoration";
+    screenEffectDurationMs.value = Math.max(500, Math.min(5000, durationMs));
+    screenEffectSequence.value += 1;
+    damageTimer = setTimeout(() => {
+      isRestoring.value = false;
+      screenEffect.value = null;
+      damageTimer = undefined;
+    }, screenEffectDurationMs.value);
   }
 
   function resetCombatState() {
@@ -65,8 +89,9 @@ export const useGameUiStore = defineStore("game-ui", () => {
     energy.value = maxEnergy.value;
     shielded.value = false;
     isTakingDamage.value = false;
-    damageEffect.value = null;
-    damageEffectDurationMs.value = 0;
+    isRestoring.value = false;
+    screenEffect.value = null;
+    screenEffectDurationMs.value = 0;
   }
 
   function selectNavigation(panel: NavigationPanel) {
@@ -85,9 +110,10 @@ export const useGameUiStore = defineStore("game-ui", () => {
     gold,
     shielded,
     isTakingDamage,
-    damageEffect,
-    damageEffectDurationMs,
-    damageSequence,
+    isRestoring,
+    screenEffect,
+    screenEffectDurationMs,
+    screenEffectSequence,
     portraitState,
     activeNavigation,
     missionExpanded,
@@ -95,6 +121,7 @@ export const useGameUiStore = defineStore("game-ui", () => {
     setEnergy,
     setShielded,
     receiveDamage,
+    restoreState,
     resetCombatState,
     selectNavigation,
     toggleMission,

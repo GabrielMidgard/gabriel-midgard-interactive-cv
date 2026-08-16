@@ -22,9 +22,10 @@ const {
   gold,
   portraitState,
   isTakingDamage,
-  damageEffect,
-  damageEffectDurationMs,
-  damageSequence,
+  isRestoring,
+  screenEffect,
+  screenEffectDurationMs,
+  screenEffectSequence,
   activeNavigation,
   missionExpanded,
 } = storeToRefs(gameUi);
@@ -54,6 +55,7 @@ const activeMission = computed(() => missions[Math.min(props.level, missions.len
         :gold="gold"
         :portrait-state="portraitState"
         :damaged="isTakingDamage"
+        :restored="isRestoring"
       />
     </div>
     <div :class="$style.navigation">
@@ -73,10 +75,10 @@ const activeMission = computed(() => missions[Math.min(props.level, missions.len
       <ScrollGuide />
     </div>
     <DamageEffectOverlay
-      v-if="damageEffect"
-      :key="damageSequence"
-      :effect="damageEffect"
-      :duration-ms="damageEffectDurationMs"
+      v-if="screenEffect"
+      :key="screenEffectSequence"
+      :effect="screenEffect"
+      :duration-ms="screenEffectDurationMs"
     />
   </div>
 </template>

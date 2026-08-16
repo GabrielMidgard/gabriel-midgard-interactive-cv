@@ -9,14 +9,18 @@ withDefaults(defineProps<{
   gold: number;
   portraitState?: PortraitState;
   damaged?: boolean;
+  restored?: boolean;
   finePortraitSrc?: string;
   damagePortraitSrc?: string;
+  restoredPortraitSrc?: string;
   borderSrc?: string;
 }>(), {
   portraitState: "healthy",
   damaged: false,
+  restored: false,
   finePortraitSrc: "/assets/characters/main-character/knight-status-fine.png",
   damagePortraitSrc: "/assets/characters/main-character/knight-status-damage.png",
+  restoredPortraitSrc: "/assets/characters/main-character/knight-status-restaured.png",
   borderSrc: "/assets/characters/main-character/phonix_border.png",
 });
 
@@ -27,7 +31,10 @@ const percentage = (value: number, maximum: number) =>
 <template>
   <section :class="$style.status" aria-label="Estado del personaje">
     <div
-      :class="[$style.crest, { [$style.damaged]: damaged }]"
+      :class="[
+        $style.crest,
+        { [$style.damaged]: damaged, [$style.restored]: restored },
+      ]"
       :data-state="portraitState"
     >
       <div :class="$style.portraitFrame">
@@ -39,6 +46,12 @@ const percentage = (value: number, maximum: number) =>
         <img
           :class="[$style.portrait, $style.damagePortrait]"
           :src="damagePortraitSrc"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          :class="[$style.portrait, $style.restoredPortrait]"
+          :src="restoredPortraitSrc"
           alt=""
           aria-hidden="true"
         />
@@ -75,7 +88,12 @@ const percentage = (value: number, maximum: number) =>
         </div>
       </div>
       <div :class="$style.gold" aria-label="Oro disponible">
-        <i aria-hidden="true">◆</i>
+        <img
+          :class="$style.goldBag"
+          src="/assets/icons/icon-bag_money.png"
+          alt=""
+          aria-hidden="true"
+        />
         <span>{{ gold.toLocaleString("es-MX") }}</span>
         <small>ORO</small>
       </div>

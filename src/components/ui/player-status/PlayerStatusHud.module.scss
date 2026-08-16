@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  width: clamp(300px, 31vw, 510px);
+  width: clamp(285px, 23vw, 360px);
   min-height: 118px;
   color: $bone;
   filter: drop-shadow(0 5px 9px #000c);
@@ -56,6 +56,11 @@
   transform: scale(1.035);
 }
 
+.restoredPortrait {
+  opacity: 0;
+  transform: scale(1.02);
+}
+
 .phoenixBorder {
   position: absolute;
   z-index: 3;
@@ -77,6 +82,18 @@
     animation: portraitHit 240ms ease-out both;
   }
   .damageVeil { opacity: 0.72; }
+}
+
+.restored {
+  .finePortrait,
+  .damagePortrait { opacity: 0; }
+  .restoredPortrait {
+    opacity: 1;
+    animation: portraitRestore 1.2s ease-out both;
+  }
+  .portraitFrame {
+    box-shadow: inset 0 0 18px #f5de7a8c, 0 0 0 3px #917a37, 0 0 18px #e9d25fa8;
+  }
 }
 
 .damageVeil {
@@ -109,13 +126,13 @@
   flex: 1;
   min-width: 0;
   padding-top: 17px;
-  margin-left: -8px;
+  margin-left: 14px;
 }
 
 .barRow {
   position: relative;
   display: grid;
-  grid-template-columns: 66px 1fr;
+  grid-template-columns: 72px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   margin-bottom: 9px;
@@ -166,29 +183,24 @@
   align-items: center;
   gap: 7px;
   width: max-content;
-  margin: 1px 0 0 70px;
+  margin: 1px 0 0 79px;
   color: #e2bf79;
   font: 700 13px Cinzel, serif;
   letter-spacing: 0.07em;
-
-  i {
-    width: 19px;
-    height: 19px;
-    display: grid;
-    place-items: center;
-    border: 1px solid #9f7539;
-    border-radius: 50%;
-    background: radial-gradient(circle at 38% 35%, #f5d38c, #9d681d 70%);
-    color: #5d3511;
-    font-size: 8px;
-    box-shadow: 0 0 7px #d28b29a3;
-  }
 
   small {
     color: #8f8169;
     font-size: 7px;
     letter-spacing: 0.2em;
   }
+}
+
+.goldBag {
+  width: 29px;
+  height: 29px;
+  margin: -4px -1px -3px -4px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px #d28b296b);
 }
 
 @keyframes criticalPulse {
@@ -199,6 +211,12 @@
   0% { transform: scale(1.12) translateX(2px); filter: brightness(1.8) saturate(0.35); }
   35% { transform: scale(1.025) translateX(-2px); }
   100% { transform: scale(1.035) translateX(0); filter: brightness(1) saturate(1); }
+}
+
+@keyframes portraitRestore {
+  0% { opacity: 0; transform: scale(0.96); filter: brightness(2) saturate(0.35); }
+  28% { opacity: 1; transform: scale(1.055); }
+  100% { opacity: 1; transform: scale(1.02); filter: brightness(1) saturate(1); }
 }
 
 @media (max-width: 760px) {
@@ -212,4 +230,5 @@
 @media (prefers-reduced-motion: reduce) {
   .crest[data-state="critical"] .portraitFrame { animation: none; }
   .damaged .damagePortrait { animation: none; }
+  .restored .restoredPortrait { animation: none; }
 }

@@ -40,6 +40,14 @@ const attacks = [
     effect: "ember-burn",
     durationMs: 2000,
   },
+  {
+    id: "drowning",
+    label: "Ahogamiento",
+    description: "La visión pulsa y se oscurece progresivamente hasta casi desaparecer.",
+    damage: 35,
+    effect: "drowning",
+    durationMs: 5500,
+  },
 ] as const satisfies readonly AttackPreset[];
 
 const gameUi = useGameUiStore();
@@ -51,9 +59,10 @@ const {
   gold,
   portraitState,
   isTakingDamage,
-  damageEffect,
-  damageEffectDurationMs,
-  damageSequence,
+  isRestoring,
+  screenEffect,
+  screenEffectDurationMs,
+  screenEffectSequence,
 } = storeToRefs(gameUi);
 
 onBeforeUnmount(() => gameUi.resetCombatState());
@@ -88,9 +97,10 @@ onBeforeUnmount(() => gameUi.resetCombatState());
           :gold="gold"
           :portrait-state="portraitState"
           :damaged="isTakingDamage"
+          :restored="isRestoring"
         />
       </div>
-      <button type="button" :class="$style.reset" @click="gameUi.resetCombatState">
+      <button type="button" :class="$style.reset" @click="gameUi.restoreState()">
         RESTAURAR ESTADO
       </button>
     </section>
@@ -122,10 +132,10 @@ onBeforeUnmount(() => gameUi.resetCombatState());
     </footer>
 
     <DamageEffectOverlay
-      v-if="damageEffect"
-      :key="damageSequence"
-      :effect="damageEffect"
-      :duration-ms="damageEffectDurationMs"
+      v-if="screenEffect"
+      :key="screenEffectSequence"
+      :effect="screenEffect"
+      :duration-ms="screenEffectDurationMs"
     />
   </main>
 </template>

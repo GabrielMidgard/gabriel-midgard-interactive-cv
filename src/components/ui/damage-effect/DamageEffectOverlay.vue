@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { DamageEffect } from "@/types/game-ui";
+import type { ScreenEffect } from "@/types/game-ui";
 import type { CssVariables } from "@/types/experience";
 
 const props = defineProps<{
-  effect: DamageEffect;
+  effect: ScreenEffect;
   durationMs: number;
 }>();
 

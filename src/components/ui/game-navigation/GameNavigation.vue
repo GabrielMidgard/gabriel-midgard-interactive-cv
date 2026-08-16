@@ -10,11 +10,18 @@ const emit = defineEmits<{
   select: [panel: NavigationPanel];
 }>();
 
-const items: { id: NavigationPanel; label: string; key: string; symbol: string }[] = [
-  { id: "map", label: "MAPA", key: "M", symbol: "✥" },
-  { id: "inventory", label: "INVENTARIO", key: "I", symbol: "◇" },
-  { id: "journal", label: "DIARIO", key: "J", symbol: "▤" },
+const items: { id: NavigationPanel; label: string; key: string; icon: string }[] = [
+  { id: "map", label: "MAPA", key: "M", icon: "/assets/icons/icon-map.png" },
+  {
+    id: "inventory",
+    label: "INVENTARIO",
+    key: "I",
+    icon: "/assets/icons/icon_inventary.png",
+  },
+  { id: "journal", label: "DIARIO", key: "J", icon: "/assets/icons/icon-diary.png" },
 ];
+
+const cornerPositions = ["topLeft", "topRight", "bottomRight", "bottomLeft"] as const;
 
 function handleKeyboard(event: KeyboardEvent) {
   const target = event.target as HTMLElement | null;
@@ -33,13 +40,23 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeyboard));
       v-for="item in items"
       :key="item.id"
       type="button"
-      :class="{ [$style.active]: props.activePanel === item.id }"
+      :class="[$style[item.id], { [$style.active]: props.activePanel === item.id }]"
       :aria-pressed="props.activePanel === item.id"
       @click="emit('select', item.id)"
     >
-      <i aria-hidden="true">{{ item.symbol }}</i>
+      <i :class="$style.iconWell" aria-hidden="true">
+        <img :src="item.icon" alt="" />
+      </i>
       <span>{{ item.label }}</span>
-      <kbd>{{ item.key }}</kbd>
+      <kbd>[{{ item.key }}]</kbd>
+      <i
+        v-for="position in cornerPositions"
+        :key="position"
+        :class="[$style.corner, $style[position]]"
+        aria-hidden="true"
+      >
+        <img src="/assets/icons/icon-btn-corner.png" alt="" />
+      </i>
     </button>
   </nav>
 </template>
