@@ -58,7 +58,7 @@ Opciones principales:
 - `loading.durationSeconds`: duración de la pantalla de carga.
 - `loading.modeSelectorEnabled`: muestra las opciones de experiencia en el loading.
 - `modals.sceneDurationSeconds`: duración total de los avisos de ubicación.
-- `modals.scenePalettes`: colores de runas, brillo, aura y partículas por escenario.
+- `modals.scenePalettes`: dominio visual, colores de runas, brillo, aura y partículas por escenario.
 - `modes.<modo>.enabled`: habilita o deshabilita una modalidad.
 - `modes.<modo>.scenes`: determina qué escenarios se muestran.
 - `modes.<modo>.features`: reserva las funciones RPG de mapa, menú e inventario.
@@ -80,7 +80,8 @@ la duración después de recargar, edita `modals.sceneDurationSeconds` en
 `public/settings.json`. Los textos y tonos disponibles para el recorrido se
 centralizan en `src/config/scene-location-notices.ts`.
 
-Cada entrada de `modals.scenePalettes` acepta `runeColor`, `glowColor`,
+Cada entrada de `modals.scenePalettes` acepta `sceneDomain` (`phoenix` o
+`dragon`), `runeColor`, `glowColor`,
 `auraColor` y un arreglo `particleColors`. Los escenarios luminosos y
 corrompidos pueden compartir una paleta o utilizar una propia mediante el campo
 `paletteId` de cada aviso.

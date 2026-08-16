@@ -58,8 +58,6 @@
 }
 
 .emblem {
-  width: min(430px, 62vw);
-  height: min(250px, 37vw);
   object-fit: contain;
   opacity: 0;
   border-radius: 48%;
@@ -72,6 +70,17 @@
   transform-origin: 50% 68%;
   will-change: opacity, transform, filter;
   animation: emblem-awakens var(--modal-duration) ease-out both;
+}
+
+.phoenixEmblem {
+  width: min(430px, 62vw);
+  height: min(250px, 37vw);
+}
+
+.dragonEmblem {
+  width: min(270px, 42vw);
+  height: min(270px, 42vw);
+  mask-image: radial-gradient(ellipse at center, #000 45%, #000e 70%, transparent 96%);
 }
 
 .ember .emblem {

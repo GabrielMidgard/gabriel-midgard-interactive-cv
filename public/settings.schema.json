@@ -43,8 +43,9 @@
     "modalPalette": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["runeColor", "glowColor", "auraColor", "particleColors"],
+      "required": ["sceneDomain", "runeColor", "glowColor", "auraColor", "particleColors"],
       "properties": {
+        "sceneDomain": { "enum": ["phoenix", "dragon"] },
         "runeColor": { "$ref": "#/$defs/color" },
         "glowColor": { "$ref": "#/$defs/color" },
         "auraColor": { "$ref": "#/$defs/color" },

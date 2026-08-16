@@ -25,11 +25,14 @@ export interface ExperienceMode {
 }
 
 export interface SceneModalPalette {
+  sceneDomain: SceneDomain;
   runeColor: string;
   glowColor: string;
   auraColor: string;
   particleColors: string[];
 }
+
+export type SceneDomain = "phoenix" | "dragon";
 
 export interface RuntimeSettings {
   version: number;

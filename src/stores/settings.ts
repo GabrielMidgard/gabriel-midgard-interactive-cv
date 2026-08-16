@@ -5,6 +5,7 @@ import { SCENE_IDS } from "@/types/settings";
 import type {
   ExperienceMode,
   RuntimeSettings,
+  SceneDomain,
   SceneId,
   SceneModalPalette,
 } from "@/types/settings";
@@ -44,8 +45,16 @@ function normalizeSceneModalPalette(
       (color): color is string => typeof color === "string" && HEX_COLOR_PATTERN.test(color),
     ).slice(0, 8)
     : [];
+  const rawDomain: unknown = candidate.sceneDomain;
+  const requestedDomain = rawDomain === "phonix"
+    ? "phoenix"
+    : rawDomain;
+  const sceneDomain: SceneDomain = requestedDomain === "phoenix" || requestedDomain === "dragon"
+    ? requestedDomain
+    : fallback.sceneDomain;
 
   return {
+    sceneDomain,
     runeColor: normalizeColor(candidate.runeColor, fallback.runeColor),
     glowColor: normalizeColor(candidate.glowColor, fallback.glowColor),
     auraColor: normalizeColor(candidate.auraColor, fallback.auraColor),

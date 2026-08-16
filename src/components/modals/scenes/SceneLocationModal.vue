@@ -17,6 +17,13 @@ const particles = Array.from({ length: 28 }, (_, index) => index);
 const runeParticles = Array.from({ length: 16 }, (_, index) => index);
 const particleRunes = ["ᚠ", "ᚢ", "ᚦ", "ᚨ", "ᚱ", "ᚲ", "ᚷ", "ᚹ", "ᚺ", "ᚾ", "ᛁ", "ᛃ"];
 
+const emblemSource = computed(() => props.palette.sceneDomain === "dragon"
+  ? "/assets/modals/scenes/dragon-emblem.png"
+  : "/assets/modals/scenes/phoenix-fire-emblem.png");
+const emblemClass = computed(() => props.palette.sceneDomain === "dragon"
+  ? "dragonEmblem"
+  : "phoenixEmblem");
+
 const modalStyle = computed(() => {
   const duration = Math.max(1500, props.durationMs);
   return {
@@ -89,8 +96,8 @@ function particleStyle(index: number, kind: "spark" | "rune") {
       >
         <div :class="$style.magic" aria-hidden="true">
           <img
-            :class="$style.emblem"
-            src="/assets/modals/scenes/phoenix-fire-emblem.png"
+            :class="[$style.emblem, $style[emblemClass]]"
+            :src="emblemSource"
             alt=""
           />
           <div :class="$style.runeOrbit">
