@@ -42,6 +42,10 @@ export interface RuntimeSettings {
     durationSeconds: number;
     modeSelectorEnabled: boolean;
   };
+  scrollGuide: {
+    inactivitySeconds: number;
+    dismissDelaySeconds: number;
+  };
   modals: {
     sceneDurationSeconds: number;
     scenePalettes: Record<string, SceneModalPalette>;

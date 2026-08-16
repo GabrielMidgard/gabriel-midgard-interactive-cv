@@ -27,6 +27,8 @@ test("publica la configuración editable sin recompilar", async () => {
   assert.equal(settings.defaultMode, "cinematic");
   assert.equal(settings.loading.durationSeconds, 5);
   assert.equal(settings.loading.modeSelectorEnabled, false);
+  assert.equal(settings.scrollGuide.inactivitySeconds, 5);
+  assert.equal(settings.scrollGuide.dismissDelaySeconds, 2);
   assert.deepEqual(settings.modes.cinematic.scenes, [
     "fantastic-town",
     "enchanted-forest",

@@ -15,6 +15,10 @@ const MODE_STORAGE_KEY = "gabriel-midgard-experience-mode";
 const sceneIds = new Set<string>(SCENE_IDS);
 const MIN_SCENE_MODAL_SECONDS = 1.5;
 const MAX_SCENE_MODAL_SECONDS = 12;
+const MIN_SCROLL_GUIDE_INACTIVITY_SECONDS = 1;
+const MAX_SCROLL_GUIDE_INACTIVITY_SECONDS = 60;
+const MIN_SCROLL_GUIDE_DISMISS_SECONDS = 0;
+const MAX_SCROLL_GUIDE_DISMISS_SECONDS = 10;
 const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}([0-9a-f]{2})?$/i;
 
 function cloneDefaults(): RuntimeSettings {
@@ -25,6 +29,12 @@ function normalizeSceneModalDuration(value: unknown) {
   const duration = Number(value);
   if (!Number.isFinite(duration)) return DEFAULT_SETTINGS.modals.sceneDurationSeconds;
   return Math.max(MIN_SCENE_MODAL_SECONDS, Math.min(MAX_SCENE_MODAL_SECONDS, duration));
+}
+
+function normalizeSeconds(value: unknown, fallback: number, minimum: number, maximum: number) {
+  const seconds = Number(value);
+  if (!Number.isFinite(seconds)) return fallback;
+  return Math.max(minimum, Math.min(maximum, seconds));
 }
 
 function normalizeColor(value: unknown, fallback: string) {
@@ -126,6 +136,20 @@ function normalizeSettings(value: unknown): RuntimeSettings {
       durationSeconds: Math.max(0, Math.min(60, Number(candidate.loading?.durationSeconds) || 0)),
       modeSelectorEnabled: candidate.loading?.modeSelectorEnabled === true,
     },
+    scrollGuide: {
+      inactivitySeconds: normalizeSeconds(
+        candidate.scrollGuide?.inactivitySeconds,
+        DEFAULT_SETTINGS.scrollGuide.inactivitySeconds,
+        MIN_SCROLL_GUIDE_INACTIVITY_SECONDS,
+        MAX_SCROLL_GUIDE_INACTIVITY_SECONDS,
+      ),
+      dismissDelaySeconds: normalizeSeconds(
+        candidate.scrollGuide?.dismissDelaySeconds,
+        DEFAULT_SETTINGS.scrollGuide.dismissDelaySeconds,
+        MIN_SCROLL_GUIDE_DISMISS_SECONDS,
+        MAX_SCROLL_GUIDE_DISMISS_SECONDS,
+      ),
+    },
     modals: {
       sceneDurationSeconds: normalizeSceneModalDuration(
         candidate.modals?.sceneDurationSeconds,
@@ -151,6 +175,12 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.modes[activeModeId.value] ?? enabledModes.value[0],
   );
   const loadingDurationSeconds = computed(() => settings.value.loading.durationSeconds);
+  const scrollGuideInactivitySeconds = computed(
+    () => settings.value.scrollGuide.inactivitySeconds,
+  );
+  const scrollGuideDismissDelaySeconds = computed(
+    () => settings.value.scrollGuide.dismissDelaySeconds,
+  );
   const sceneModalDurationSeconds = computed(() => settings.value.modals.sceneDurationSeconds);
   const modeSelectorEnabled = computed(() =>
     settings.value.loading.modeSelectorEnabled && enabledModes.value.length > 1,
@@ -202,6 +232,8 @@ export const useSettingsStore = defineStore("settings", () => {
     isReady,
     usedFallback,
     loadingDurationSeconds,
+    scrollGuideInactivitySeconds,
+    scrollGuideDismissDelaySeconds,
     sceneModalDurationSeconds,
     modeSelectorEnabled,
     hasScene,

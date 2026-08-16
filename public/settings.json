@@ -7,6 +7,10 @@
     "durationSeconds": 5,
     "modeSelectorEnabled": false
   },
+  "scrollGuide": {
+    "inactivitySeconds": 5,
+    "dismissDelaySeconds": 2
+  },
   "modals": {
     "sceneDurationSeconds": 2.3,
     "scenePalettes": {
