@@ -1,0 +1,75 @@
+.overlay {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  pointer-events: none;
+  will-change: opacity, background-color, filter;
+}
+
+.white-flash {
+  background: #fff;
+  mix-blend-mode: screen;
+  animation: whiteFlash var(--damage-duration, 1000ms) ease-out both;
+}
+
+.blood-pulse {
+  background:
+    radial-gradient(circle at 50% 48%, transparent 0 28%, #6e000048 62%, #bc0909c7 100%),
+    linear-gradient(#9c080733, #18000091);
+  mix-blend-mode: screen;
+  animation: bloodPulse var(--damage-duration, 3000ms) ease-in-out both;
+}
+
+.ember-burn {
+  background:
+    radial-gradient(circle at 50% 70%, #ffb21c47, transparent 34%),
+    radial-gradient(circle at 50% 50%, transparent 25%, #c0320f66 76%, #2c0700b3 100%);
+  mix-blend-mode: screen;
+  animation: emberBurn var(--damage-duration, 2000ms) ease-out both;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes whiteFlash {
+  0% { opacity: 0.96; }
+  12% { opacity: 0.76; }
+  32% { opacity: 0.2; }
+  46% { opacity: 0.38; }
+  100% { opacity: 0; }
+}
+
+@keyframes bloodPulse {
+  0% { opacity: 0; }
+  8% { opacity: 0.92; }
+  20% { opacity: 0.24; }
+  34% { opacity: 0.78; }
+  50% { opacity: 0.29; }
+  66% { opacity: 0.64; }
+  82% { opacity: 0.22; }
+  100% { opacity: 0; }
+}
+
+@keyframes emberBurn {
+  0% { opacity: 0.96; filter: brightness(1.7); }
+  18% { opacity: 0.46; }
+  36% { opacity: 0.74; filter: brightness(1.15); }
+  100% { opacity: 0; filter: brightness(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .white-flash,
+  .blood-pulse,
+  .ember-burn {
+    animation-timing-function: linear;
+  }
+}

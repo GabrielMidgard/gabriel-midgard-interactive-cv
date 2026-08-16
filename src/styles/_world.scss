@@ -135,56 +135,6 @@ body {
 .contact-zone {
   left: calc(var(--pre-castle-width, 0vw) + 700vw + 178vh);
 }
-.game-hud {
-  position: fixed;
-  z-index: 40;
-  top: 22px;
-  left: 3vw;
-  right: 3vw;
-  height: 57px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  filter: drop-shadow(0 4px 8px #000);
-}
-.crest {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--gold);
-  background: #131715;
-  font: 700 12px Cinzel;
-  transform: rotate(45deg);
-}
-.hud-copy {
-  display: grid;
-  gap: 4px;
-}
-.hud-copy strong {
-  font: 700 12px Cinzel;
-  letter-spacing: 0.13em;
-}
-.hud-copy span {
-  font: 500 8px Cinzel;
-  color: #a58f69;
-  letter-spacing: 0.24em;
-}
-.level-counter {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.level-counter small {
-  font: 600 8px Cinzel;
-  letter-spacing: 0.2em;
-  color: #9a907c;
-}
-.level-counter b {
-  font: 700 28px Cinzel;
-  color: #c38263;
-}
 .progress-track {
   position: fixed;
   z-index: 41;
@@ -596,41 +546,12 @@ body {
     transform: translateX(30vw);
   }
 }
-.scroll-prompt {
-  position: fixed;
-  z-index: 41;
-  bottom: 3vh;
-  right: 3vw;
-  color: #aaa28e;
-  font: 600 8px Cinzel;
-  letter-spacing: 0.2em;
-}
-.scroll-prompt span {
-  color: #d09b62;
-  font-size: 15px;
-}
 @media (max-width: 760px) {
   .game-scroll {
     height: var(--scroll-height, calc(800vh + 178vw));
   }
   .world {
     width: var(--world);
-  }
-  .game-hud {
-    top: 13px;
-  }
-  .hud-copy strong {
-    font-size: 9px;
-  }
-  .hud-copy span {
-    font-size: 6px;
-  }
-  .level-counter small {
-    display: none;
-  }
-  .crest {
-    width: 38px;
-    height: 38px;
   }
   .title-plaque {
     left: 8vw;
@@ -720,9 +641,6 @@ body {
   .final-shrine div {
     flex-direction: column;
     gap: 7px;
-  }
-  .scroll-prompt {
-    right: 15px;
   }
   .fog {
     display: none;

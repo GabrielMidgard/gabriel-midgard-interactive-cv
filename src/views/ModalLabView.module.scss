@@ -39,11 +39,16 @@
 
 .back {
   display: inline-block;
-  margin-bottom: 38px;
   color: #bda98a;
   font: 600 10px Cinzel, serif;
   letter-spacing: 0.18em;
   text-decoration: none;
+}
+
+.labLinks {
+  display: flex;
+  gap: 26px;
+  margin-bottom: 38px;
 }
 
 .back:hover,
@@ -247,6 +252,7 @@
 }
 
 @media (max-width: 540px) {
+  .labLinks { flex-direction: column; }
   .card { grid-template-columns: 3px 1fr; }
   .card button { grid-column: 2; justify-self: start; }
   .footer { flex-direction: column; }

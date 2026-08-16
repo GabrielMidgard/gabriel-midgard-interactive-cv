@@ -30,7 +30,10 @@ onMounted(() => {
     <div :class="$style.ambient" aria-hidden="true" />
 
     <header :class="$style.header">
-      <RouterLink to="/" :class="$style.back">← VOLVER A LA EXPERIENCIA</RouterLink>
+      <nav :class="$style.labLinks" aria-label="Laboratorios de interfaz">
+        <RouterLink to="/" :class="$style.back">← VOLVER A LA EXPERIENCIA</RouterLink>
+        <RouterLink to="/test/damage" :class="$style.back">PRUEBAS DE DAÑO</RouterLink>
+      </nav>
       <p>LABORATORIO DE INTERFAZ · MODALS / SCENES</p>
       <h1>Modales de escena</h1>
       <span>Prueba cada aviso sobre distintos tonos sin entrar al recorrido completo.</span>

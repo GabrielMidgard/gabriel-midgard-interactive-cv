@@ -1,0 +1,52 @@
+.interface {
+  position: fixed;
+  z-index: 48;
+  inset: 0;
+  pointer-events: none;
+}
+
+.playerStatus {
+  position: absolute;
+  top: 20px;
+  left: 22px;
+}
+
+.navigation {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+}
+
+.mission {
+  position: absolute;
+  top: 88px;
+  right: 28px;
+}
+
+.scrollGuide {
+  position: absolute;
+  right: 28px;
+  bottom: 34px;
+}
+
+@media (max-width: 760px) {
+  .playerStatus {
+    top: 10px;
+    left: 10px;
+  }
+
+  .navigation {
+    top: 14px;
+    right: 12px;
+  }
+
+  .mission {
+    top: 64px;
+    right: 12px;
+  }
+
+  .scrollGuide {
+    right: 10px;
+    bottom: 18px;
+  }
+}

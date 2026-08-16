@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import MainCharacter from "@/components/characters/main-character/MainCharacter.vue";
+import GameInterface from "@/components/ui/game-interface/GameInterface.vue";
 import CastleWalls from "@/components/scenes/castle-walls/CastleWalls.vue";
 import EnchantedForest from "@/components/scenes/enchanted-forest/EnchantedForest.vue";
 import FantasticTown from "@/components/scenes/fantastic-town/FantasticTown.vue";
@@ -123,11 +124,6 @@ onBeforeUnmount(() => {
       :aria-hidden="isLoading"
     >
       <div class="fog fog-one" /><div class="fog fog-two" />
-      <div class="game-hud">
-        <div class="crest">GV</div>
-        <div class="hud-copy"><strong>GABRIEL VÁZQUEZ RUIZ</strong><span>FULL STACK DEVELOPER</span></div>
-        <div class="level-counter"><small>NIVEL</small><b>{{ String(level).padStart(2, "0") }}</b></div>
-      </div>
       <div class="progress-track"><i :style="{ width: `${progress * 100}%` }" /></div>
 
       <div class="world" :style="{ transform: worldTransform }">
@@ -233,7 +229,7 @@ onBeforeUnmount(() => {
       </div>
 
       <MainCharacter :motion="motion" :backwards="backwards" :left="`${heroX}vw`" />
-      <div class="scroll-prompt">SCROLL PARA CAMINAR <span>↕</span></div>
+      <GameInterface v-if="!isLoading" :level="level" />
     </div>
   </main>
 </template>

@@ -1,0 +1,215 @@
+@use "../../../styles/tokens" as *;
+
+.status {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: clamp(300px, 31vw, 510px);
+  min-height: 118px;
+  color: $bone;
+  filter: drop-shadow(0 5px 9px #000c);
+  pointer-events: none;
+}
+
+.crest {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 112px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.portraitFrame {
+  position: relative;
+  z-index: 1;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  border: 1px solid #dfb66d;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 35%, #4b4b48 0, #171b1d 54%, #060707 100%);
+  box-shadow:
+    inset 0 0 0 4px #17120e,
+    inset 0 0 18px #000,
+    0 0 0 3px #5c341d,
+    0 0 14px #c44a2094;
+}
+
+.portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 24%;
+  transform-origin: 50% 36%;
+  transition: opacity 150ms ease, filter 180ms ease, transform 180ms ease;
+}
+
+.finePortrait { opacity: 1; }
+
+.damagePortrait {
+  opacity: 0;
+  transform: scale(1.035);
+}
+
+.phoenixBorder {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: 121px;
+  height: 121px;
+  max-width: none;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 7px #d94e1da1) drop-shadow(0 4px 5px #000b);
+  pointer-events: none;
+}
+
+.damaged {
+  .finePortrait { opacity: 0; }
+  .damagePortrait {
+    opacity: 1;
+    animation: portraitHit 240ms ease-out both;
+  }
+  .damageVeil { opacity: 0.72; }
+}
+
+.damageVeil {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    linear-gradient(118deg, transparent 20%, #7e100f80 20.5% 23%, transparent 23.5%),
+    radial-gradient(circle at 62% 42%, transparent 0 18%, #7a0d0d52 43%, transparent 70%);
+  transition: opacity 180ms ease;
+}
+
+.crest[data-state="wounded"] {
+  .portrait { filter: saturate(0.72) contrast(1.12) sepia(0.18); }
+  .damageVeil { opacity: 0.55; }
+}
+
+.crest[data-state="critical"] {
+  .portrait { filter: saturate(0.45) contrast(1.2) sepia(0.34); }
+  .damageVeil { opacity: 0.95; }
+  .portraitFrame { animation: criticalPulse 850ms ease-in-out infinite alternate; }
+}
+
+.crest[data-state="shielded"] {
+  .portrait { filter: saturate(0.85) brightness(1.12); }
+  .portraitFrame { box-shadow: inset 0 0 20px #71b7db73, 0 0 0 3px #5d91a6, 0 0 18px #72d8ffbd; }
+}
+
+.readout {
+  flex: 1;
+  min-width: 0;
+  padding-top: 17px;
+  margin-left: -8px;
+}
+
+.barRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 66px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+
+  > span {
+    font: 700 10px Cinzel, serif;
+    letter-spacing: 0.12em;
+    text-align: right;
+    text-shadow: 0 2px 4px #000;
+  }
+}
+
+.bar {
+  position: relative;
+  height: 11px;
+  padding: 2px;
+  border: 1px solid #b99258;
+  background: #050706ed;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%);
+  box-shadow: inset 0 0 7px #000, 0 2px 5px #000;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 2px 14px 2px 3px;
+    border-top: 1px solid #ffffff35;
+  }
+
+  i {
+    display: block;
+    height: 100%;
+    transition: width 260ms ease;
+  }
+}
+
+.health i {
+  background: linear-gradient(90deg, #691314, #bd2c23 62%, #e15a3c);
+  box-shadow: 0 0 8px #df3424a8;
+}
+
+.energy i {
+  background: linear-gradient(90deg, #173b70, #286fa4 62%, #63afd0);
+  box-shadow: 0 0 8px #3b9dd7a8;
+}
+
+.gold {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: max-content;
+  margin: 1px 0 0 70px;
+  color: #e2bf79;
+  font: 700 13px Cinzel, serif;
+  letter-spacing: 0.07em;
+
+  i {
+    width: 19px;
+    height: 19px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #9f7539;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, #f5d38c, #9d681d 70%);
+    color: #5d3511;
+    font-size: 8px;
+    box-shadow: 0 0 7px #d28b29a3;
+  }
+
+  small {
+    color: #8f8169;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+  }
+}
+
+@keyframes criticalPulse {
+  to { box-shadow: inset 0 0 18px #86130a91, 0 0 0 3px #7d251c, 0 0 20px #e02b1dbd; }
+}
+
+@keyframes portraitHit {
+  0% { transform: scale(1.12) translateX(2px); filter: brightness(1.8) saturate(0.35); }
+  35% { transform: scale(1.025) translateX(-2px); }
+  100% { transform: scale(1.035) translateX(0); filter: brightness(1) saturate(1); }
+}
+
+@media (max-width: 760px) {
+  .status {
+    width: 275px;
+    transform: scale(0.82);
+    transform-origin: top left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crest[data-state="critical"] .portraitFrame { animation: none; }
+  .damaged .damagePortrait { animation: none; }
+}

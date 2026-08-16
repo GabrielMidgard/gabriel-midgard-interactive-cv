@@ -14,6 +14,11 @@ export const router = createRouter({
       component: () => import("@/views/ModalLabView.vue"),
     },
     {
+      path: "/test/damage",
+      name: "damage-lab",
+      component: () => import("@/views/DamageLabView.vue"),
+    },
+    {
       path: "/:pathMatch(.*)*",
       redirect: "/",
     },
