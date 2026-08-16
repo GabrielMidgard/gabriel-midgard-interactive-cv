@@ -48,6 +48,7 @@ export interface RuntimeSettings {
   };
   modals: {
     sceneDurationSeconds: number;
+    questDurationSeconds: number;
     scenePalettes: Record<string, SceneModalPalette>;
   };
   modes: Record<string, ExperienceMode>;

@@ -31,9 +31,10 @@
     "modals": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sceneDurationSeconds", "scenePalettes"],
+      "required": ["sceneDurationSeconds", "questDurationSeconds", "scenePalettes"],
       "properties": {
         "sceneDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
+        "questDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
         "scenePalettes": {
           "type": "object",
           "required": ["default"],

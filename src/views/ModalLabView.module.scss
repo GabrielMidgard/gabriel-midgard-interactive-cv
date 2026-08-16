@@ -111,6 +111,11 @@
   letter-spacing: 0.08em;
 }
 
+.durationGroup {
+  display: flex;
+  gap: 8px;
+}
+
 .colorPicker input {
   width: 34px;
   height: 30px;
@@ -210,6 +215,19 @@
 
 .tone.ember { background: #b8793d; box-shadow: 0 0 18px #f0b05f70; }
 .tone.moon { background: #8da09d; box-shadow: 0 0 18px #d1e6df66; }
+.tone.parchment { background: #bf8a48; box-shadow: 0 0 18px #e5b56a70; }
+.tone.royal { background: #7f9cb2; box-shadow: 0 0 18px #9fd6ff66; }
+.tone.warning { background: #a44d31; box-shadow: 0 0 18px #ef6a4870; }
+
+.questTone {
+  height: 82px;
+}
+
+.questHeading {
+  margin-top: 34px;
+  padding-top: 30px;
+  border-top: 1px solid #8e765f35;
+}
 
 .card small {
   color: #a67352;
@@ -248,6 +266,7 @@
 
 @media (max-width: 820px) {
   .controls { grid-template-columns: 1fr; }
+  .durationGroup { flex-wrap: wrap; }
   .catalog { grid-template-columns: 1fr; }
 }
 

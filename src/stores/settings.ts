@@ -15,6 +15,8 @@ const MODE_STORAGE_KEY = "gabriel-midgard-experience-mode";
 const sceneIds = new Set<string>(SCENE_IDS);
 const MIN_SCENE_MODAL_SECONDS = 1.5;
 const MAX_SCENE_MODAL_SECONDS = 12;
+const MIN_QUEST_MODAL_SECONDS = 1.5;
+const MAX_QUEST_MODAL_SECONDS = 12;
 const MIN_SCROLL_GUIDE_INACTIVITY_SECONDS = 1;
 const MAX_SCROLL_GUIDE_INACTIVITY_SECONDS = 60;
 const MIN_SCROLL_GUIDE_DISMISS_SECONDS = 0;
@@ -29,6 +31,12 @@ function normalizeSceneModalDuration(value: unknown) {
   const duration = Number(value);
   if (!Number.isFinite(duration)) return DEFAULT_SETTINGS.modals.sceneDurationSeconds;
   return Math.max(MIN_SCENE_MODAL_SECONDS, Math.min(MAX_SCENE_MODAL_SECONDS, duration));
+}
+
+function normalizeQuestModalDuration(value: unknown) {
+  const duration = Number(value);
+  if (!Number.isFinite(duration)) return DEFAULT_SETTINGS.modals.questDurationSeconds;
+  return Math.max(MIN_QUEST_MODAL_SECONDS, Math.min(MAX_QUEST_MODAL_SECONDS, duration));
 }
 
 function normalizeSeconds(value: unknown, fallback: number, minimum: number, maximum: number) {
@@ -154,6 +162,9 @@ function normalizeSettings(value: unknown): RuntimeSettings {
       sceneDurationSeconds: normalizeSceneModalDuration(
         candidate.modals?.sceneDurationSeconds,
       ),
+      questDurationSeconds: normalizeQuestModalDuration(
+        candidate.modals?.questDurationSeconds,
+      ),
       scenePalettes: normalizeSceneModalPalettes(candidate.modals?.scenePalettes),
     },
     modes,
@@ -182,6 +193,7 @@ export const useSettingsStore = defineStore("settings", () => {
     () => settings.value.scrollGuide.dismissDelaySeconds,
   );
   const sceneModalDurationSeconds = computed(() => settings.value.modals.sceneDurationSeconds);
+  const questModalDurationSeconds = computed(() => settings.value.modals.questDurationSeconds);
   const modeSelectorEnabled = computed(() =>
     settings.value.loading.modeSelectorEnabled && enabledModes.value.length > 1,
   );
@@ -198,6 +210,10 @@ export const useSettingsStore = defineStore("settings", () => {
 
   function setSceneModalDurationSeconds(value: number) {
     settings.value.modals.sceneDurationSeconds = normalizeSceneModalDuration(value);
+  }
+
+  function setQuestModalDurationSeconds(value: number) {
+    settings.value.modals.questDurationSeconds = normalizeQuestModalDuration(value);
   }
 
   function getSceneModalPalette(paletteId = "default") {
@@ -235,11 +251,13 @@ export const useSettingsStore = defineStore("settings", () => {
     scrollGuideInactivitySeconds,
     scrollGuideDismissDelaySeconds,
     sceneModalDurationSeconds,
+    questModalDurationSeconds,
     modeSelectorEnabled,
     hasScene,
     getSceneModalPalette,
     selectMode,
     setSceneModalDurationSeconds,
+    setQuestModalDurationSeconds,
     loadSettings,
   };
 });
