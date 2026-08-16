@@ -47,6 +47,7 @@ const {
   level,
   townPan,
   forestPan,
+  isFastTravel,
   skyPhase,
   heroX,
   worldTransform,
@@ -86,9 +87,10 @@ onMounted(async () => {
 });
 
 watch(
-  [isLoading, level, townPan, forestPan],
-  ([loading, currentLevel, currentTownPan, currentForestPan]) => {
-    if (loading) return;
+  [isLoading, level, townPan, forestPan, isFastTravel],
+  ([loading, currentLevel, currentTownPan, currentForestPan, fastTravel]) => {
+    sceneModalStore.setTravelSuppressed(fastTravel);
+    if (loading || fastTravel) return;
     sceneModalStore.announceLocation(
       resolveSceneLocationNotice(currentLevel, currentTownPan, currentForestPan),
     );
