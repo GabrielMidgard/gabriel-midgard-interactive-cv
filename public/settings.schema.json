@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "settings.schema.json",
+  "title": "Configuración del CV interactivo",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "defaultMode", "rememberLastMode", "loading", "modals", "modes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "defaultMode": { "type": "string", "minLength": 1 },
+    "rememberLastMode": { "type": "boolean" },
+    "loading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["durationSeconds", "modeSelectorEnabled"],
+      "properties": {
+        "durationSeconds": { "type": "number", "minimum": 0, "maximum": 60 },
+        "modeSelectorEnabled": { "type": "boolean" }
+      }
+    },
+    "modals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sceneDurationSeconds", "scenePalettes"],
+      "properties": {
+        "sceneDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
+        "scenePalettes": {
+          "type": "object",
+          "required": ["default"],
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/modalPalette" }
+        }
+      }
+    },
+    "modes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/mode" }
+    }
+  },
+  "$defs": {
+    "modalPalette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sceneDomain", "runeColor", "glowColor", "auraColor", "particleColors"],
+      "properties": {
+        "sceneDomain": { "enum": ["phoenix", "dragon"] },
+        "runeColor": { "$ref": "#/$defs/color" },
+        "glowColor": { "$ref": "#/$defs/color" },
+        "auraColor": { "$ref": "#/$defs/color" },
+        "particleColors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/color" }
+        }
+      }
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "label", "description", "scenes", "features"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "label": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "scenes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "fantastic-town",
+              "enchanted-forest",
+              "castle-walls",
+              "skills",
+              "experience",
+              "education",
+              "contact"
+            ]
+          }
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["map", "menu", "inventory"],
+          "properties": {
+            "map": { "type": "boolean" },
+            "menu": { "type": "boolean" },
+            "inventory": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}
