@@ -1,0 +1,255 @@
+.scenario {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300vw;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, #070a09aa 0%, transparent 18%, transparent 78%, #090b0acc 100%),
+    url("/assets/scenes/castle-walls/about-journey-bg-clean.png") left center / 300vw 100% no-repeat;
+  background-color: #05080d;
+  filter: saturate(0.76) brightness(0.76);
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.scenario:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(180deg, #020713e8 0%, #07101bd4 48%, #090d119c 76%, #0709085c 100%);
+  opacity: calc(var(--sky-phase) * 0.7);
+}
+
+.profileZone {
+  left: 100vw;
+  width: calc(200vw + 178vh);
+}
+
+.legend {
+  position: absolute;
+  top: 27vh;
+  width: min(42vw, 690px);
+  padding: 30px 34px 34px;
+  border-left: 2px solid #b47750;
+  background: linear-gradient(90deg, #090d0ce8, #0d1110c9 76%, transparent);
+  box-shadow: -16px 0 40px #0008;
+  text-shadow: 0 3px 12px #000;
+}
+
+.legendOrigin { left: 8vw; }
+.legendCalling { left: 108vw; }
+
+.legend small {
+  color: #c79d61;
+  font: 600 9px Cinzel;
+  letter-spacing: 0.32em;
+}
+
+.legend h2 {
+  max-width: 620px;
+  margin: 10px 0 15px;
+  font: 700 clamp(2rem, 3.5vw, 4rem)/1.05 Cinzel;
+  text-transform: uppercase;
+}
+
+.legend p {
+  max-width: 560px;
+  margin: 0;
+  color: #bbb8aa;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.legend blockquote {
+  margin: 22px 0 0;
+  color: #dbc698;
+  font: 600 1rem/1.5 Cinzel;
+}
+
+.wanderer {
+  position: absolute;
+  z-index: 3;
+  left: 72vw;
+  bottom: 12.5vh;
+  width: 13vw;
+  max-width: 208px;
+  min-width: 130px;
+  aspect-ratio: 560/794;
+  opacity: 0.62;
+  filter: saturate(0.7) brightness(0.7) drop-shadow(0 8px 5px #000a);
+}
+
+.wanderer i {
+  position: absolute;
+  inset: 0;
+  background: url("/assets/scenes/castle-walls/wanderer-lantern-locked.png") 0 50% / 400% 100% no-repeat;
+  animation: lantern-sway 3.6s steps(1, end) infinite;
+}
+
+@keyframes lantern-sway {
+  0%, 23% { background-position: 0 50%; }
+  25%, 48% { background-position: 33.333% 50%; }
+  50%, 73% { background-position: 66.666% 50%; }
+  75%, 98% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.raven {
+  position: absolute;
+  aspect-ratio: 1/2;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 4px #000b);
+}
+
+.raven i {
+  position: absolute;
+  inset: 0;
+  background: url("/assets/scenes/castle-walls/raven-head-sprites.png") 0 50% / 400% 100% no-repeat;
+  animation: raven-watch 7.2s steps(1, end) infinite;
+}
+
+@keyframes raven-watch {
+  0%, 23% { background-position: 0 50%; }
+  25%, 48% { background-position: 33.333% 50%; }
+  50%, 73% { background-position: 66.666% 50%; }
+  75%, 98% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.ravenDistant {
+  z-index: 4;
+  left: 60vw;
+  bottom: 35vh;
+  width: 2.4vw;
+  min-width: 28px;
+  max-width: 40px;
+  opacity: 0.9;
+  filter: brightness(0.48) contrast(1.15) drop-shadow(0 3px 3px #000c);
+}
+
+.foregroundPost {
+  position: fixed;
+  z-index: 27;
+  bottom: 11vh;
+  left: 0;
+  width: 30vw;
+  min-width: 270px;
+  max-width: 520px;
+  height: 18vh;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+.foregroundPost:before,
+.foregroundPost:after {
+  content: "";
+  position: absolute;
+  background: #020303;
+  filter: drop-shadow(0 7px 4px #000a);
+}
+
+.foregroundPost:before {
+  left: -35%;
+  bottom: -17%;
+  width: 135%;
+  height: 34%;
+  transform: rotate(-7deg);
+  transform-origin: left bottom;
+  clip-path: polygon(0 39%, 8% 25%, 19% 33%, 33% 17%, 48% 30%, 62% 8%, 76% 31%, 92% 15%, 100% 40%, 91% 66%, 74% 57%, 58% 78%, 43% 62%, 28% 82%, 12% 64%, 0 76%);
+}
+
+.foregroundPost:after {
+  left: 58%;
+  bottom: 25%;
+  width: 30%;
+  height: 42%;
+  transform: rotate(18deg);
+  transform-origin: left bottom;
+  clip-path: polygon(0 42%, 54% 34%, 78% 0, 68% 39%, 100% 58%, 65% 53%, 84% 100%, 52% 60%, 0 68%);
+}
+
+.ravenForeground {
+  z-index: 2;
+  top: -44%;
+  left: 58%;
+  width: 16%;
+  opacity: 0.94;
+  filter: brightness(0) drop-shadow(0 5px 4px #000d);
+}
+
+.ravenForeground i {
+  animation-duration: 6.6s;
+  animation-delay: -2.4s;
+}
+
+.castleWallTransition {
+  position: fixed;
+  left: 0;
+  bottom: 9vh;
+  width: 178vh;
+  height: 108vh;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.08s linear;
+  background: url("/assets/scenes/castle-walls/castle-wall-transition.png") center bottom / 100% 100% no-repeat;
+  filter: saturate(0.72) brightness(0.7) drop-shadow(-18px 4px 20px #000b);
+}
+
+.castleWallBack { z-index: 24; }
+
+.castleWallFront {
+  z-index: 26;
+  clip-path: inset(0 0 0 43%);
+}
+
+.levelGate { right: 2vw; }
+
+@media (max-width: 760px) {
+  .legend {
+    top: 25vh;
+    width: 70vw;
+    padding: 20px 22px 24px;
+  }
+
+  .legendOrigin { left: 7vw; }
+  .legendCalling { left: 107vw; }
+  .legend h2 { font-size: 7vw; }
+  .legend p { font-size: 10px; }
+  .legend blockquote { font-size: 0.72rem; }
+
+  .wanderer {
+    left: 74vw;
+    width: 22vw;
+    min-width: 110px;
+  }
+
+  .ravenDistant {
+    left: 60vw;
+    width: 4.5vw;
+  }
+
+  .foregroundPost {
+    width: 48vw;
+    min-width: 250px;
+    height: 15vh;
+  }
+
+  .castleWallTransition {
+    bottom: 9vh;
+    width: 178vh;
+    height: 108vh;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wanderer i,
+  .raven i {
+    animation: none;
+  }
+}

@@ -17,7 +17,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo El sitio se abrira normalmente en http://localhost:3000
+echo El sitio se abrira normalmente en http://localhost:5173
 echo Para detenerlo, presiona Ctrl+C.
 call npm run dev
 pause
