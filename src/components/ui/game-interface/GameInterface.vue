@@ -24,35 +24,37 @@ const {
 </script>
 
 <template>
-  <div :class="$style.interface" aria-label="Interfaz de aventura">
-    <div :class="$style.playerStatus">
-      <PlayerStatusHud
-        :health="health"
-        :max-health="maxHealth"
-        :energy="energy"
-        :max-energy="maxEnergy"
-        :gold="gold"
-        :portrait-state="portraitState"
-        :damaged="isTakingDamage"
-        :restored="isRestoring"
+  <Teleport to="body">
+    <div :class="$style.interface" aria-label="Interfaz de aventura">
+      <div :class="$style.playerStatus">
+        <PlayerStatusHud
+          :health="health"
+          :max-health="maxHealth"
+          :energy="energy"
+          :max-energy="maxEnergy"
+          :gold="gold"
+          :portrait-state="portraitState"
+          :damaged="isTakingDamage"
+          :restored="isRestoring"
+        />
+      </div>
+      <div :class="$style.navigation">
+        <GameNavigation
+          :active-panel="activeNavigation"
+          @select="gameUi.selectNavigation"
+        />
+      </div>
+      <div :class="$style.scrollGuide">
+        <ScrollGuide />
+      </div>
+      <DamageEffectOverlay
+        v-if="screenEffect"
+        :key="screenEffectSequence"
+        :effect="screenEffect"
+        :duration-ms="screenEffectDurationMs"
       />
     </div>
-    <div :class="$style.navigation">
-      <GameNavigation
-        :active-panel="activeNavigation"
-        @select="gameUi.selectNavigation"
-      />
-    </div>
-    <div :class="$style.scrollGuide">
-      <ScrollGuide />
-    </div>
-    <DamageEffectOverlay
-      v-if="screenEffect"
-      :key="screenEffectSequence"
-      :effect="screenEffect"
-      :duration-ms="screenEffectDurationMs"
-    />
-  </div>
+  </Teleport>
 </template>
 
 <style module lang="scss" src="./GameInterface.module.scss"></style>

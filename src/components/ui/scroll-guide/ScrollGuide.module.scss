@@ -1,79 +1,18 @@
-@use "../../../styles/tokens" as *;
-
 .guide {
   display: grid;
   justify-items: center;
-  gap: 10px;
-  width: 132px;
-  padding: 17px 12px 13px;
+  box-sizing: border-box;
+  width: 212px;
+  padding: 17px 18px 13px;
   border: 1px solid #a88b5d38;
   color: #cfc4ae;
   background: linear-gradient(90deg, transparent, #0709089e 21% 79%, transparent);
   backdrop-filter: blur(2px);
   pointer-events: none;
-
-  p {
-    margin: 0;
-    font: 600 8px Cinzel, serif;
-    letter-spacing: 0.16em;
-    text-align: center;
-    text-shadow: 0 2px 5px #000;
-  }
-}
-
-.gesture {
-  position: relative;
-  width: 29px;
-  height: 47px;
-  border: 1px solid #d0b27bbd;
-  border-radius: 17px;
-  box-shadow: inset 0 0 12px #000, 0 0 12px #c88a3b2e;
-
-  i {
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    width: 3px;
-    height: 9px;
-    border-radius: 2px;
-    background: #e0bd78;
-    transform: translateX(-50%);
-    box-shadow: 0 0 6px #efad53;
-    animation: wheelMove 1.45s ease-in-out infinite;
-  }
-
-  span {
-    position: absolute;
-    bottom: -9px;
-    left: 50%;
-    color: #bd8b4e;
-    font: 18px serif;
-    transform: translateX(-50%);
-    animation: arrowMove 1.45s ease-in-out infinite;
-  }
-}
-
-.touch {
-  height: 39px;
-  border-radius: 50% 50% 43% 43%;
-
-  i { height: 13px; }
 }
 
 .enter { animation: reveal 500ms ease both; }
 .leave { animation: reveal 300ms ease reverse both; }
-
-@keyframes wheelMove {
-  0%, 20% { opacity: 0; transform: translate(-50%, -3px); }
-  45% { opacity: 1; }
-  85%, 100% { opacity: 0; transform: translate(-50%, 13px); }
-}
-
-@keyframes arrowMove {
-  0%, 20% { opacity: 0; transform: translate(-50%, -5px); }
-  55% { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%, 6px); }
-}
 
 @keyframes reveal {
   from { opacity: 0; transform: translateY(10px); }
@@ -81,8 +20,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gesture i,
-  .gesture span,
   .enter,
   .leave { animation: none; }
 }

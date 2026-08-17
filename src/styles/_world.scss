@@ -6,6 +6,9 @@
   --blood: #862e28;
   --ink: #070909;
   --world: calc(800vw + 178vh);
+  --layer-interface: 900;
+  --layer-scene-modal: 1000;
+  --layer-quest-modal: 1010;
 }
 * {
   box-sizing: border-box;

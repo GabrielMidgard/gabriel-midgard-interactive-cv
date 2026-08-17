@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
+import TravelControlsHint from "@/components/ui/travel-controls-hint/TravelControlsHint.vue";
 import { adventureScrollTutorial } from "@/config/quest-modal-notices";
 import { useQuestModalStore } from "@/stores/quest-modals";
 import { useSceneModalStore } from "@/stores/scene-modals";
@@ -25,9 +26,6 @@ const { locked: sceneModalLocked } = storeToRefs(sceneModalStore);
 const initialTutorialVisible = ref(false);
 const reminderVisible = ref(false);
 const initialHintCompleted = ref(false);
-const touchOnly = ref(false);
-
-const label = computed(() => touchOnly.value ? "DESLIZA · AVANZAR" : "SCROLL · AVANZAR");
 
 let revealPending = false;
 let dismissTimer: ReturnType<typeof setTimeout> | undefined;
@@ -155,8 +153,6 @@ watch(
 );
 
 onMounted(() => {
-  const hasFinePointer = window.matchMedia("(any-pointer: fine)").matches;
-  touchOnly.value = !hasFinePointer && navigator.maxTouchPoints > 0;
   lastScrollY = window.scrollY;
   window.addEventListener("wheel", handleWheel, { passive: true });
   window.addEventListener("scroll", handleScroll, { passive: true });
@@ -183,13 +179,9 @@ onBeforeUnmount(() => {
     <aside
       v-if="reminderVisible"
       :class="$style.guide"
-      aria-label="Scroll, flecha arriba o W para avanzar; flecha abajo o S para regresar"
+      aria-label="Controles de desplazamiento"
     >
-      <div :class="[$style.gesture, { [$style.touch]: touchOnly }]" aria-hidden="true">
-        <i />
-        <span>⌄</span>
-      </div>
-      <p>{{ label }}</p>
+      <TravelControlsHint size="compact" />
     </aside>
   </Transition>
 </template>
