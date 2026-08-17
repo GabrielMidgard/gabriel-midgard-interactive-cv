@@ -229,7 +229,7 @@ onBeforeUnmount(() => {
       </div>
 
       <MainCharacter :motion="motion" :backwards="backwards" :left="`${heroX}vw`" />
-      <GameInterface v-if="!isLoading" :level="level" />
+      <GameInterface v-if="!isLoading" />
     </div>
   </main>
 </template>

@@ -160,7 +160,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--quest-gold) 52%, transparent);
   background:
     radial-gradient(ellipse at 50% 0, color-mix(in srgb, var(--quest-gold) 12%, transparent), transparent 54%),
-    linear-gradient(90deg, transparent, #050706eb 8%, #080b0af7 50%, #050706eb 92%, transparent);
+    linear-gradient(90deg, #050706f8, #080b0afd 50%, #050706f8);
   box-shadow: 0 14px 26px #0008;
   opacity: 0;
   clip-path: inset(0 0 100% 0);
@@ -189,6 +189,71 @@
   font-style: normal;
   text-shadow: 0 0 8px color-mix(in srgb, var(--quest-gold) 62%, transparent);
 }
+
+.scrollDetails {
+  min-height: 134px;
+  display: grid;
+  place-items: center;
+  padding-block: 18px;
+}
+
+.scrollInstruction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #d7cbb6;
+}
+
+.scrollInstruction p {
+  display: block;
+  margin: 0;
+  color: #d7cbb6;
+  font: 600 11px Cinzel, serif;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-shadow: 0 2px 6px #000;
+}
+
+.gesture {
+  position: relative;
+  width: 36px;
+  height: 58px;
+  border: 1px solid #d0b27bbd;
+  border-radius: 21px;
+  box-shadow: inset 0 0 12px #000, 0 0 12px #c88a3b2e;
+}
+
+.gesture i {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 4px;
+  height: 11px;
+  border-radius: 2px;
+  background: #e0bd78;
+  box-shadow: 0 0 6px #efad53;
+  transform: translateX(-50%);
+  animation: wheel-move 1.45s ease-in-out infinite;
+}
+
+.gesture span {
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  color: #bd8b4e;
+  font: 22px serif;
+  transform: translateX(-50%);
+  animation: arrow-move 1.45s ease-in-out infinite;
+}
+
+.touch {
+  height: 48px;
+  border-radius: 50% 50% 43% 43%;
+}
+
+.touch i { height: 16px; }
 
 .enterActive {
   animation: notice-arrives 380ms ease-out both;
@@ -297,6 +362,18 @@
   to { opacity: 0; clip-path: inset(0 0 100% 0); transform: translateY(-6px); }
 }
 
+@keyframes wheel-move {
+  0%, 20% { opacity: 0; transform: translate(-50%, -3px); }
+  45% { opacity: 1; }
+  85%, 100% { opacity: 0; transform: translate(-50%, 13px); }
+}
+
+@keyframes arrow-move {
+  0%, 20% { opacity: 0; transform: translate(-50%, -5px); }
+  55% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, 6px); }
+}
+
 @media (max-width: 620px) {
   .notice {
     top: 15vh;
@@ -327,5 +404,10 @@
   .leaveActive .details {
     animation-duration: 1ms;
     animation-delay: 0ms;
+  }
+
+  .gesture i,
+  .gesture span {
+    animation: none;
   }
 }

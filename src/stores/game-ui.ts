@@ -23,7 +23,6 @@ export const useGameUiStore = defineStore("game-ui", () => {
   const screenEffectDurationMs = ref(0);
   const screenEffectSequence = ref(0);
   const activeNavigation = ref<NavigationPanel | null>(null);
-  const missionExpanded = ref(true);
   let damageTimer: ReturnType<typeof setTimeout> | undefined;
 
   const portraitState = computed<PortraitState>(() => {
@@ -98,10 +97,6 @@ export const useGameUiStore = defineStore("game-ui", () => {
     activeNavigation.value = activeNavigation.value === panel ? null : panel;
   }
 
-  function toggleMission() {
-    missionExpanded.value = !missionExpanded.value;
-  }
-
   return {
     health,
     maxHealth,
@@ -116,7 +111,6 @@ export const useGameUiStore = defineStore("game-ui", () => {
     screenEffectSequence,
     portraitState,
     activeNavigation,
-    missionExpanded,
     setHealth,
     setEnergy,
     setShielded,
@@ -124,6 +118,5 @@ export const useGameUiStore = defineStore("game-ui", () => {
     restoreState,
     resetCombatState,
     selectNavigation,
-    toggleMission,
   };
 });

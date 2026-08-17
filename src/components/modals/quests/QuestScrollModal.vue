@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import type { CssVariables } from "@/types/experience";
 import type { QuestScrollNotice } from "./types";
 
@@ -11,6 +11,13 @@ const props = defineProps<{
 }>();
 
 const heading = computed(() => props.notice?.heading.toLocaleUpperCase("es-MX") ?? "");
+const touchOnly = ref(false);
+const scrollLabel = computed(() => touchOnly.value ? "DESLIZA · AVANZAR" : "SCROLL · AVANZAR");
+
+onMounted(() => {
+  const hasFinePointer = window.matchMedia("(any-pointer: fine)").matches;
+  touchOnly.value = !hasFinePointer && navigator.maxTouchPoints > 0;
+});
 
 const modalStyle = computed(() => {
   const duration = Math.max(1500, props.durationMs);
@@ -50,9 +57,25 @@ const modalStyle = computed(() => {
           <span :class="[$style.roller, $style.rightRoller]" aria-hidden="true" />
         </div>
 
-        <div :class="$style.details">
-          <h3>{{ notice.title }}</h3>
-          <p v-if="notice.description"><i aria-hidden="true">◇</i>{{ notice.description }}</p>
+        <div
+          :class="[
+            $style.details,
+            { [$style.scrollDetails]: notice.variant === 'scroll-guide' },
+          ]"
+        >
+          <template v-if="notice.variant === 'scroll-guide'">
+            <div :class="$style.scrollInstruction" aria-label="Instrucciones de desplazamiento">
+              <div :class="[$style.gesture, { [$style.touch]: touchOnly }]" aria-hidden="true">
+                <i />
+                <span>⌄</span>
+              </div>
+              <p>{{ scrollLabel }}</p>
+            </div>
+          </template>
+          <template v-else>
+            <h3 v-if="notice.title">{{ notice.title }}</h3>
+            <p v-if="notice.description"><i aria-hidden="true">◇</i>{{ notice.description }}</p>
+          </template>
         </div>
       </aside>
     </Transition>

@@ -21,10 +21,11 @@ export const useQuestModalStore = defineStore("quest-modals", () => {
   }
 
   function hide() {
+    clearTimer();
     visible.value = false;
   }
 
-  function showNotice(notice: QuestScrollNotice) {
+  function showNotice(notice: QuestScrollNotice, autoDismiss = true) {
     clearTimer();
     const configuredDuration = settingsStore.questModalDurationSeconds * 1000;
     const durationMs = notice.durationMs ?? configuredDuration ?? DEFAULT_DURATION_MS;
@@ -33,7 +34,9 @@ export const useQuestModalStore = defineStore("quest-modals", () => {
     currentDurationMs.value = durationMs;
     presentationKey.value += 1;
     visible.value = true;
-    dismissTimer = setTimeout(hide, Math.max(300, durationMs - EXIT_TRANSITION_MS));
+    if (autoDismiss) {
+      dismissTimer = setTimeout(hide, Math.max(300, durationMs - EXIT_TRANSITION_MS));
+    }
   }
 
   function reset() {
