@@ -68,7 +68,10 @@ const modalStyle = computed(() => {
           ]"
         >
           <template v-if="notice.variant === 'scroll-guide'">
-            <div :class="$style.scrollInstruction" aria-label="Instrucciones de desplazamiento">
+            <div
+              :class="$style.scrollInstruction"
+              aria-label="Scroll, flecha arriba o W para avanzar; flecha abajo o S para regresar"
+            >
               <div :class="[$style.gesture, { [$style.touch]: touchOnly }]" aria-hidden="true">
                 <i />
                 <span>⌄</span>

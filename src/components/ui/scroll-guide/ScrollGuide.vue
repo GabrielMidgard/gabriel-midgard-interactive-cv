@@ -183,7 +183,7 @@ onBeforeUnmount(() => {
     <aside
       v-if="reminderVisible"
       :class="$style.guide"
-      aria-label="Instrucciones de desplazamiento"
+      aria-label="Scroll, flecha arriba o W para avanzar; flecha abajo o S para regresar"
     >
       <div :class="[$style.gesture, { [$style.touch]: touchOnly }]" aria-hidden="true">
         <i />
