@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { questModalLabExamples } from "@/config/quest-modal-notices";
+import ScrollGuidePreview from "@/components/test/modals/ScrollGuidePreview.vue";
+import {
+  adventureScrollTutorial,
+  questModalLabExamples,
+} from "@/config/quest-modal-notices";
 import { modalLabExamples } from "@/config/scene-location-notices";
 import { useQuestModalStore } from "@/stores/quest-modals";
 import { useSceneModalStore } from "@/stores/scene-modals";
@@ -11,6 +15,8 @@ const sceneModalStore = useSceneModalStore();
 const questModalStore = useQuestModalStore();
 const settingsStore = useSettingsStore();
 const backgroundColor = ref("#000000");
+const scrollGuidePreviewVisible = ref(false);
+let scrollGuidePreviewTimer: ReturnType<typeof setTimeout> | undefined;
 
 const modalDurationSeconds = computed({
   get: () => settingsStore.sceneModalDurationSeconds,
@@ -33,18 +39,42 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  if (scrollGuidePreviewTimer) clearTimeout(scrollGuidePreviewTimer);
   sceneModalStore.resetLocation();
   questModalStore.reset();
 });
 
 function showSceneModal(notice: (typeof modalLabExamples)[number]) {
+  hideScrollGuidePreview();
   questModalStore.reset();
   sceneModalStore.showNotice(notice);
 }
 
 function showQuestModal(notice: (typeof questModalLabExamples)[number]) {
+  hideScrollGuidePreview();
   sceneModalStore.resetLocation();
   questModalStore.showNotice(notice);
+}
+
+function showScrollTutorial() {
+  hideScrollGuidePreview();
+  sceneModalStore.resetLocation();
+  questModalStore.showNotice(adventureScrollTutorial);
+}
+
+function hideScrollGuidePreview() {
+  if (scrollGuidePreviewTimer) clearTimeout(scrollGuidePreviewTimer);
+  scrollGuidePreviewTimer = undefined;
+  scrollGuidePreviewVisible.value = false;
+}
+
+function showScrollGuidePreview() {
+  sceneModalStore.resetLocation();
+  questModalStore.reset();
+  hideScrollGuidePreview();
+  scrollGuidePreviewVisible.value = true;
+  const previewDurationMs = Math.max(7500, questDurationSeconds.value * 1000);
+  scrollGuidePreviewTimer = setTimeout(hideScrollGuidePreview, previewDurationMs);
 }
 </script>
 
@@ -146,7 +176,42 @@ function showQuestModal(notice: (typeof questModalLabExamples)[number]) {
           PROBAR PERGAMINO
         </button>
       </article>
+
+      <div :class="[$style.sectionHeading, $style.questHeading]">
+        <small>GUÍAS DE DESPLAZAMIENTO</small>
+        <h2>Scroll y controles</h2>
+      </div>
+
+      <article :class="$style.card">
+        <span :class="[$style.tone, $style.questTone, $style.parchment]" />
+        <div>
+          <small>PERGAMINO ESPECIAL</small>
+          <h3>Completa la aventura</h3>
+          <p>Prueba el pergamino con el ciclo de mouse, flechas y teclado WASD.</p>
+        </div>
+        <button type="button" @click="showScrollTutorial">
+          PROBAR PERGAMINO
+        </button>
+      </article>
+
+      <article :class="$style.card">
+        <span :class="[$style.tone, $style.questTone, $style.royal]" />
+        <div>
+          <small>INDICADOR INFERIOR</small>
+          <h3>Guía de desplazamiento</h3>
+          <p>Prueba directamente la guía compacta que aparece tras un periodo sin movimiento.</p>
+        </div>
+        <button type="button" @click="showScrollGuidePreview">
+          PROBAR GUÍA
+        </button>
+      </article>
     </section>
+
+    <Teleport to="body">
+      <div :class="$style.scrollGuidePreviewHost">
+        <ScrollGuidePreview :visible="scrollGuidePreviewVisible" />
+      </div>
+    </Teleport>
 
     <footer :class="$style.footer">
       <span>Ruta directa</span>
