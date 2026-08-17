@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import QuestScrollModal from "./QuestScrollModal.vue";
+import QuestScroll from "./QuestScroll.vue";
 import { useQuestModalStore } from "@/stores/quest-modals";
 
 const modalStore = useQuestModalStore();
@@ -13,7 +13,7 @@ const {
 </script>
 
 <template>
-  <QuestScrollModal
+  <QuestScroll
     :notice="current"
     :visible="visible"
     :presentation-key="presentationKey"

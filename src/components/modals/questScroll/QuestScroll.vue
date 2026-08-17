@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import TravelControlsHint from "@/components/ui/travel-controls-hint/TravelControlsHint.vue";
 import type { CssVariables } from "@/types/experience";
-import type { QuestScrollNotice } from "./types";
+import ScrollGuide from "./ScrollGuide.vue";
+import type { QuestScrollNotice } from "./QuestScroll.types";
 
 const props = defineProps<{
   notice: QuestScrollNotice | null;
@@ -62,7 +62,7 @@ const modalStyle = computed(() => {
           ]"
         >
           <template v-if="notice.variant === 'scroll-guide'">
-            <TravelControlsHint size="modal" />
+            <ScrollGuide size="modal" />
           </template>
           <template v-else>
             <h3 v-if="notice.title">{{ notice.title }}</h3>
@@ -74,4 +74,4 @@ const modalStyle = computed(() => {
   </Teleport>
 </template>
 
-<style module lang="scss" src="./QuestScrollModal.module.scss"></style>
+<style module lang="scss" src="./QuestScroll.module.scss"></style>

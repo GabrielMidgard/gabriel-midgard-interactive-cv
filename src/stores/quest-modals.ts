@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import type { QuestScrollNotice } from "@/components/modals/quests/types";
+import type { QuestScrollNotice } from "@/components/modals/questScroll/QuestScroll.types";
 import { useSettingsStore } from "@/stores/settings";
 
 const DEFAULT_DURATION_MS = 5000;

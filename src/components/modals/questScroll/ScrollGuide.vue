@@ -87,4 +87,4 @@ onBeforeUnmount(clearPhaseTimer);
   </div>
 </template>
 
-<style module lang="scss" src="./TravelControlsHint.module.scss"></style>
+<style module lang="scss" src="./ScrollGuide.module.scss"></style>

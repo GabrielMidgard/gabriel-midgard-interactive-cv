@@ -1,4 +1,4 @@
-import type { QuestScrollNotice } from "@/components/modals/quests/types";
+import type { QuestScrollNotice } from "@/components/modals/questScroll/QuestScroll.types";
 
 export const adventureScrollTutorial = {
   id: "adventure-scroll-tutorial",

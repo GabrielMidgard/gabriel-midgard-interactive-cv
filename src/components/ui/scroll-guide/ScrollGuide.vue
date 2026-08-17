@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import TravelControlsHint from "@/components/ui/travel-controls-hint/TravelControlsHint.vue";
+import ScrollGuideControls from "@/components/modals/questScroll/ScrollGuide.vue";
 import { adventureScrollTutorial } from "@/config/quest-modal-notices";
 import { useQuestModalStore } from "@/stores/quest-modals";
 import { useSceneModalStore } from "@/stores/scene-modals";
@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
       :class="$style.guide"
       aria-label="Controles de desplazamiento"
     >
-      <TravelControlsHint size="compact" />
+      <ScrollGuideControls size="compact" />
     </aside>
   </Transition>
 </template>
