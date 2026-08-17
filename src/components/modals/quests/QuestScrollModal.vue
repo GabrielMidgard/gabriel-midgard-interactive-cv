@@ -43,7 +43,11 @@ const modalStyle = computed(() => {
       <aside
         v-if="visible && notice"
         :key="presentationKey"
-        :class="[$style.notice, $style[notice.tone ?? 'parchment']]"
+        :class="[
+          $style.notice,
+          $style[notice.tone ?? 'parchment'],
+          { [$style.scrollGuideNotice]: notice.variant === 'scroll-guide' },
+        ]"
         :style="modalStyle"
         role="status"
         aria-live="polite"
