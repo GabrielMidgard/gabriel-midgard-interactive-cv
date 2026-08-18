@@ -128,6 +128,17 @@ watch(
             speaker?.side === 'right' ? $style.speakerRight : $style.speakerLeft,
           ]"
         >
+          <div :class="$style.ornateFrame" aria-hidden="true">
+            <i :class="[$style.frameRail, $style.frameRailTop]" />
+            <i :class="[$style.frameRail, $style.frameRailRight]" />
+            <i :class="[$style.frameRail, $style.frameRailBottom]" />
+            <i :class="[$style.frameRail, $style.frameRailLeft]" />
+            <span :class="[$style.frameCorner, $style.frameCornerTopLeft]" />
+            <span :class="[$style.frameCorner, $style.frameCornerTopRight]" />
+            <span :class="[$style.frameCorner, $style.frameCornerBottomRight]" />
+            <span :class="[$style.frameCorner, $style.frameCornerBottomLeft]" />
+          </div>
+
           <div :class="$style.nameplate">
             <i :class="[$style.nameRoller, $style.nameRollerLeft]" aria-hidden="true" />
             <span :class="$style.nameSheet">
