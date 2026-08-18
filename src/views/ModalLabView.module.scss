@@ -219,6 +219,7 @@
 .tone.royal { background: #7f9cb2; box-shadow: 0 0 18px #9fd6ff66; }
 .tone.warning { background: #a44d31; box-shadow: 0 0 18px #ef6a4870; }
 .tone.narratorTone { background: #756079; box-shadow: 0 0 20px #d98cff75; }
+.tone.conversationTone { background: #6c91bd; box-shadow: 0 0 20px #85baff80; }
 
 .questTone {
   height: 82px;
@@ -251,6 +252,18 @@
   min-width: 120px;
   height: 40px;
   padding-inline: 14px;
+}
+
+.card button:disabled {
+  border-color: #665e54;
+  color: #827b70;
+  background: #242321;
+  cursor: wait;
+  transform: none;
+}
+
+.loadError {
+  color: #dc8d7f !important;
 }
 
 .footer {

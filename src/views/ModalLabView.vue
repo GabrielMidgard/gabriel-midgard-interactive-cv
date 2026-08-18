@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import ConversationModal from "@/components/modals/conversation/ConversationModal.vue";
 import NarratorModal from "@/components/modals/narrator/NarratorModal.vue";
 import ScrollGuidePreview from "@/components/test/modals/ScrollGuidePreview.vue";
 import {
@@ -11,6 +12,7 @@ import { useQuestModalStore } from "@/stores/quest-modals";
 import { useSceneModalStore } from "@/stores/scene-modals";
 import { useSettingsStore } from "@/stores/settings";
 import type { CssVariables } from "@/types/experience";
+import type { ConversationDefinition } from "@/types/conversations";
 
 const sceneModalStore = useSceneModalStore();
 const questModalStore = useQuestModalStore();
@@ -19,6 +21,9 @@ const backgroundColor = ref("#000000");
 const scrollGuidePreviewVisible = ref(false);
 const narratorPreviewVisible = ref(false);
 const narratorPresentationKey = ref(0);
+const conversationPreviewVisible = ref(false);
+const conversationPreview = ref<ConversationDefinition | null>(null);
+const conversationLoadError = ref("");
 let scrollGuidePreviewTimer: ReturnType<typeof setTimeout> | undefined;
 let narratorPreviewTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -43,16 +48,19 @@ const swatches = ["#000000", "#101617", "#2b1717", "#e8ded0"];
 
 onMounted(() => {
   if (!settingsStore.isReady) void settingsStore.loadSettings();
+  void loadConversationPreview();
 });
 
 onBeforeUnmount(() => {
   if (scrollGuidePreviewTimer) clearTimeout(scrollGuidePreviewTimer);
   if (narratorPreviewTimer) clearTimeout(narratorPreviewTimer);
+  hideConversationPreview();
   sceneModalStore.resetLocation();
   questModalStore.reset();
 });
 
 function showSceneModal(notice: (typeof modalLabExamples)[number]) {
+  hideConversationPreview();
   hideNarratorPreview();
   hideScrollGuidePreview();
   questModalStore.reset();
@@ -60,6 +68,7 @@ function showSceneModal(notice: (typeof modalLabExamples)[number]) {
 }
 
 function showQuestModal(notice: (typeof questModalLabExamples)[number]) {
+  hideConversationPreview();
   hideNarratorPreview();
   hideScrollGuidePreview();
   sceneModalStore.resetLocation();
@@ -67,6 +76,7 @@ function showQuestModal(notice: (typeof questModalLabExamples)[number]) {
 }
 
 function showScrollTutorial() {
+  hideConversationPreview();
   hideNarratorPreview();
   hideScrollGuidePreview();
   sceneModalStore.resetLocation();
@@ -80,6 +90,7 @@ function hideScrollGuidePreview() {
 }
 
 function showScrollGuidePreview() {
+  hideConversationPreview();
   hideNarratorPreview();
   sceneModalStore.resetLocation();
   questModalStore.reset();
@@ -96,6 +107,7 @@ function hideNarratorPreview() {
 }
 
 function showNarratorPreview() {
+  hideConversationPreview();
   hideScrollGuidePreview();
   sceneModalStore.resetLocation();
   questModalStore.reset();
@@ -103,6 +115,40 @@ function showNarratorPreview() {
   narratorPresentationKey.value += 1;
   narratorPreviewVisible.value = true;
   narratorPreviewTimer = setTimeout(hideNarratorPreview, NARRATOR_PREVIEW_DURATION_MS);
+}
+
+async function loadConversationPreview() {
+  conversationLoadError.value = "";
+
+  try {
+    const response = await fetch(`/data/conversations/princess-milla-test.json?v=${Date.now()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    conversationPreview.value = await response.json() as ConversationDefinition;
+  } catch (error) {
+    conversationPreview.value = null;
+    conversationLoadError.value = "No se pudo cargar la conversación de la Princesa Milla.";
+    console.error("Conversation preview could not be loaded", error);
+  }
+}
+
+function hideConversationPreview() {
+  conversationPreviewVisible.value = false;
+}
+
+function showConversationPreview() {
+  hideNarratorPreview();
+  hideScrollGuidePreview();
+  sceneModalStore.resetLocation();
+  questModalStore.reset();
+
+  if (!conversationPreview.value) {
+    void loadConversationPreview();
+    return;
+  }
+
+  conversationPreviewVisible.value = true;
 }
 </script>
 
@@ -250,6 +296,32 @@ function showNarratorPreview() {
           PROBAR NARRADOR
         </button>
       </article>
+
+      <div :class="[$style.sectionHeading, $style.questHeading]">
+        <small>DIÁLOGOS RPG</small>
+        <h2>Conversaciones ramificadas</h2>
+      </div>
+
+      <article :class="$style.card">
+        <span :class="[$style.tone, $style.questTone, $style.conversationTone]" />
+        <div>
+          <small>ENCUENTRO DE PERSONAJES</small>
+          <h3>La advertencia de la Princesa Milla</h3>
+          <p v-if="conversationLoadError" :class="$style.loadError">
+            {{ conversationLoadError }}
+          </p>
+          <p v-else>
+            Prueba cambios de hablante, emoción, posición y una decisión con dos desenlaces.
+          </p>
+        </div>
+        <button
+          type="button"
+          :disabled="!conversationPreview"
+          @click="showConversationPreview"
+        >
+          PROBAR CONVERSACIÓN
+        </button>
+      </article>
     </section>
 
     <Teleport to="body">
@@ -262,6 +334,12 @@ function showNarratorPreview() {
       :visible="narratorPreviewVisible"
       :message="narratorMessage"
       :presentation-key="narratorPresentationKey"
+    />
+
+    <ConversationModal
+      :visible="conversationPreviewVisible"
+      :conversation="conversationPreview"
+      @close="hideConversationPreview"
     />
 
     <footer :class="$style.footer">
