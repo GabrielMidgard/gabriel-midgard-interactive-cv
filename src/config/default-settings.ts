@@ -9,8 +9,13 @@ export const DEFAULT_SETTINGS: RuntimeSettings = {
     durationSeconds: 5,
     modeSelectorEnabled: false,
   },
+  scrollGuide: {
+    inactivitySeconds: 5,
+    dismissDelaySeconds: 2,
+  },
   modals: {
     sceneDurationSeconds: 2.3,
+    questDurationSeconds: 5,
     scenePalettes: {
       default: {
         sceneDomain: "dragon",

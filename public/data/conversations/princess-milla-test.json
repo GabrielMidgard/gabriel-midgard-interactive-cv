@@ -1,0 +1,99 @@
+{
+  "id": "princess-milla-first-encounter",
+  "startNode": "milla-greeting",
+  "actors": {
+    "knight": {
+      "id": "knight",
+      "name": "El Caballero",
+      "side": "left",
+      "size": "large",
+      "sprites": {
+        "neutral": "/assets/characters/main-character/knight-idle.png",
+        "guarded": "/assets/characters/main-character/knight-idle.png",
+        "resolved": "/assets/characters/main-character/knight-idle.png"
+      }
+    },
+    "milla": {
+      "id": "milla",
+      "name": "Princesa Milla",
+      "side": "right",
+      "size": "medium",
+      "sprites": {
+        "neutral": "/assets/characters/princess-milla/princess-milla.png",
+        "serene": "/assets/characters/princess-milla/princess-milla.png",
+        "concerned": "/assets/characters/princess-milla/princess-milla.png",
+        "resolved": "/assets/characters/princess-milla/princess-milla.png"
+      }
+    }
+  },
+  "nodes": {
+    "milla-greeting": {
+      "speaker": "milla",
+      "text": "Así que tú eres el caballero que atravesó la villa sin revelar su nombre.",
+      "emotion": "serene",
+      "position": "right",
+      "motion": "breathe",
+      "next": "knight-answer"
+    },
+    "knight-answer": {
+      "speaker": "knight",
+      "text": "Los nombres tienen un precio. Antes dime por qué una princesa espera sola junto al bosque.",
+      "emotion": "guarded",
+      "position": "left",
+      "motion": "stepForward",
+      "next": "milla-warning"
+    },
+    "milla-warning": {
+      "speaker": "milla",
+      "text": "Porque algo antiguo ha despertado entre sus raíces, y conoce el sonido de tus pasos.",
+      "emotion": "concerned",
+      "position": "centerRight",
+      "motion": "leanIn",
+      "next": "milla-choice"
+    },
+    "milla-choice": {
+      "speaker": "milla",
+      "text": "Puedo mostrarte un sendero oculto, pero necesito saber qué clase de hombre caminará a mi lado.",
+      "emotion": "resolved",
+      "position": "centerRight",
+      "motion": "breathe",
+      "choices": [
+        {
+          "id": "protect",
+          "text": "Juro protegerte durante el camino.",
+          "next": "milla-relieved",
+          "setFlag": "promisedToProtectMilla"
+        },
+        {
+          "id": "question",
+          "text": "Primero necesito conocer toda la verdad.",
+          "next": "milla-cautious",
+          "setFlag": "questionedMilla"
+        }
+      ]
+    },
+    "milla-relieved": {
+      "speaker": "milla",
+      "text": "Entonces quizá las historias sobre ti aún no han contado su capítulo más importante.",
+      "emotion": "serene",
+      "position": "centerRight",
+      "motion": "relieved",
+      "next": "knight-farewell"
+    },
+    "milla-cautious": {
+      "speaker": "milla",
+      "text": "Una respuesta prudente. Conserva esa desconfianza; en el bosque hasta los recuerdos pueden mentir.",
+      "emotion": "concerned",
+      "position": "right",
+      "motion": "retreat",
+      "next": "knight-farewell"
+    },
+    "knight-farewell": {
+      "speaker": "knight",
+      "text": "Muéstrame el sendero. Decidiré en quién confiar cuando lleguemos al otro lado.",
+      "emotion": "resolved",
+      "position": "centerLeft",
+      "motion": "stepForward"
+    }
+  }
+}

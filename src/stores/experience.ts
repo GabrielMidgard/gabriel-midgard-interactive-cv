@@ -13,6 +13,9 @@ const clamp = (value: number, minimum = 0, maximum = 1) =>
 
 const FAST_TRAVEL_THRESHOLD_VH_PER_SECOND = 18;
 const FAST_TRAVEL_RELEASE_MS = 220;
+const KEYBOARD_TRAVEL_VH_PER_SECOND = 46;
+const FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]);
+const BACKWARD_KEYS = new Set(["ArrowDown", "KeyS"]);
 
 export const useExperienceStore = defineStore("experience", () => {
   const isLoading = ref(true);
@@ -32,7 +35,11 @@ export const useExperienceStore = defineStore("experience", () => {
   let stopTimer: ReturnType<typeof setTimeout> | undefined;
   let fastTravelTimer: ReturnType<typeof setTimeout> | undefined;
   let scrollFrame: number | undefined;
+  let keyboardFrame: number | undefined;
+  let keyboardFrameAt = 0;
+  let keyboardTravelActive = false;
   let listening = false;
+  const pressedTravelKeys = new Set<string>();
 
   const travelVw = computed(() => progress.value * WORLD_TRAVEL_VW);
   const travelVh = computed(() => progress.value * 178);
@@ -79,6 +86,17 @@ export const useExperienceStore = defineStore("experience", () => {
     const smoothedVelocity = scrollVelocityVh.value * 0.35 + instantaneousVelocity * 0.65;
 
     scrollVelocityVh.value = smoothedVelocity;
+
+    if (keyboardTravelActive) {
+      isFastTravel.value = false;
+      if (fastTravelTimer) clearTimeout(fastTravelTimer);
+      fastTravelTimer = setTimeout(() => {
+        scrollVelocityVh.value = 0;
+        isFastTravel.value = false;
+      }, FAST_TRAVEL_RELEASE_MS);
+      lastScrollAt = now;
+      return;
+    }
 
     if (
       instantaneousVelocity >= FAST_TRAVEL_THRESHOLD_VH_PER_SECOND
@@ -143,6 +161,85 @@ export const useExperienceStore = defineStore("experience", () => {
     });
   }
 
+  function isEditableTarget(target: EventTarget | null) {
+    if (!(target instanceof HTMLElement)) return false;
+    return target.isContentEditable
+      || ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(target.tagName);
+  }
+
+  function keyboardDirection() {
+    const forward = pressedTravelKeys.has("ArrowUp") || pressedTravelKeys.has("KeyW");
+    const backward = pressedTravelKeys.has("ArrowDown") || pressedTravelKeys.has("KeyS");
+    return Number(forward) - Number(backward);
+  }
+
+  function pauseKeyboardTravel() {
+    keyboardTravelActive = false;
+    keyboardFrameAt = 0;
+    if (keyboardFrame !== undefined) cancelAnimationFrame(keyboardFrame);
+    keyboardFrame = undefined;
+  }
+
+  function stopKeyboardTravel() {
+    pressedTravelKeys.clear();
+    pauseKeyboardTravel();
+  }
+
+  function updateKeyboardTravel(now: number) {
+    const direction = keyboardDirection();
+    if (direction === 0) {
+      pauseKeyboardTravel();
+      return;
+    }
+    if (isLoading.value) {
+      stopKeyboardTravel();
+      return;
+    }
+
+    const elapsedSeconds = keyboardFrameAt
+      ? Math.min(0.032, Math.max(0.008, (now - keyboardFrameAt) / 1000))
+      : 1 / 60;
+    keyboardFrameAt = now;
+    keyboardTravelActive = true;
+    window.scrollBy({
+      top: direction * KEYBOARD_TRAVEL_VH_PER_SECOND * window.innerHeight * elapsedSeconds / 100,
+      behavior: "auto",
+    });
+    keyboardFrame = requestAnimationFrame(updateKeyboardTravel);
+  }
+
+  function ensureKeyboardTravel() {
+    if (keyboardFrame !== undefined || keyboardDirection() === 0) return;
+    keyboardFrameAt = performance.now();
+    keyboardFrame = requestAnimationFrame(updateKeyboardTravel);
+  }
+
+  function handleKeyDown(event: KeyboardEvent) {
+    if (
+      isLoading.value
+      || event.altKey
+      || event.ctrlKey
+      || event.metaKey
+      || isEditableTarget(event.target)
+      || (!FORWARD_KEYS.has(event.code) && !BACKWARD_KEYS.has(event.code))
+    ) return;
+
+    event.preventDefault();
+    pressedTravelKeys.add(event.code);
+    ensureKeyboardTravel();
+  }
+
+  function handleKeyUp(event: KeyboardEvent) {
+    if (!FORWARD_KEYS.has(event.code) && !BACKWARD_KEYS.has(event.code)) return;
+    event.preventDefault();
+    pressedTravelKeys.delete(event.code);
+    if (keyboardDirection() === 0) {
+      pauseKeyboardTravel();
+      return;
+    }
+    ensureKeyboardTravel();
+  }
+
   function startNavigation() {
     if (listening) return;
     listening = true;
@@ -151,6 +248,9 @@ export const useExperienceStore = defineStore("experience", () => {
     updateFromScroll();
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("blur", stopKeyboardTravel);
   }
 
   function stopNavigation() {
@@ -158,6 +258,10 @@ export const useExperienceStore = defineStore("experience", () => {
     listening = false;
     window.removeEventListener("scroll", requestUpdate);
     window.removeEventListener("resize", requestUpdate);
+    window.removeEventListener("keydown", handleKeyDown);
+    window.removeEventListener("keyup", handleKeyUp);
+    window.removeEventListener("blur", stopKeyboardTravel);
+    stopKeyboardTravel();
     if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame);
     if (phaseTimer) clearTimeout(phaseTimer);
     if (stopTimer) clearTimeout(stopTimer);

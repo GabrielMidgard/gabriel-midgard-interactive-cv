@@ -28,20 +28,9 @@ function npcStyle(frame: number, left: number, height: number, delay: number) {
 </script>
 
 <template>
-  <section :class="$style.town" :style="sceneStyle" aria-labelledby="fantastic-town-title">
+  <section :class="$style.town" :style="sceneStyle" aria-label="Escenario Fantastic Town">
     <div :class="$style.panorama" aria-hidden="true"><i /></div>
     <div :class="$style.sunHaze" aria-hidden="true"><i /><i /><i /></div>
-
-    <header :class="$style.intro">
-      <span>PRÓLOGO · NIVEL DE INICIACIÓN</span>
-      <h1 id="fantastic-town-title">Fantastic<br />Town</h1>
-      <p>A las dos de la tarde comienza el viaje, entre la cal, el trigo y quienes aún conservan la luz.</p>
-    </header>
-
-    <div :class="$style.tutorial">
-      <b>APRENDE A DESPLAZARTE</b>
-      <span>↓ para avanzar&nbsp;&nbsp;·&nbsp;&nbsp;↑ para regresar</span>
-    </div>
 
     <div :class="$style.villagers" aria-hidden="true">
       <div

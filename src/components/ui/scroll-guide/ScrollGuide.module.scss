@@ -1,0 +1,25 @@
+.guide {
+  display: grid;
+  justify-items: center;
+  box-sizing: border-box;
+  width: 212px;
+  padding: 17px 18px 13px;
+  border: 1px solid #a88b5d38;
+  color: #cfc4ae;
+  background: linear-gradient(90deg, transparent, #0709089e 21% 79%, transparent);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.enter { animation: reveal 500ms ease both; }
+.leave { animation: reveal 300ms ease reverse both; }
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .leave { animation: none; }
+}

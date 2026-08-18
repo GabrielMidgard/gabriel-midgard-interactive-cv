@@ -54,37 +54,6 @@
     radial-gradient(ellipse at 72% 63%, #77818b14, transparent 58%);
 }
 
-.intro {
-  position: absolute;
-  z-index: 8;
-  left: 7vw;
-  top: 16vh;
-  width: 67vw;
-  text-shadow: 0 4px 18px #020804;
-}
-
-.intro span {
-  color: #c59c58;
-  font: 700 9px Cinzel, serif;
-  letter-spacing: 0.3em;
-}
-
-.intro h2 {
-  margin: 12px 0 14px;
-  max-width: 70vw;
-  color: #efe7ce;
-  font: 700 clamp(3rem, 6.7vw, 7.3rem)/0.88 Cinzel, serif;
-  letter-spacing: -0.055em;
-  text-transform: uppercase;
-}
-
-.intro p {
-  max-width: 560px;
-  color: #d7d5c4;
-  font-size: 13px;
-  line-height: 1.75;
-}
-
 .motes {
   position: absolute;
   inset: 0 auto 0 0;
@@ -145,15 +114,6 @@
 }
 
 @media (max-width: 760px) {
-  .intro {
-    left: 8vw;
-    top: 20vh;
-    width: 82vw;
-  }
-
-  .intro h2 { font-size: 11vw; }
-  .intro p { width: 72vw; font-size: 10px; }
-
   .thresholdTree {
     bottom: -5vh;
     margin-left: -78vh;
