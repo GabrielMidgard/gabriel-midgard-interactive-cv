@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import NarratorModal from "@/components/modals/narrator/NarratorModal.vue";
 import ScrollGuidePreview from "@/components/test/modals/ScrollGuidePreview.vue";
 import {
   adventureScrollTutorial,
@@ -16,7 +17,13 @@ const questModalStore = useQuestModalStore();
 const settingsStore = useSettingsStore();
 const backgroundColor = ref("#000000");
 const scrollGuidePreviewVisible = ref(false);
+const narratorPreviewVisible = ref(false);
+const narratorPresentationKey = ref(0);
 let scrollGuidePreviewTimer: ReturnType<typeof setTimeout> | undefined;
+let narratorPreviewTimer: ReturnType<typeof setTimeout> | undefined;
+
+const narratorMessage = "Has tomado una decisión y nunca sabrás si elegiste bien.";
+const NARRATOR_PREVIEW_DURATION_MS = 6200;
 
 const modalDurationSeconds = computed({
   get: () => settingsStore.sceneModalDurationSeconds,
@@ -40,23 +47,27 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (scrollGuidePreviewTimer) clearTimeout(scrollGuidePreviewTimer);
+  if (narratorPreviewTimer) clearTimeout(narratorPreviewTimer);
   sceneModalStore.resetLocation();
   questModalStore.reset();
 });
 
 function showSceneModal(notice: (typeof modalLabExamples)[number]) {
+  hideNarratorPreview();
   hideScrollGuidePreview();
   questModalStore.reset();
   sceneModalStore.showNotice(notice);
 }
 
 function showQuestModal(notice: (typeof questModalLabExamples)[number]) {
+  hideNarratorPreview();
   hideScrollGuidePreview();
   sceneModalStore.resetLocation();
   questModalStore.showNotice(notice);
 }
 
 function showScrollTutorial() {
+  hideNarratorPreview();
   hideScrollGuidePreview();
   sceneModalStore.resetLocation();
   questModalStore.showNotice(adventureScrollTutorial);
@@ -69,12 +80,29 @@ function hideScrollGuidePreview() {
 }
 
 function showScrollGuidePreview() {
+  hideNarratorPreview();
   sceneModalStore.resetLocation();
   questModalStore.reset();
   hideScrollGuidePreview();
   scrollGuidePreviewVisible.value = true;
   const previewDurationMs = Math.max(7500, questDurationSeconds.value * 1000);
   scrollGuidePreviewTimer = setTimeout(hideScrollGuidePreview, previewDurationMs);
+}
+
+function hideNarratorPreview() {
+  if (narratorPreviewTimer) clearTimeout(narratorPreviewTimer);
+  narratorPreviewTimer = undefined;
+  narratorPreviewVisible.value = false;
+}
+
+function showNarratorPreview() {
+  hideScrollGuidePreview();
+  sceneModalStore.resetLocation();
+  questModalStore.reset();
+  hideNarratorPreview();
+  narratorPresentationKey.value += 1;
+  narratorPreviewVisible.value = true;
+  narratorPreviewTimer = setTimeout(hideNarratorPreview, NARRATOR_PREVIEW_DURATION_MS);
 }
 </script>
 
@@ -205,6 +233,23 @@ function showScrollGuidePreview() {
           PROBAR GUÍA
         </button>
       </article>
+
+      <div :class="[$style.sectionHeading, $style.questHeading]">
+        <small>VOCES DEL DESTINO</small>
+        <h2>Comentarios del narrador</h2>
+      </div>
+
+      <article :class="$style.card">
+        <span :class="[$style.tone, $style.questTone, $style.narratorTone]" />
+        <div>
+          <small>INTERVENCIÓN SINIESTRA</small>
+          <h3>El narrador susurra</h3>
+          <p>{{ narratorMessage }}</p>
+        </div>
+        <button type="button" @click="showNarratorPreview">
+          PROBAR NARRADOR
+        </button>
+      </article>
     </section>
 
     <Teleport to="body">
@@ -212,6 +257,12 @@ function showScrollGuidePreview() {
         <ScrollGuidePreview :visible="scrollGuidePreviewVisible" />
       </div>
     </Teleport>
+
+    <NarratorModal
+      :visible="narratorPreviewVisible"
+      :message="narratorMessage"
+      :presentation-key="narratorPresentationKey"
+    />
 
     <footer :class="$style.footer">
       <span>Ruta directa</span>
