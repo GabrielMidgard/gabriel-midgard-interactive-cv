@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+import ConversationContinueGuide from "./ConversationContinueGuide.vue";
 import type {
   ConversationActor,
   ConversationChoice,
@@ -19,6 +20,10 @@ const emit = defineEmits<{
 
 const modal = ref<HTMLElement | null>(null);
 const currentNodeId = ref("");
+const continueGuideVisible = ref(false);
+let continueGuideTimer: ReturnType<typeof setTimeout> | undefined;
+
+const CONTINUE_GUIDE_DELAY_MS = 3000;
 
 const actors = computed(() => Object.values(props.conversation?.actors ?? {}));
 const currentNode = computed(() => props.conversation?.nodes[currentNodeId.value] ?? null);
@@ -32,6 +37,22 @@ function resetConversation() {
   void nextTick(() => modal.value?.focus());
 }
 
+function hideContinueGuide() {
+  if (continueGuideTimer) clearTimeout(continueGuideTimer);
+  continueGuideTimer = undefined;
+  continueGuideVisible.value = false;
+}
+
+function scheduleContinueGuide() {
+  hideContinueGuide();
+  if (!props.visible || !currentNode.value || choices.value.length) return;
+
+  continueGuideTimer = setTimeout(() => {
+    continueGuideVisible.value = true;
+    continueGuideTimer = undefined;
+  }, CONTINUE_GUIDE_DELAY_MS);
+}
+
 function actorSprite(actor: ConversationActor) {
   if (actor.id !== currentNode.value?.speaker) return actor.sprites.neutral;
   const emotion = currentNode.value.emotion ?? "neutral";
@@ -39,6 +60,7 @@ function actorSprite(actor: ConversationActor) {
 }
 
 function closeConversation() {
+  hideContinueGuide();
   emit("close");
 }
 
@@ -49,6 +71,7 @@ function completeConversation() {
 
 function advance() {
   if (!currentNode.value || choices.value.length) return;
+  hideContinueGuide();
   if (!currentNode.value.next) {
     completeConversation();
     return;
@@ -57,6 +80,7 @@ function advance() {
 }
 
 function selectChoice(choice: ConversationChoice) {
+  hideContinueGuide();
   emit("choice", choice);
   currentNodeId.value = choice.next;
 }
@@ -68,6 +92,17 @@ watch(
   },
   { immediate: true },
 );
+
+watch(
+  [() => props.visible, currentNodeId],
+  ([visible]) => {
+    if (visible) scheduleContinueGuide();
+    else hideContinueGuide();
+  },
+  { immediate: true },
+);
+
+onBeforeUnmount(hideContinueGuide);
 </script>
 
 <template>
@@ -185,6 +220,11 @@ watch(
         <button type="button" :class="$style.close" aria-label="Cerrar conversación" @click="closeConversation">
           ×
         </button>
+
+        <ConversationContinueGuide
+          :visible="continueGuideVisible"
+          :placement="speaker?.side === 'right' ? 'left' : 'right'"
+        />
       </section>
     </Transition>
   </Teleport>
