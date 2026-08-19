@@ -43,7 +43,11 @@
 }
 
 .starting i { animation: run-start 0.055s steps(1, end) forwards; }
-.running i { animation: armored-run 0.36s steps(1, end) infinite; }
+.running i {
+  background-image: url("/assets/characters/main-character/knight-run-12.png");
+  background-size: 400% 300%;
+  animation: armored-run 0.72s steps(1, end) infinite;
+}
 .stopping i { animation: run-stop 0.08s steps(1, end) forwards; }
 
 .backwards {
@@ -63,12 +67,18 @@
 }
 
 @keyframes armored-run {
-  0%, 100% { background-position: 0 50%; }
-  16.666% { background-position: 50% 50%; }
-  33.333% { background-position: 100% 50%; }
-  50% { background-position: 0 100%; }
-  66.666% { background-position: 50% 100%; }
-  83.333% { background-position: 100% 100%; }
+  0%, 100% { background-position: 0 0; }
+  8.333% { background-position: 33.333% 0; }
+  16.666% { background-position: 66.666% 0; }
+  25% { background-position: 100% 0; }
+  33.333% { background-position: 0 50%; }
+  41.666% { background-position: 33.333% 50%; }
+  50% { background-position: 66.666% 50%; }
+  58.333% { background-position: 100% 50%; }
+  66.666% { background-position: 0 100%; }
+  75% { background-position: 33.333% 100%; }
+  83.333% { background-position: 66.666% 100%; }
+  91.666% { background-position: 100% 100%; }
 }
 
 @keyframes run-stop {
