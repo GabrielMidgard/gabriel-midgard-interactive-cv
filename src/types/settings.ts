@@ -42,8 +42,13 @@ export interface RuntimeSettings {
     durationSeconds: number;
     modeSelectorEnabled: boolean;
   };
+  scrollGuide: {
+    inactivitySeconds: number;
+    dismissDelaySeconds: number;
+  };
   modals: {
     sceneDurationSeconds: number;
+    questDurationSeconds: number;
     scenePalettes: Record<string, SceneModalPalette>;
   };
   modes: Record<string, ExperienceMode>;

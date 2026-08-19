@@ -4,7 +4,7 @@
   "title": "Configuración del CV interactivo",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "defaultMode", "rememberLastMode", "loading", "modals", "modes"],
+  "required": ["version", "defaultMode", "rememberLastMode", "loading", "scrollGuide", "modals", "modes"],
   "properties": {
     "$schema": { "type": "string" },
     "version": { "type": "integer", "minimum": 1 },
@@ -19,12 +19,22 @@
         "modeSelectorEnabled": { "type": "boolean" }
       }
     },
+    "scrollGuide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inactivitySeconds", "dismissDelaySeconds"],
+      "properties": {
+        "inactivitySeconds": { "type": "number", "minimum": 1, "maximum": 60 },
+        "dismissDelaySeconds": { "type": "number", "minimum": 0, "maximum": 10 }
+      }
+    },
     "modals": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sceneDurationSeconds", "scenePalettes"],
+      "required": ["sceneDurationSeconds", "questDurationSeconds", "scenePalettes"],
       "properties": {
         "sceneDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
+        "questDurationSeconds": { "type": "number", "minimum": 1.5, "maximum": 12 },
         "scenePalettes": {
           "type": "object",
           "required": ["default"],

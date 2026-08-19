@@ -5,7 +5,7 @@
   --modal-ink: #f0e7d7;
   --modal-duration: 2300ms;
   position: fixed;
-  z-index: 1000;
+  z-index: var(--layer-scene-modal, 1000);
   left: 50%;
   bottom: clamp(42px, 7vh, 76px);
   width: min(760px, 92vw);
