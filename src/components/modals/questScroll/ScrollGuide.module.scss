@@ -1,0 +1,290 @@
+.hint {
+  --control-gold: #d0a75f;
+  --control-text: #d7cbb6;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  overflow: hidden;
+  color: var(--control-text);
+}
+
+.controlView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.controlView p {
+  display: block;
+  margin: 0;
+  color: var(--control-text);
+  font-family: Cinzel, serif;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 2px 6px #000;
+  white-space: nowrap;
+}
+
+.modal {
+  min-height: 96px;
+
+  .controlView {
+    gap: 10px;
+    min-height: 92px;
+  }
+
+  .controlView p {
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.18em;
+  }
+}
+
+.compact {
+  min-height: 75px;
+
+  .controlView {
+    gap: 8px;
+    width: 100%;
+    min-height: 75px;
+  }
+
+  .controlView p {
+    width: 100%;
+    font-size: 8px;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+  }
+}
+
+.gesture {
+  position: relative;
+  width: 36px;
+  height: 58px;
+  border: 1px solid #d0b27bbd;
+  border-radius: 21px;
+  box-shadow: inset 0 0 12px #000, 0 0 12px #c88a3b2e;
+}
+
+.gesture i {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 4px;
+  height: 11px;
+  border-radius: 2px;
+  background: #e0bd78;
+  box-shadow: 0 0 6px #efad53;
+  transform: translateX(-50%);
+  animation: wheel-move 1.45s ease-in-out infinite;
+}
+
+.gesture span {
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  color: #bd8b4e;
+  font: 22px serif;
+  transform: translateX(-50%);
+  animation: arrow-move 1.45s ease-in-out infinite;
+}
+
+.compact .gesture {
+  width: 29px;
+  height: 47px;
+  border-radius: 17px;
+}
+
+.compact .gesture i {
+  top: 8px;
+  width: 3px;
+  height: 9px;
+}
+
+.compact .gesture span {
+  bottom: -9px;
+  font-size: 18px;
+}
+
+.touch {
+  height: 48px;
+  border-radius: 50% 50% 43% 43%;
+}
+
+.touch i { height: 16px; }
+.compact .touch { height: 39px; }
+.compact .touch i { height: 13px; }
+
+.arrowKeyboard {
+  display: grid;
+  grid-template-columns: repeat(3, 28px);
+  grid-template-rows: repeat(2, 26px);
+  gap: 3px;
+}
+
+.key {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  border: 1px solid var(--control-gold);
+  border-radius: 3px;
+  color: #d7b46f;
+  background: transparent;
+  box-shadow: inset 0 0 8px #0009, 0 0 7px #c88a3b1f;
+  font: 700 17px/1 Cinzel, serif;
+  font-style: normal;
+}
+
+.upKey {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.leftKey {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.downKey {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.rightKey {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.wsKeyboard {
+  position: relative;
+  width: 90px;
+  height: 55px;
+}
+
+.wKey,
+.aKey,
+.sKey,
+.dKey {
+  position: absolute;
+}
+
+.wKey {
+  top: 0;
+  left: 20px;
+}
+
+.aKey {
+  left: 0;
+  bottom: 0;
+}
+
+.sKey {
+  left: 31px;
+  bottom: 0;
+}
+
+.dKey {
+  left: 62px;
+  bottom: 0;
+}
+
+.forwardKey {
+  animation: press-forward-key 2s ease-in-out infinite;
+}
+
+.backwardKey {
+  animation: press-backward-key 2s ease-in-out infinite;
+}
+
+.compact .arrowKeyboard {
+  grid-template-columns: repeat(3, 22px);
+  grid-template-rows: repeat(2, 20px);
+  gap: 2px;
+}
+
+.compact .key {
+  width: 22px;
+  height: 20px;
+  font-size: 13px;
+}
+
+.compact .wsKeyboard {
+  width: 70px;
+  height: 42px;
+}
+
+.compact .wKey { left: 15px; }
+.compact .aKey { left: 0; }
+.compact .sKey { left: 24px; }
+.compact .dKey { left: 48px; }
+
+.controlEnter {
+  animation: control-enters-left 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.controlLeave {
+  animation: control-leaves-left 260ms ease-in both;
+}
+
+@keyframes wheel-move {
+  0%, 20% { opacity: 0; transform: translate(-50%, -3px); }
+  45% { opacity: 1; }
+  85%, 100% { opacity: 0; transform: translate(-50%, 13px); }
+}
+
+@keyframes arrow-move {
+  0%, 20% { opacity: 0; transform: translate(-50%, -5px); }
+  55% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, 6px); }
+}
+
+@keyframes control-leaves-left {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-34px); }
+}
+
+@keyframes control-enters-left {
+  from { opacity: 0; transform: translateX(34px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes press-forward-key {
+  0%, 8%, 40%, 100% {
+    color: #d7b46f;
+    background: transparent;
+    transform: translateY(0);
+  }
+  14%, 34% {
+    color: #100b06;
+    background: #d5a54d;
+    box-shadow: 0 0 14px #d59a3b99, inset 0 1px #f8d98c;
+    transform: translateY(2px);
+  }
+}
+
+@keyframes press-backward-key {
+  0%, 48%, 88%, 100% {
+    color: #d7b46f;
+    background: transparent;
+    transform: translateY(0);
+  }
+  58%, 82% {
+    color: #100b06;
+    background: #d5a54d;
+    box-shadow: 0 0 14px #d59a3b99, inset 0 1px #f8d98c;
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gesture i,
+  .gesture span,
+  .forwardKey,
+  .backwardKey,
+  .controlEnter,
+  .controlLeave {
+    animation: none;
+  }
+}

@@ -15,16 +15,10 @@ const sceneStyle = {
 </script>
 
 <template>
-  <section :class="$style.forest" :style="sceneStyle" aria-labelledby="enchanted-forest-title">
+  <section :class="$style.forest" :style="sceneStyle" aria-label="Escenario del bosque encantado">
     <div :class="$style.panorama" aria-hidden="true"><i /></div>
     <div :class="$style.corruption" aria-hidden="true" />
     <div :class="$style.motes" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
-
-    <header :class="$style.intro">
-      <span>NIVEL I · EL SENDERO ENTRE MUNDOS</span>
-      <h2 id="enchanted-forest-title">El bosque<br />de los susurros</h2>
-      <p>La luz aún habita entre las raíces, pero algo antiguo ha comenzado a devorar el camino.</p>
-    </header>
   </section>
 
   <Teleport to="body">
