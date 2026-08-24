@@ -26,6 +26,15 @@ const stars = Array.from({ length: 46 }, (_, index) => ({
   size: 0.7 + ((index * 11) % 17) / 10,
 }));
 
+const embers = [
+  [-30, 0.1, 0.9], [-18, 0.7, 1.2], [-7, 1.3, 0.8], [4, 0.3, 1.1],
+  [15, 1.7, 0.75], [27, 0.9, 1], [36, 2.1, 0.7], [9, 2.7, 0.85],
+  [-39, 1.9, 0.65], [-25, 2.4, 0.8], [-12, 2.9, 0.55], [2, 2.2, 0.7],
+  [20, 0.45, 0.62], [31, 1.45, 0.78], [43, 2.55, 0.58], [12, 3.15, 0.68],
+  [-46, 0.35, 0.52], [-34, 1.15, 0.68], [-3, 1.85, 0.58], [7, 3.4, 0.48],
+  [24, 2.85, 0.55], [39, 1.05, 0.46], [-20, 3.65, 0.5], [47, 3.05, 0.44],
+] as const;
+
 const sceneStyle = {
   "--celestial-transition": `${Math.max(0.3, props.transitionSeconds)}s`,
 } as CssVariables;
@@ -106,6 +115,15 @@ function runeStyle(index: number) {
   } as CssVariables;
 }
 
+function emberStyle(ember: readonly [number, number, number]) {
+  const [x, delay, scale] = ember;
+  return {
+    "--ember-x": `${x}px`,
+    "--ember-delay": `${delay}s`,
+    "--ember-scale": scale,
+  } as CssVariables;
+}
+
 </script>
 
 <template>
@@ -152,6 +170,9 @@ function runeStyle(index: number) {
           <div :class="$style.landingCampfire">
             <i />
             <i />
+            <div :class="$style.landingEmbers">
+              <i v-for="(ember, index) in embers" :key="index" :style="emberStyle(ember)" />
+            </div>
           </div>
         </div>
       </div>

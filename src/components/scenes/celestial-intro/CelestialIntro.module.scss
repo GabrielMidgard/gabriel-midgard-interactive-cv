@@ -258,7 +258,7 @@
   );
   filter: blur(11px);
   mix-blend-mode: screen;
-  animation: landing-fire-glow 0.24s ease-in-out infinite alternate;
+  animation: landing-fire-glow 0.72s ease-in-out infinite alternate;
 }
 
 .landingCharacterStage {
@@ -313,7 +313,27 @@
   opacity: 0.32;
   filter: saturate(1.5) brightness(1.22) blur(1.2px);
   mix-blend-mode: screen;
-  animation: landing-fire-warmth 0.18s ease-in-out infinite alternate;
+  animation: landing-fire-warmth 0.55s ease-in-out infinite alternate;
+}
+
+.landingEmbers {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.landingEmbers i {
+  position: absolute;
+  left: 50%;
+  bottom: 35%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffd26a;
+  box-shadow: 0 0 7px 2px #ff6a1c;
+  opacity: 0;
+  animation: landing-ember-rise 3.4s ease-out var(--ember-delay) infinite;
 }
 
 .descentStreaks {
@@ -388,6 +408,13 @@
   to { opacity: 0.94; transform: translateX(-50%) scale(1.03); }
 }
 
+@keyframes landing-ember-rise {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(var(--ember-scale)); }
+  12% { opacity: 1; }
+  72% { opacity: 0.7; }
+  100% { opacity: 0; transform: translate3d(var(--ember-x), -145px, 0) scale(0.15); }
+}
+
 @keyframes landing-fire-warmth {
   from { opacity: 0.22; }
   to { opacity: 0.42; }
@@ -440,6 +467,7 @@
   .descentStreaks i,
   .landingKnight,
   .landingCampfire > i:nth-child(2),
+  .landingEmbers i,
   .landingFireLight {
     animation: none;
   }

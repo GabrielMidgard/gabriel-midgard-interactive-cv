@@ -64,7 +64,7 @@
   background: radial-gradient(ellipse at 50% 72%, #ffb44da6 0 8%, #e5672e5b 21%, #a7391829 46%, transparent 76%);
   filter: blur(11px);
   mix-blend-mode: screen;
-  animation: fire-glow 0.19s ease-in-out infinite alternate;
+  animation: fire-glow 0.72s ease-in-out infinite alternate;
 }
 
 .characterStage {
@@ -156,7 +156,7 @@
   opacity: 0.32;
   filter: saturate(1.5) brightness(1.22) blur(1.2px);
   mix-blend-mode: screen;
-  animation: campfire-warmth 0.18s ease-in-out infinite alternate;
+  animation: campfire-warmth 0.55s ease-in-out infinite alternate;
 }
 
 .embers i {
