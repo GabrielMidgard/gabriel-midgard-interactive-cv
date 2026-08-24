@@ -8,6 +8,9 @@ export const DEFAULT_SETTINGS: RuntimeSettings = {
   loading: {
     durationSeconds: 5,
     modeSelectorEnabled: false,
+    celestialIntroEnabled: true,
+    celestialIntroDurationSeconds: 3.8,
+    celestialIntroTransitionSeconds: 1.25,
   },
   scrollGuide: {
     inactivitySeconds: 5,

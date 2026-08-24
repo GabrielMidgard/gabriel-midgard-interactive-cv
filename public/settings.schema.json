@@ -13,10 +13,19 @@
     "loading": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["durationSeconds", "modeSelectorEnabled"],
+      "required": [
+        "durationSeconds",
+        "modeSelectorEnabled",
+        "celestialIntroEnabled",
+        "celestialIntroDurationSeconds",
+        "celestialIntroTransitionSeconds"
+      ],
       "properties": {
         "durationSeconds": { "type": "number", "minimum": 0, "maximum": 60 },
-        "modeSelectorEnabled": { "type": "boolean" }
+        "modeSelectorEnabled": { "type": "boolean" },
+        "celestialIntroEnabled": { "type": "boolean" },
+        "celestialIntroDurationSeconds": { "type": "number", "minimum": 0.5, "maximum": 12 },
+        "celestialIntroTransitionSeconds": { "type": "number", "minimum": 0.3, "maximum": 2.5 }
       }
     },
     "scrollGuide": {

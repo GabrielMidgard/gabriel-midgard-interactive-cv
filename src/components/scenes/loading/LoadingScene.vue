@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import type { CssVariables } from "@/types/experience";
 import type { ExperienceMode } from "@/types/settings";
 
 const props = defineProps<{
+  active: boolean;
   durationSeconds: number;
   modeSelectorEnabled: boolean;
   modes: Array<{ id: string } & ExperienceMode>;
@@ -27,6 +28,8 @@ const stars = [
 const embers = [
   [-30, 0.1, 0.9], [-18, 0.7, 1.2], [-7, 1.3, 0.8], [4, 0.3, 1.1],
   [15, 1.7, 0.75], [27, 0.9, 1], [36, 2.1, 0.7], [9, 2.7, 0.85],
+  [-39, 1.9, 0.65], [-25, 2.4, 0.8], [-12, 2.9, 0.55], [2, 2.2, 0.7],
+  [20, 0.45, 0.62], [31, 1.45, 0.78], [43, 2.55, 0.58], [12, 3.15, 0.68],
 ] as const;
 
 const sceneStyle = {
@@ -36,20 +39,44 @@ const sceneStyle = {
 let leaveTimer: number | undefined;
 let completeTimer: number | undefined;
 let previousOverflow = "";
+let stopActiveWatch: (() => void) | undefined;
 
-onMounted(() => {
+function clearCountdown() {
+  if (leaveTimer !== undefined) window.clearTimeout(leaveTimer);
+  if (completeTimer !== undefined) window.clearTimeout(completeTimer);
+  leaveTimer = undefined;
+  completeTimer = undefined;
+}
+
+function startCountdown() {
+  clearCountdown();
+  leaving.value = false;
   const durationMs = Math.max(0, props.durationSeconds * 1000);
   const transitionMs = Math.min(900, durationMs);
+  leaveTimer = window.setTimeout(() => { leaving.value = true; }, Math.max(0, durationMs - transitionMs));
+  completeTimer = window.setTimeout(() => emit("complete"), durationMs);
+}
+
+onMounted(() => {
   previousOverflow = document.body.style.overflow;
   window.scrollTo(0, 0);
   document.body.style.overflow = "hidden";
-  leaveTimer = window.setTimeout(() => { leaving.value = true; }, durationMs - transitionMs);
-  completeTimer = window.setTimeout(() => emit("complete"), durationMs);
+  stopActiveWatch = watch(
+    () => props.active,
+    (active) => {
+      if (active) startCountdown();
+      else {
+        clearCountdown();
+        leaving.value = false;
+      }
+    },
+    { immediate: true },
+  );
 });
 
 onBeforeUnmount(() => {
-  if (leaveTimer !== undefined) window.clearTimeout(leaveTimer);
-  if (completeTimer !== undefined) window.clearTimeout(completeTimer);
+  stopActiveWatch?.();
+  clearCountdown();
   document.body.style.overflow = previousOverflow;
 });
 
@@ -77,8 +104,11 @@ function emberStyle(ember: readonly [number, number, number]) {
   <section
     :class="[$style.loadingScene, leaving ? $style.leaving : '']"
     :style="sceneStyle"
+    :data-active="active"
+    :aria-hidden="!active"
+    :inert="!active"
     aria-label="Preparando la travesía"
-    aria-live="polite"
+    :aria-live="active ? 'polite' : 'off'"
   >
     <div :class="$style.background" aria-hidden="true" />
     <div :class="$style.stars" aria-hidden="true">
@@ -92,8 +122,7 @@ function emberStyle(ember: readonly [number, number, number]) {
     </div>
 
     <div :class="$style.campfire" aria-hidden="true">
-      <div :class="$style.logs"><i /><i /></div>
-      <div :class="$style.flames"><i /><i /><i /><i /></div>
+      <div :class="$style.campfireArt"><i :class="$style.fireBase" /><i :class="$style.fireWarmth" /></div>
       <div :class="$style.embers">
         <i v-for="(ember, index) in embers" :key="index" :style="emberStyle(ember)" />
       </div>

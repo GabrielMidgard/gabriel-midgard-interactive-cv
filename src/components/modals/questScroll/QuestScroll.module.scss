@@ -209,6 +209,16 @@
   filter: none;
 }
 
+.startGuideNotice {
+  top: clamp(250px, 35vh, 390px);
+  width: min(470px, calc(100vw - 32px));
+}
+
+.startGuideNotice .details {
+  min-height: 118px;
+  padding-block: 22px 19px;
+}
+
 .enterActive {
   animation: notice-arrives 380ms ease-out both;
 }

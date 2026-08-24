@@ -27,6 +27,9 @@ test("publica la configuración editable sin recompilar", async () => {
   assert.equal(settings.defaultMode, "cinematic");
   assert.equal(settings.loading.durationSeconds, 5);
   assert.equal(settings.loading.modeSelectorEnabled, false);
+  assert.equal(settings.loading.celestialIntroEnabled, true);
+  assert.equal(settings.loading.celestialIntroDurationSeconds, 3.8);
+  assert.equal(settings.loading.celestialIntroTransitionSeconds, 1.25);
   assert.equal(settings.scrollGuide.inactivitySeconds, 5);
   assert.equal(settings.scrollGuide.dismissDelaySeconds, 2);
   assert.equal(settings.modals.questDurationSeconds, 5);

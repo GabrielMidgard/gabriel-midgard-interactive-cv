@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import MainCharacter from "@/components/characters/main-character/MainCharacter.vue";
 import GameInterface from "@/components/ui/game-interface/GameInterface.vue";
 import CastleWalls from "@/components/scenes/castle-walls/CastleWalls.vue";
+import CelestialIntro from "@/components/scenes/celestial-intro/CelestialIntro.vue";
 import EnchantedForest from "@/components/scenes/enchanted-forest/EnchantedForest.vue";
 import FantasticTown from "@/components/scenes/fantastic-town/FantasticTown.vue";
 import LoadingScene from "@/components/scenes/loading/LoadingScene.vue";
@@ -55,6 +56,9 @@ const {
 } = storeToRefs(experience);
 const {
   activeModeId,
+  celestialIntroDurationSeconds,
+  celestialIntroEnabled,
+  celestialIntroTransitionSeconds,
   enabledModes,
   isReady: settingsReady,
   loadingDurationSeconds,
@@ -83,7 +87,7 @@ const foregroundPostTransform = computed(() => experience.layerTransform(CASTLE_
 
 onMounted(async () => {
   await settingsStore.loadSettings();
-  experience.startLoading();
+  if (!celestialIntroEnabled.value) experience.startLoading();
   experience.startNavigation();
 });
 
@@ -108,13 +112,21 @@ onBeforeUnmount(() => {
 <template>
   <main class="game-scroll" :style="rootStyle">
     <LoadingScene
-      v-if="settingsReady && loadingStarted && isLoading"
+      v-if="settingsReady && isLoading"
+      :active="loadingStarted"
       :duration-seconds="loadingDurationSeconds"
       :mode-selector-enabled="modeSelectorEnabled"
       :modes="enabledModes"
       :active-mode-id="activeModeId"
       @select-mode="settingsStore.selectMode"
       @complete="experience.finishLoading"
+    />
+
+    <CelestialIntro
+      v-if="settingsReady && isLoading && celestialIntroEnabled && !loadingStarted"
+      :duration-seconds="celestialIntroDurationSeconds"
+      :transition-seconds="celestialIntroTransitionSeconds"
+      @complete="experience.startLoading"
     />
 
     <div

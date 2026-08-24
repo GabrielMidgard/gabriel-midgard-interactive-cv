@@ -12,11 +12,10 @@
 
 .background {
   position: absolute;
-  inset: -2%;
+  inset: 0;
   z-index: -4;
-  background: url("/assets/scenes/loading/loading-night-bg.png") center / cover no-repeat;
-  filter: saturate(0.78) brightness(0.78);
-  transform: scale(1.025);
+  background: #020611 url("/assets/scenes/loading/celestial-loading-panorama-wide.png") center bottom / auto 200% no-repeat;
+  transform: scale(1);
   animation: scene-breathe 8s ease-in-out infinite alternate;
 }
 
@@ -27,9 +26,9 @@
   z-index: 20;
   pointer-events: none;
   background:
-    radial-gradient(circle at 54% 79%, transparent 0 12%, #02050926 37%, #02050999 100%),
-    linear-gradient(180deg, #02050a4a, transparent 34%, #0102027d 100%);
-  box-shadow: inset 0 0 110px #000;
+    radial-gradient(ellipse at 54% 92%, transparent 0 26%, #0205090a 56%, #02050944 100%),
+    linear-gradient(180deg, transparent 0 56%, #0102020a 78%, #0102025c 100%);
+  box-shadow: inset 0 -48px 74px #0005;
 }
 
 .stars {
@@ -55,15 +54,15 @@
 .fireLight {
   position: absolute;
   z-index: 1;
-  left: 53%;
-  bottom: -9vh;
-  width: min(70vw, 1050px);
-  height: 75vh;
+  left: 56%;
+  bottom: 2vh;
+  width: clamp(170px, 21vw, 340px);
+  height: clamp(150px, 33vh, 360px);
   transform: translateX(-50%);
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(ellipse at center bottom, #ffb44d78 0 7%, #e5672e3f 18%, #a7391821 38%, transparent 68%);
-  filter: blur(17px);
+  background: radial-gradient(ellipse at 50% 72%, #ffb44da6 0 8%, #e5672e5b 21%, #a7391829 46%, transparent 76%);
+  filter: blur(11px);
   mix-blend-mode: screen;
   animation: fire-glow 0.19s ease-in-out infinite alternate;
 }
@@ -131,75 +130,33 @@
   position: absolute;
   z-index: 5;
   left: 56%;
-  bottom: 9.8vh;
-  width: clamp(92px, 9vw, 150px);
-  height: clamp(115px, 13vw, 205px);
+  bottom: 7.6vh;
+  width: clamp(122px, 11vw, 188px);
+  aspect-ratio: 1;
   transform: translateX(-50%);
-  filter: drop-shadow(0 0 10px #ed6b25);
+  filter: drop-shadow(0 0 12px #ed6b25a8);
 }
 
-.logs {
+.campfireArt {
   position: absolute;
-  left: 7%;
-  right: 7%;
-  bottom: 2%;
-  height: 22%;
+  inset: 0;
 }
 
-.logs i {
+.campfireArt i {
   position: absolute;
-  left: 7%;
-  bottom: 18%;
-  width: 86%;
-  height: 27%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #24110b, #6e2c16 46%, #1a0d09);
-  box-shadow: inset 0 2px #9d4825, 0 4px 5px #000c;
-  transform: rotate(13deg);
+  inset: 0;
+  background: url("/assets/scenes/loading/campfire.png") center bottom / contain no-repeat;
 }
 
-.logs i:last-child { transform: rotate(-14deg); }
-
-.flames {
-  position: absolute;
-  inset: 0 13% 15%;
-  transform-origin: center bottom;
-  animation: flame-body 0.27s ease-in-out infinite alternate;
+.fireBase {
+  filter: saturate(0.92) contrast(1.04);
 }
 
-.flames i {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 42%;
-  height: 72%;
-  border-radius: 58% 42% 60% 40%;
-  background: linear-gradient(to top, #fff1a0 0 17%, #ffb52f 36%, #e74715 72%, transparent 100%);
-  filter: blur(0.4px);
-  transform: translateX(-50%) rotate(45deg);
-  transform-origin: center bottom;
-}
-
-.flames i:nth-child(2) {
-  left: 27%;
-  width: 30%;
-  height: 51%;
-  animation: flame-left 0.31s ease-in-out infinite alternate;
-}
-
-.flames i:nth-child(3) {
-  left: 72%;
-  width: 27%;
-  height: 58%;
-  animation: flame-right 0.24s ease-in-out infinite alternate;
-}
-
-.flames i:nth-child(4) {
-  left: 52%;
-  width: 17%;
-  height: 46%;
-  background: linear-gradient(to top, #fffbd0 0 28%, #ffe269 58%, transparent 100%);
-  animation: flame-core 0.18s ease-in-out infinite alternate;
+.fireWarmth {
+  opacity: 0.32;
+  filter: saturate(1.5) brightness(1.22) blur(1.2px);
+  mix-blend-mode: screen;
+  animation: campfire-warmth 0.18s ease-in-out infinite alternate;
 }
 
 .embers i {
@@ -264,6 +221,10 @@
   background: linear-gradient(90deg, #7f2a1d, #e07938, #f0c17a);
   box-shadow: 0 0 10px #e47a36;
   animation: loading-progress var(--loading-duration) linear forwards;
+}
+
+.loadingScene[data-active="false"] .loadingStatus i {
+  animation-play-state: paused;
 }
 
 .modeSelector {
@@ -335,7 +296,7 @@
 .leaving .background { transform: scale(1.055); }
 
 @keyframes scene-breathe {
-  to { transform: scale(1.04) translate3d(-0.25%, -0.15%, 0); }
+  to { transform: scale(1.018) translate3d(-0.12%, -0.08%, 0); }
 }
 
 @keyframes star-pulse {
@@ -360,21 +321,9 @@
   to { opacity: 0.31; }
 }
 
-@keyframes flame-body {
-  from { transform: scale(0.94, 0.91) skewX(-2deg); }
-  to { transform: scale(1.05, 1.08) skewX(3deg); }
-}
-
-@keyframes flame-left {
-  to { transform: translateX(-50%) rotate(38deg) scale(0.9, 1.15); }
-}
-
-@keyframes flame-right {
-  to { transform: translateX(-50%) rotate(53deg) scale(1.1, 0.9); }
-}
-
-@keyframes flame-core {
-  to { transform: translateX(-50%) rotate(40deg) scale(0.86, 1.13); }
+@keyframes campfire-warmth {
+  from { opacity: 0.2; }
+  to { opacity: 0.42; }
 }
 
 @keyframes ember-rise {
@@ -389,7 +338,7 @@
 }
 
 @media (max-width: 760px) {
-  .background { background-position: 56% center; }
+  .background { background-position: center bottom; }
 
   .characterStage {
     left: 43%;
@@ -399,13 +348,15 @@
 
   .campfire {
     left: 71%;
-    bottom: 12vh;
+    bottom: 10vh;
     transform: translateX(-50%) scale(0.78);
   }
 
   .fireLight {
-    left: 66%;
-    width: 110vw;
+    left: 71%;
+    bottom: 7vh;
+    width: clamp(150px, 44vw, 260px);
+    height: 42vh;
   }
 
   .title strong { max-width: 75vw; }
@@ -437,8 +388,8 @@
   .knight,
   .knightWarmth,
   .shieldWarmth,
-  .flames,
-  .flames i,
+  .campfireArt,
+  .fireWarmth,
   .embers i {
     animation: none;
   }

@@ -21,6 +21,10 @@ const MIN_SCROLL_GUIDE_INACTIVITY_SECONDS = 1;
 const MAX_SCROLL_GUIDE_INACTIVITY_SECONDS = 60;
 const MIN_SCROLL_GUIDE_DISMISS_SECONDS = 0;
 const MAX_SCROLL_GUIDE_DISMISS_SECONDS = 10;
+const MIN_CELESTIAL_INTRO_SECONDS = 0.5;
+const MAX_CELESTIAL_INTRO_SECONDS = 12;
+const MIN_CELESTIAL_TRANSITION_SECONDS = 0.3;
+const MAX_CELESTIAL_TRANSITION_SECONDS = 2.5;
 const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}([0-9a-f]{2})?$/i;
 
 function cloneDefaults(): RuntimeSettings {
@@ -135,6 +139,21 @@ function normalizeSettings(value: unknown): RuntimeSettings {
   const defaultMode = modes[requestedDefault]?.enabled
     ? requestedDefault
     : enabledModes[0][0];
+  const celestialIntroDurationSeconds = normalizeSeconds(
+    candidate.loading?.celestialIntroDurationSeconds,
+    DEFAULT_SETTINGS.loading.celestialIntroDurationSeconds,
+    MIN_CELESTIAL_INTRO_SECONDS,
+    MAX_CELESTIAL_INTRO_SECONDS,
+  );
+  const celestialIntroTransitionSeconds = Math.min(
+    celestialIntroDurationSeconds,
+    normalizeSeconds(
+      candidate.loading?.celestialIntroTransitionSeconds,
+      DEFAULT_SETTINGS.loading.celestialIntroTransitionSeconds,
+      MIN_CELESTIAL_TRANSITION_SECONDS,
+      MAX_CELESTIAL_TRANSITION_SECONDS,
+    ),
+  );
 
   return {
     version: typeof candidate.version === "number" ? candidate.version : 1,
@@ -143,6 +162,9 @@ function normalizeSettings(value: unknown): RuntimeSettings {
     loading: {
       durationSeconds: Math.max(0, Math.min(60, Number(candidate.loading?.durationSeconds) || 0)),
       modeSelectorEnabled: candidate.loading?.modeSelectorEnabled === true,
+      celestialIntroEnabled: candidate.loading?.celestialIntroEnabled !== false,
+      celestialIntroDurationSeconds,
+      celestialIntroTransitionSeconds,
     },
     scrollGuide: {
       inactivitySeconds: normalizeSeconds(
@@ -186,6 +208,13 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.modes[activeModeId.value] ?? enabledModes.value[0],
   );
   const loadingDurationSeconds = computed(() => settings.value.loading.durationSeconds);
+  const celestialIntroEnabled = computed(() => settings.value.loading.celestialIntroEnabled);
+  const celestialIntroDurationSeconds = computed(
+    () => settings.value.loading.celestialIntroDurationSeconds,
+  );
+  const celestialIntroTransitionSeconds = computed(
+    () => settings.value.loading.celestialIntroTransitionSeconds,
+  );
   const scrollGuideInactivitySeconds = computed(
     () => settings.value.scrollGuide.inactivitySeconds,
   );
@@ -248,6 +277,9 @@ export const useSettingsStore = defineStore("settings", () => {
     isReady,
     usedFallback,
     loadingDurationSeconds,
+    celestialIntroEnabled,
+    celestialIntroDurationSeconds,
+    celestialIntroTransitionSeconds,
     scrollGuideInactivitySeconds,
     scrollGuideDismissDelaySeconds,
     sceneModalDurationSeconds,

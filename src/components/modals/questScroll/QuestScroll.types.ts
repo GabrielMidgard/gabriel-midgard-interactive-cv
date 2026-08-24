@@ -5,7 +5,7 @@ export interface QuestScrollNotice {
   heading: string;
   title?: string;
   description?: string;
-  variant?: "default" | "scroll-guide";
+  variant?: "default" | "scroll-guide" | "start-guide";
   tone?: QuestModalTone;
   durationMs?: number;
 }

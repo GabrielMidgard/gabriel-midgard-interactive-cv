@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import type { CssVariables } from "@/types/experience";
 import ScrollGuide from "./ScrollGuide.vue";
+import StartGuideControls from "./StartGuideControls.vue";
 import type { QuestScrollNotice } from "./QuestScroll.types";
 
 const props = defineProps<{
@@ -41,6 +42,7 @@ const modalStyle = computed(() => {
           $style.notice,
           $style[notice.tone ?? 'parchment'],
           { [$style.scrollGuideNotice]: notice.variant === 'scroll-guide' },
+          { [$style.startGuideNotice]: notice.variant === 'start-guide' },
         ]"
         :style="modalStyle"
         role="status"
@@ -63,6 +65,9 @@ const modalStyle = computed(() => {
         >
           <template v-if="notice.variant === 'scroll-guide'">
             <ScrollGuide size="modal" />
+          </template>
+          <template v-else-if="notice.variant === 'start-guide'">
+            <StartGuideControls />
           </template>
           <template v-else>
             <h3 v-if="notice.title">{{ notice.title }}</h3>

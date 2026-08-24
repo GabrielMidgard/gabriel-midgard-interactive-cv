@@ -41,6 +41,9 @@ export interface RuntimeSettings {
   loading: {
     durationSeconds: number;
     modeSelectorEnabled: boolean;
+    celestialIntroEnabled: boolean;
+    celestialIntroDurationSeconds: number;
+    celestialIntroTransitionSeconds: number;
   };
   scrollGuide: {
     inactivitySeconds: number;
